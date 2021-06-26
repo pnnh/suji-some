@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    {{ template "headmeta.html" }}
+    <title>{{.title}} - sfx.xyz</title>
+    {{ cssLink "/src/main.scss" "/main.css" }}
+</head>
+<body>
+    <noscript id="noscript" data-s="{{.status}}">{{.noscript}}</noscript>
+    <script id="data" type="application/json">{{.data}}</script>
+    <div id="root"></div>
+    {{ jsLink "/src/main.tsx" "/main.js" }}
+</body>
+</html>

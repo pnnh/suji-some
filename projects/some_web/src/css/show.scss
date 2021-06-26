@@ -1,0 +1,99 @@
+@import "fonts.css";
+
+html {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  color: #000;
+  background-color: #f6f6f6;
+}
+
+header {
+  background-color: #fff;
+  display: flex;
+  flex-direction: row;
+}
+
+header nav {
+  width: 1200px;
+  margin: 0 auto;
+  display: flex;
+}
+
+header nav div.left {
+  flex-grow: 1;
+}
+header nav div.left a.logo {
+  color: #000;
+  text-decoration: none;
+}
+
+header nav div.left a.logo h1 {
+  display: inline-block;
+}
+
+header nav div.right {
+  flex-grow: 1;
+  flex-direction: row;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+}
+header nav div.right a.new {
+  color: #1C73E8;
+  text-decoration: none;
+}
+
+main {
+  width: 1200px;
+  margin: 0 auto;
+  padding-top: 16px;
+  padding-bottom: 16px;
+}
+main div.article {
+  background: #fff;
+  border-radius: 4px;
+  margin: 0 80px;
+}
+main div.article .title, main div.article .summary, main div.article .content, main div.article .email {
+  padding: 16px 32px;
+}
+main div.article label {
+  display: flex;
+}
+main div.article label > span {
+  width: 64px;
+  display: inline-block;
+}
+
+.email {
+  color: #9f9f9f;
+}
+.summary {
+  p {
+    padding: 8px 16px;
+    background-color: #f6f6f6;
+    border-radius: 4px;
+  }
+}
+code {
+  background: #e4e6e8;
+  padding: 4px 4px;
+  border-radius: 4px;
+}
+blockquote {
+  padding: 16px;
+  background-color: #fafafa;
+  border-left: 6px solid #e6e6e6;
+  word-break: break-word;
+  font-size: 16px;
+  font-weight: normal;
+  line-height: 24px;
+  margin: 0 0 16px;
+}
