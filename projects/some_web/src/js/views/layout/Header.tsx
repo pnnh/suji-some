@@ -27,7 +27,7 @@ const navStackStyles: IStackStyles = {
 };
 export default function SFXHeader(props: SFXHeaderProps) {
     return <nav>
-        <Stack horizontal horizontalAlign="start"
+        <Stack horizontal horizontalAlign="start" verticalAlign={'center'}
                styles={navStackStyles}>
             <Stack.Item align={'center'}>
                 <a href="/" className={'logo'} title={'首页'}>sfx.xyz</a>

@@ -55,7 +55,7 @@ func NewIndexHandler(md *middleware.ServerMiddleware) *indexHandler {
 
 func HandleNotFound(gctx *gin.Context) {
 	gctx.HTML(http.StatusOK, "client.html", gin.H{
-		"title":  "页面未找到",
-		"status": http.StatusNotFound,
+		"title":  "页面",
+		//"status": http.StatusNotFound,
 	})
 }

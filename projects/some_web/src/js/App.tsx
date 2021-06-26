@@ -16,6 +16,7 @@ import UnauthorizedPage from "@/js/views/exception/Unauthorized";
 import NotFoundPage from "@/js/views/exception/NotFound";
 import InternalServerErrorPage from "@/js/views/exception/InternalServerError";
 import PostEditPage from "@/js/views/post/edit";
+import RandomPasswordPage from "@/js/views/utils/random-password";
 
 const renderExceptionPage = (status: number) => {
     switch(status) {
@@ -39,6 +40,7 @@ const App = () =>{
                     <Route path="/post/read/:pk" component={PostShowPage} />
                     <Route path="/post/new" component={PostPage} />
                     <Route path="/post/edit/:pk" component={PostEditPage} />
+                    <Route path="/utils/random/password" component={RandomPasswordPage} />
                     <Route path="/account/login" component={AccountPage} />
                     <Route path="/" component={HomePage} />
                 </Switch>
