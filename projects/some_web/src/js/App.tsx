@@ -17,6 +17,8 @@ import NotFoundPage from "@/js/views/exception/NotFound";
 import InternalServerErrorPage from "@/js/views/exception/InternalServerError";
 import PostEditPage from "@/js/views/post/edit";
 import RandomPasswordPage from "@/js/views/utils/random-password";
+import * as katex from 'katex';
+(window as any).katex = katex;
 
 const renderExceptionPage = (status: number) => {
     switch(status) {
