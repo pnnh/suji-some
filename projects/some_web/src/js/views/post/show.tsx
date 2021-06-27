@@ -67,9 +67,8 @@ export default class PostShowPage extends React.Component<PostShowPageProps, {}>
         super(props);
     }
     componentDidMount() {
-        //const serverData = getXmlData<any>();
         const serverData = getJsonData<any>();
-
+        console.debug('serverBody=====\n', serverData.body);
         const packet = JSON.parse(serverData.body);
         const editor = new Quill('#sfxeditor',editorOptions);
         editor.setContents(packet);

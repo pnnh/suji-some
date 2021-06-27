@@ -24,7 +24,6 @@ import {
     Slider, SpinButton
 } from "@fluentui/react";
 import {getJsonData, getXmlData} from "@/services/utils/helpers";
-import randomPassword from "some_utils/entry";
 import NavMenu from "@/js/views/layout/partial/NavMenu";
 import sfxlib from "some_library";
 
@@ -128,7 +127,8 @@ export default function RandomPasswordPage() {
                         uppercaseLetter: allowUppercaseLetter, symbol: allowSymbol,
                     }
                     //const password = randomPassword(length, options);
-                    const password = sfxlib.utils.randomPassword(length, true, true, true, true);
+                    const password = sfxlib.utils.randomPassword(length, options.number,
+                        options.letter, options.uppercaseLetter, options.symbol);
 
                     setPassword(password);
                     const history = passwordHistory.slice(0, 15);
