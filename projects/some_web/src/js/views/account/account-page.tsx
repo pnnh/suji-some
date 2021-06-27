@@ -20,9 +20,7 @@ function sendCodeToMail(mail: string, callback: (msg)=>void) {
         email: mail,
     }
     accountPost(postData).then((out)=>{
-        console.debug("ok", out);
     }).catch((error) => {
-        console.debug("catch", error);
         if(error.data && error.data.msg) {
             callback(error.data.msg);
         }
@@ -35,10 +33,8 @@ function loginByCode(mail: string, code: string, callback: (msg)=>void) {
         code: code,
     }
     sessionPost(postData).then((out)=>{
-        console.debug("ok", out);
         window.location.href = '/';
     }).catch((error) => {
-        console.debug("catch", error);
         if(error.data && error.data.msg) {
             callback(error.data.msg);
         }
@@ -46,7 +42,6 @@ function loginByCode(mail: string, code: string, callback: (msg)=>void) {
 }
 
 export default function AccountPage() {
-    console.debug('UserPage');
     const [email, setEmail] = useState('');
     const [code, setCode] = useState('');
     const [error, setError] = useState('');
@@ -95,7 +90,6 @@ export default function AccountPage() {
                                     </Stack.Item>
                                     <Stack.Item>
                                         <Link onClick={()=>{
-                                            console.debug('22222', email);
                                             sendCodeToMail(email, (msg)=>{
                                                 setError(msg);
                                             });
@@ -105,7 +99,6 @@ export default function AccountPage() {
                             </Stack.Item>
                             <Stack.Item>
                                 <PrimaryButton onClick={()=>{
-                                    console.debug('register', email);
                                     loginByCode(email, code, (msg)=>{
                                         setError(msg);
                                     })

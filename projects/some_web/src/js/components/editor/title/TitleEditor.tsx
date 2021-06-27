@@ -49,11 +49,9 @@ class SFXTitleEditor extends React.Component<SFEditorProps, SFEditorState> {
     render() {
         return (
             <div onMouseEnter={()=>{
-                console.debug('onMouseEnter',)
                 this.setState({active: true})
             }}
                  onMouseLeave={()=>{
-                     console.debug('onMouseLeave',)
                      this.setState({active: false})
                  }}>
                 <Slate editor={this.editor} value={this.state.value}
@@ -104,9 +102,6 @@ const titleStyles = css`
     margin: 0;
 `
 const Element = ({ attributes, children, element }) => {
-
-    console.debug('Element', attributes, children, element )
-    console.debug('Elemen2t', element instanceof SFXTitleOne, element instanceof String)
     switch (element.type) {
         case 'heading-one':
             return <h1 {...attributes} className={titleStyles}>{children}</h1>
@@ -122,7 +117,6 @@ const Element = ({ attributes, children, element }) => {
 }
 
 const Leaf = ({ attributes, children, leaf }) => {
-    console.debug('Leaf', leaf)
     return <span {...attributes}>{children}</span>
 }
 

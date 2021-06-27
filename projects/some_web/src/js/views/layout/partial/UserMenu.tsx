@@ -8,7 +8,6 @@ import { getJsonData} from "@/services/utils/helpers";
 
 const useActionButton = () => {
     const auth = getJsonData<any>();
-    console.debug('useActionButton', auth);
     if (auth && auth.login) {
         return <PrimaryButton onClick={()=>{
             window.location.href = "/post/new"

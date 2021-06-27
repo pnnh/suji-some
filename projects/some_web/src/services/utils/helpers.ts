@@ -82,14 +82,12 @@ export function getXmlData<T>(): T {
     if (!dataEl || !dataEl.innerText) {
         return {} as T;
     }
-    //console.debug('getServerData', dataEl.innerText);
     const oParser = new DOMParser();
     const oDOM = oParser.parseFromString(dataEl.innerText, "application/xml");
     if (oDOM.documentElement.nodeName == "parsererror") {
         return {} as T;
     }
     const root = parseValue(oDOM.documentElement);
-    console.debug('root!!!!', root);
     return root.data as T;
 }
 

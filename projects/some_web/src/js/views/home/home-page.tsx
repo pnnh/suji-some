@@ -40,11 +40,9 @@ const titleStyles = css`
 `
 
 export default function HomePage() {
-    console.debug('HomePage');
     const [list, setList] = useState<IIndexArticle[]>([]);
     useEffect(() => {
         const serverData = getXmlData<IIndexData>();
-        console.debug('HomePage useEffect', serverData);
         if (!serverData || !serverData.rows || serverData.count < 1) {
             return;
         }

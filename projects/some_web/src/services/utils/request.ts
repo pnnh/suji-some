@@ -23,7 +23,6 @@ export function sendRequest<T>(method: Method, url: string, params: unknown) {
   return request.request<T>(config).then(resp => {
     return resp.data;
   }).catch((error) => {
-    console.debug('axios catch', error);
     if (error.response) {
       throw {status: error.response.status, data: error.response.data};
     }

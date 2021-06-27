@@ -78,12 +78,10 @@ export default class PostEditPage extends React.Component<SFPostPageProps, SFPos
         }
     }
     componentDidMount() {
-        console.debug('jjjjjj componentDidMount', this.props.match.params);
         this.editor = new Quill('#editor', editorOptions);
 
         //const serverData = getXmlData<any>();
         const serverData = getJsonData<any>();
-        console.debug('PostEditPage', serverData);
         const packet = JSON.parse(serverData.body);
         this.editor.setContents(packet);
         this.setState({ title: serverData.title});
@@ -93,14 +91,12 @@ export default class PostEditPage extends React.Component<SFPostPageProps, SFPos
             return null;
         }
         const contents = this.editor.getContents();
-        console.debug("contents", contents)
         return {
             title: this.state.title, body: contents,
         }
     }
     onSave() {
         const article = this.getArticle();
-        console.debug("packet", article);
         if (!article) {
             return;
         }
@@ -109,7 +105,6 @@ export default class PostEditPage extends React.Component<SFPostPageProps, SFPos
             body: JSON.stringify(article.body),
         }
         articlePut(this.props.match.params.pk, postData).then((out)=>{
-            console.debug("ok", out);
             if(out) {
                 window.location.href = "/post/read/" + out.pk;
             }

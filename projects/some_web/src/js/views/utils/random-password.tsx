@@ -30,7 +30,6 @@ import sfxlib from "some_library";
 
 const ShowHeader = () => {
     const auth = getJsonData<any>();
-    console.debug('useActionButton', auth);
     let userMenu = <Stack.Item align={'center'}>
         <PrimaryButton onClick={()=>{
             window.location.href = "/account/login"
@@ -128,11 +127,9 @@ export default function RandomPasswordPage() {
                         number: allowNumber, letter: allowLetter,
                         uppercaseLetter: allowUppercaseLetter, symbol: allowSymbol,
                     }
-                    console.debug("生成选项", options);
                     //const password = randomPassword(length, options);
-                    console.debug("pwd2", sfxlib);
                     const password = sfxlib.utils.randomPassword(length, true, true, true, true);
-                    console.debug("pwd", password);
+
                     setPassword(password);
                     const history = passwordHistory.slice(0, 15);
                     history.splice(0, 0, password);

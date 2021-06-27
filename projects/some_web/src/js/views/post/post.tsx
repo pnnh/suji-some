@@ -79,7 +79,6 @@ export default class PostPage extends React.Component<SFPostPageProps, SFPostPag
         }
     }
     componentDidMount() {
-        console.debug('jjjjjj componentDidMount', this.props.match.params);
         this.editor = new Quill('#editor', editorOptions);
         const data = localStorage.getItem('post');
         if (!data) {
@@ -91,8 +90,6 @@ export default class PostPage extends React.Component<SFPostPageProps, SFPostPag
         })
         this.editor.setContents(article.body)
         this.editor.on('editor-change', () => {
-
-            console.debug('jjjjjj onChange222')
         });
     }
     getArticle(): IArticle | null {
@@ -100,7 +97,6 @@ export default class PostPage extends React.Component<SFPostPageProps, SFPostPag
             return null;
         }
         const contents = this.editor.getContents();
-        console.debug("contents", contents)
         //const packet = JSON.stringify(contents);
         return {
             title: this.state.title, body: contents,
@@ -108,7 +104,6 @@ export default class PostPage extends React.Component<SFPostPageProps, SFPostPag
     }
     onSave() {
         const article = this.getArticle();
-        console.debug("packet", article);
         if (!article) {
             return;
         }
@@ -117,7 +112,6 @@ export default class PostPage extends React.Component<SFPostPageProps, SFPostPag
             body: JSON.stringify(article.body),
         }
         articlePost(postData).then((out)=>{
-            console.debug("ok", out);
             if(out) {
                 window.location.href = "/post/read/" + out.pk;
             }

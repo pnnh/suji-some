@@ -37,17 +37,14 @@ class SFXParagraphEditor extends React.Component<SFEditorProps, SFEditorState> {
     }
     onChange = (value) => {
         this.setState({value: value})
-        console.debug('onchange', value)
     }
 
     render() {
         return (
             <div onMouseEnter={()=>{
-                console.debug('onMouseEnter',)
                 this.setState({active: true})
             }}
             onMouseLeave={()=>{
-                console.debug('onMouseLeave',)
                 this.setState({active: false})
             }}>
                 <Slate editor={this.editor} value={this.state.value}
@@ -97,7 +94,6 @@ class SFXParagraphEditor extends React.Component<SFEditorProps, SFEditorState> {
 
 const toggleMark = (editor, format) => {
     const isActive = isMarkActive(editor, format)
-    console.debug('toggleMark', format, isActive)
 
     if (isActive) {
         Editor.removeMark(editor, format)
@@ -112,12 +108,10 @@ const isMarkActive = (editor, format) => {
 }
 
 const Element = ({ attributes, children, element }) => {
-    console.debug('Element', attributes, children, element)
     return <p style={{marginTop:0, marginBottom:0, minHeight:16 }} {...attributes}>{children}</p>
 }
 
 const Leaf = ({ attributes, children, leaf }) => {
-    console.debug('Leaf', leaf)
     if (leaf.bold) {
         children = <strong>{children}</strong>
     }

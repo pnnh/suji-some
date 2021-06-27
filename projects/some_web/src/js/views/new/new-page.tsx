@@ -25,7 +25,6 @@ const useSaveArticle = (title: string, email: string,
             em: email,   // 邮箱
             ct: content,        // 内容
         }
-        console.debug('Clicked', artitle);
 
         fetch('/create', {
             method: "post",     // get/post
@@ -38,7 +37,6 @@ const useSaveArticle = (title: string, email: string,
         }).then((resp)=>{
             return resp.json();
         }).then(function(json) {
-            console.debug("ssss", json);
             if (json) {
                 if (json.show) {
                     localStorage.removeItem('title');

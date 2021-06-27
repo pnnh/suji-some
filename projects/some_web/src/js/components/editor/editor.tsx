@@ -43,12 +43,10 @@ const SFXEditor = (props: {value: SFXNode[], readOnly?: boolean}) => {
         return <Stack.Item key={k}>
             <SFXRow value={d} onInsert={(value) => {
                 const newValue = editorValue.concat(value);
-                console.debug('jjjjj', editorValue, newValue);
                 setEditorValue(newValue);
             }}/>
         </Stack.Item>
     })
-    console.debug('jj descendants', descendants)
 
     return (
         <div className={editorStyles}>

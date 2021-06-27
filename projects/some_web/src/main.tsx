@@ -10,10 +10,8 @@ interface viteEnv {
 }
 
 const importMeta = (import.meta as any).env as viteEnv;
-console.debug('jjjjenv', importMeta);
 
 if(importMeta.DEV) {
-    console.debug('isdebug', import.meta);
     initializeIcons('http://localhost:3000/fluentui/icons/');    // 从自定义路劲加载FluentUI图标字体
     registerDefaultFontFaces('http://localhost:3000/fluentui');  // 从自定义路劲加载FluentUI字体
 } else {

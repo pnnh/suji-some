@@ -43,7 +43,6 @@ const useParagraphToolExtra = (onInsert: (value: SFXNode) => void) => {
             },
         ],
         onItemClick: (event, item) => {
-            console.debug('onItemClick', event, item)
             if (!item) {
                 return;
             }
@@ -79,7 +78,6 @@ const useParagraphToolExtra = (onInsert: (value: SFXNode) => void) => {
             iconProps={{ iconName: 'Remove' }}
             text={'删除'}
             onClick={(event)=>{
-                console.debug('onclick3', event)
             }}
         />
     </>
@@ -90,16 +88,13 @@ const SFXRow = (props: {value: SFXNode, onInsert: (value: SFXNode) => void}) => 
     let children = <SFXParagraphEditor value={[props.value]}
                                        toolextra={toolExtra}
                                        onChange={(value: SlateDescendant[]) => {
-        console.debug('SFXParagraphEditor change', value)
     }}/>
     if (props.value.type === 'title') {
         children = <SFXTitleEditor value={[props.value]}
                                    toolextra={toolExtra}
                                    onChange={(value: SlateDescendant[]) => {
-            console.debug('SFXParagraphEditor change', value)
         }}/>
     }
-    console.debug('SFXRow', typeof(props.value))
     return <Stack tokens={{childrenGap: 8}}>
         <Stack.Item grow={10}>
             {children}

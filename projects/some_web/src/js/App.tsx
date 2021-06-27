@@ -30,7 +30,6 @@ const renderExceptionPage = (status: number) => {
 
 const App = () =>{
     const status = getPageStatus();
-    console.debug('jjjj status', status);
     // 正常情况下该属性为空，有值时代表页面无权访问
     if (status != StatusOK) {
         return renderExceptionPage(status);

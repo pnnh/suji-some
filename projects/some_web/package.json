@@ -28,8 +28,7 @@
     "slate-history": "^0.62.0",
     "slate-react": "^0.63.0",
     "some_library": "file:packages/some_library",
-    "some_utils": "file:packages/some_utils",
-    "utils": "file:packages/utils"
+    "some_utils": "file:packages/some_utils"
   },
   "devDependencies": {
     "@rollup/plugin-strip": "^2.0.1",

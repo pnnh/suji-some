@@ -9,7 +9,6 @@ import {getJsonData, getXmlData} from "@/services/utils/helpers";
 
 const ShowHeader = (props: {pk: string}) => {
     const auth = getJsonData<any>();
-    console.debug('useActionButton', auth);
     let userMenu = <Stack.Item align={'center'}>
         <PrimaryButton onClick={()=>{
             window.location.href = "/account/login"
@@ -70,7 +69,6 @@ export default class PostShowPage extends React.Component<PostShowPageProps, {}>
     componentDidMount() {
         //const serverData = getXmlData<any>();
         const serverData = getJsonData<any>();
-        console.debug('PostShowPage useEffect', serverData);
 
         const packet = JSON.parse(serverData.body);
         const editor = new Quill('#sfxeditor',editorOptions);
