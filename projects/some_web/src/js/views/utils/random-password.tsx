@@ -26,6 +26,7 @@ import {
 import {getJsonData, getXmlData} from "@/services/utils/helpers";
 import randomPassword from "some_utils/entry";
 import NavMenu from "@/js/views/layout/partial/NavMenu";
+import sfxlib from "some_library";
 
 const ShowHeader = () => {
     const auth = getJsonData<any>();
@@ -64,6 +65,7 @@ export default function RandomPasswordPage() {
     const [allowUppercaseLetter, setAllowUppercaseLetter] = useState<boolean>(true);
     const [allowSymbol, setAllowSymbol] = useState<boolean>(true);
     const [allowNumber, setAllowNumber] = useState<boolean>(true);
+
 
     const renderPassword = () => {
         if(password.length < 1) {
@@ -127,7 +129,10 @@ export default function RandomPasswordPage() {
                         uppercaseLetter: allowUppercaseLetter, symbol: allowSymbol,
                     }
                     console.debug("生成选项", options);
-                    const password = randomPassword(length, options);
+                    //const password = randomPassword(length, options);
+                    console.debug("pwd2", sfxlib);
+                    const password = sfxlib.utils.randomPassword(length, true, true, true, true);
+                    console.debug("pwd", password);
                     setPassword(password);
                     const history = passwordHistory.slice(0, 15);
                     history.splice(0, 0, password);

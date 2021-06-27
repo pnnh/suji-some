@@ -10,14 +10,6 @@ repositories {
 }
 
 kotlin {
-    jvm {
-        compilations.all {
-            kotlinOptions.jvmTarget = "11"
-        }
-        testRuns["test"].executionTask.configure {
-            useJUnit()
-        }
-    }
     js(LEGACY) {
         browser {
             commonWebpackConfig {
@@ -34,7 +26,6 @@ kotlin {
         else -> throw GradleException("Host OS is not supported in Kotlin/Native.")
     }
 
-    
     sourceSets {
         val commonMain by getting
         val commonTest by getting {
@@ -42,8 +33,6 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jvmMain by getting
-        val jvmTest by getting
         val jsMain by getting
         val jsTest by getting
         val nativeMain by getting
