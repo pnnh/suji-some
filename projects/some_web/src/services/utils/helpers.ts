@@ -99,7 +99,6 @@ export function getJsonData<T>(name: string = "data"): T {
     if (!dataEl) {
         return {} as T;
     }
-    console.debug('getXYZ', dataEl.innerText);
     return JSON.parse(dataEl.innerText);
 }
 

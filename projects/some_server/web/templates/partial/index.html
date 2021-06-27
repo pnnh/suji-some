@@ -5,7 +5,9 @@
                 <div data-name="{{.Pk}}" data-type="object">
                     <input type="hidden" data-name="pk" data-value="{{.Pk}}" />
                     <div>
-                        <h3 data-name="title">{{.Title}}</h3>
+                        <a href="/post/read/{{.Pk}}">
+                            <h3 data-name="title">{{.Title}}</h3>
+                        </a>
                     </div>
                     <span data-name="update_time" data-value="{{.UpdateTime}}">{{.UpdateTimeFormatted}}</span>
                 </div>
