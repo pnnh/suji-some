@@ -19,7 +19,9 @@ data class InsertAttributes(val link: String = "",
     val blockquote: Boolean = false,)
 
 @Serializable
-data class OpInsert(val insert: String,
+data class OpInsert(val insert: String = "",
+                    val retain: Int = 0,
+                    val delete: Int = 0,
     val attributes: InsertAttributes = InsertAttributes())
 
 @Serializable

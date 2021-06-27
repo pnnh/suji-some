@@ -10,6 +10,7 @@ class DeltaTests {
     private val json = Json {
         isLenient = true
         ignoreUnknownKeys = true
+        coerceInputValues = true
     }
 
     @Test
@@ -24,5 +25,24 @@ class DeltaTests {
         //println(string) // {"name":"Louis","yearOfBirth":1901}
         assertEquals(33, delta.ops.count())
         assertEquals("标题一", delta.ops[0].insert)
+    }
+
+    @Test
+    fun testUnBold() {
+        val packet = """
+            {
+              "ops": [
+                { "retain": 7, "attributes": { "bold": null, "italic": true } },
+                { "retain": 5 },
+                { "insert": "White", "attributes": { "color": "#fff" } },
+                { "delete": 4 },
+                { "insert": { "formula": "e=mc^2"}},
+                { "insert": " \n"}
+              ]
+            }
+        """.trimIndent()
+        val delta = json.decodeFromString<Delta>(packet)
+
+        assertEquals(false, delta.ops[0].attributes.bold)
     }
 }
