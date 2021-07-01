@@ -1,61 +1,56 @@
 package delta
 
 import kotlinx.serialization.*
-import kotlinx.serialization.builtins.LongAsStringSerializer
-import kotlinx.serialization.descriptors.SerialDescriptor
-import kotlinx.serialization.encoding.Decoder
-import kotlinx.serialization.encoding.Encoder
-import kotlinx.serialization.encoding.decodeStructure
-import kotlinx.serialization.json.JsonContentPolymorphicSerializer
-import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.jsonObject
+import kotlinx.serialization.json.*
 
 @Serializable
-abstract class Value(val value: String = "")
+data class ObjectValue(val formula: String = "", val image: String = "")
 
-@Serializable
-data class ObjectValue(val intValue: Int = 0): Value()
+object OpSerializer :
+    JsonContentPolymorphicSerializer<Op>(Op::class) {
 
-@Serializable
-data class StringValue(val stringValue: String = ""): Value()
+    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out Op> {
+        return when {
+            noResults(element) -> OpString.serializer()
+            else -> OpObject.serializer()
+        }
+    }
 
-//@Serializable
-//data class InsertObject(val stringValue: String = "", val objectValue: ObjectValue = ObjectValue())
-@Serializable(with = ProjectSerializer::class)
-data class InsertObject(val stringValue: String = "")
-
-//object StringValueSerializer : KSerializer<InsertObject> {
-//    override val descriptor: SerialDescriptor = InsertObject.serializer().descriptor
-//    override fun serialize(encoder: Encoder, value: InsertObject) {
-//        //encoder.encodeString(value.stringValue)
-//        ""
-//    }
-//    //@ExperimentalSerializationApi
-//    override fun deserialize(decoder: Decoder): InsertObject {
-//        val str = decoder.decodeString()
-//        return InsertObject()
-//    }
-//}
-//
-//object ObjectValueSerializer : KSerializer<InsertObject> {
-//    override val descriptor: SerialDescriptor = InsertObject.serializer().descriptor
-//    override fun serialize(encoder: Encoder, value: InsertObject) {
-//        //encoder.encodeString(value.stringValue)
-//        ""
-//    }
-//    //@ExperimentalSerializationApi
-//    override fun deserialize(decoder: Decoder): InsertObject {
-//        val str = decoder.decodeString()
-//        return InsertObject()
-//    }
-//}
-
-
-object ProjectSerializer : JsonContentPolymorphicSerializer<StringValue>(StringValue::class) {
-    override fun selectDeserializer(element: JsonElement) {
-         Value.serializer()
+    private fun noResults(element: JsonElement): Boolean {
+        //return element.jsonObject["insert"] is JsonPrimitive
+        println("element2 $element")
+        val a = element.jsonObject["insert"]
+        val b = a is JsonPrimitive
+        println("element2 aaa $a  == $b")
+        return a is JsonPrimitive
     }
 }
+@Serializable(with = OpSerializer::class)
+abstract class Op {
+}
+@Serializable
+data class OpObject(
+    @SerialName("insert")
+    val insert: ObjectValue = ObjectValue(),
+    val retain: Int = 0,
+    val delete: Int = 0,
+    val attributes: InsertAttributes = InsertAttributes()
+) : Op()
+
+@Serializable
+data class OpString(
+    @SerialName("insert")
+    val insert: String = "",
+    val retain: Int = 0,
+    val delete: Int = 0,
+    val attributes: InsertAttributes = InsertAttributes()
+) : Op()
+
+//object ProjectSerializer : JsonContentPolymorphicSerializer<Value>(Value::class) {
+//    override fun selectDeserializer(element: JsonElement) {
+//        StringValue()
+//    }
+//}
 
 @Serializable
 data class InsertAttributes(val link: String = "",
@@ -74,16 +69,7 @@ data class InsertAttributes(val link: String = "",
     val blockquote: Boolean = false,)
 
 @Serializable
-data class OpInsert(
-    @Serializable(with = ProjectSerializer::class)
-    val insert: Value = StringValue(),
-    //val insert: String = "",
-                    val retain: Int = 0,
-                    val delete: Int = 0,
-    val attributes: InsertAttributes = InsertAttributes())
-
-@Serializable
-data class Delta(val ops: Array<OpInsert> = emptyArray<OpInsert>(),) {
+data class Delta(val ops: Array<Op> = emptyArray<Op>(),) {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false

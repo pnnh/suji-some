@@ -42,7 +42,10 @@ class DeltaTests {
             }
         """.trimIndent()
         val delta = json.decodeFromString<Delta>(packet)
-
-        assertEquals(false, delta.ops[0].attributes.bold)
+        println("delta $delta")
+        for(a in delta.ops) {
+            println("delta== ${a is OpObject}")
+        }
+        //assertEquals("string", delta.ops[2])
     }
 }
