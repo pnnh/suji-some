@@ -7,6 +7,7 @@ group = "xyz.sfx"
 version = "1.0"
 
 repositories {
+    jcenter()
     mavenCentral()
 }
 
@@ -38,7 +39,10 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
-        val jsMain by getting
+        val jsMain by getting {
+            dependencies {
+            }
+        }
         val jsTest by getting
         val nativeMain by getting
         val nativeTest by getting

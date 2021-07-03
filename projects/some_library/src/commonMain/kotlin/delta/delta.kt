@@ -11,12 +11,12 @@ object OpSerializer :
 
     override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out Op> {
         return when {
-            noResults(element) -> OpString.serializer()
+            isString(element) -> OpString.serializer()
             else -> OpObject.serializer()
         }
     }
 
-    private fun noResults(element: JsonElement): Boolean {
+    private fun isString(element: JsonElement): Boolean {
         //return element.jsonObject["insert"] is JsonPrimitive
         println("element2 $element")
         val a = element.jsonObject["insert"]
@@ -25,9 +25,12 @@ object OpSerializer :
         return a is JsonPrimitive
     }
 }
+
 @Serializable(with = OpSerializer::class)
 abstract class Op {
+
 }
+
 @Serializable
 data class OpObject(
     @SerialName("insert")
