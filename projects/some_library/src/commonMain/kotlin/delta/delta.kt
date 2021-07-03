@@ -17,11 +17,7 @@ object OpSerializer :
     }
 
     private fun isString(element: JsonElement): Boolean {
-        //return element.jsonObject["insert"] is JsonPrimitive
-        println("element2 $element")
         val a = element.jsonObject["insert"]
-        val b = a is JsonPrimitive
-        println("element2 aaa $a  == $b")
         return a is JsonPrimitive
     }
 }
