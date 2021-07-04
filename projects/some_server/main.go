@@ -2,11 +2,14 @@ package main
 
 import (
 	"sujiserv/application"
+	"sujiserv/clibs/some"
 
 	"github.com/sirupsen/logrus"
 )
 
 func main() {
+	some.CPrintln()
+	return
 	app := application.NewApplication()
 
 	if err := app.Init(); err != nil {
