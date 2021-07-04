@@ -1,8 +1,7 @@
 package utils
 
 import kotlinx.serialization.json.Json
-import parchment.Node
-import parchment.TextNode
+import parchment.NodeSerializer
 import kotlin.test.Test
 
 class UtilsTests {
@@ -192,7 +191,7 @@ class UtilsTests {
             }
         """.trimIndent()
         val blot = deltaToBlot(packet)
-        val content = Node.encodeToJson(blot)
+        val content = NodeSerializer().encodeToJsonString(blot)
         println("content $content")
     }
 }

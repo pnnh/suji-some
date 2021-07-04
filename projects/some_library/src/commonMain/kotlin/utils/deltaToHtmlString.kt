@@ -9,18 +9,10 @@ import kotlinx.serialization.json.*
 import parchment.*
 import kotlin.text.lastIndex
 
-private val json = Json {
-    isLenient = true
-    prettyPrint = true
-    ignoreUnknownKeys = true
-    coerceInputValues = true
-}
-
 fun deltaToBlot(deltaString: String): Node {
     val delta = json.decodeFromString<Delta>(deltaString)
     val builder = StringBuilder("")
-    val blot = TextNode()
-    println("delta length ${delta.ops.count()}")
+    val blot = TextNode() 
     for(a in delta.ops) {
         if (a is OpObject) {
             println("isObject")
@@ -47,7 +39,14 @@ fun deltaToBlot(deltaString: String): Node {
     return blot
 }
 
-fun tagHeader(builder: StringBuilder, children: ArrayList<Node>, header: Int) {
+private val json = Json {
+    isLenient = true
+    prettyPrint = true
+    ignoreUnknownKeys = true
+    coerceInputValues = true
+}
+
+private fun tagHeader(builder: StringBuilder, children: ArrayList<Node>, header: Int) {
     val index = builder.lastIndexOf("\n", builder.lastIndex)
     var headerIndex = 0
     if (index > 0) {
@@ -62,7 +61,7 @@ fun tagHeader(builder: StringBuilder, children: ArrayList<Node>, header: Int) {
     builder.clear()
 }
 
-fun tagLinkBlot(builder: StringBuilder, children: ArrayList<Node>, text: String, attributes: InsertAttributes) {
+private fun tagLinkBlot(builder: StringBuilder, children: ArrayList<Node>, text: String, attributes: InsertAttributes) {
     val prevText = builder.toString()
     if(prevText.isNotEmpty()) {
         children.add(TextNode(text = prevText))
@@ -71,7 +70,7 @@ fun tagLinkBlot(builder: StringBuilder, children: ArrayList<Node>, text: String,
     builder.clear()
 }
 
-fun tagTextBlot(builder: StringBuilder, children: ArrayList<Node>, text: String, attributes: InsertAttributes) {
+private fun tagTextBlot(builder: StringBuilder, children: ArrayList<Node>, text: String, attributes: InsertAttributes) {
     val prevText = builder.toString()
     if(prevText.isNotEmpty()) {
         children.add(TextNode(text = prevText))
