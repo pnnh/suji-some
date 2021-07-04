@@ -10,12 +10,12 @@ import server.modules.*
 import utils.AESCrypt
 
 fun main() {
-    val key = "dae[8<Fj1Y8%RNk}SFuG_Q/.!5-%@?Lp"
-    val aesData = AESCrypt.encrypt("E3rTwpKAEAA", key)
-    println("aesData ${aesData}")
-    val decData = AESCrypt.decrypt("Jn9mNcn4cB84dZTuBJJbIjN6QsLwml1VsK4pdrHVOF8=", key)
-    println("aesData==== ${decData}")
-    return
+//    val key = "dae[8<Fj1Y8%RNk}SFuG_Q/.!5-%@?Lp"
+//    val aesData = AESCrypt.encrypt("E3rTwpKAEAA", key)
+//    println("aesData ${aesData}")
+//    val decData = AESCrypt.decrypt("Jn9mNcn4cB84dZTuBJJbIjN6QsLwml1VsK4pdrHVOF8=", key)
+//    println("aesData==== ${decData}")
+//    return
     val dsn = "jdbc:postgresql://localhost/sfxdb?user=postgres&password=example&ssl=false"
     Database.connect(dsn, driver = "org.postgresql.Driver")
 
@@ -23,6 +23,7 @@ fun main() {
         log = LoggerFactory.getLogger("ktor.application")
         config = HoconApplicationConfig(ConfigFactory.load())
         module {
+            configurePlugins()
             configureRouting()
         }
         connector {
