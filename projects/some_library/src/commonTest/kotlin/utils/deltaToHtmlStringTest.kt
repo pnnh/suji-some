@@ -1,6 +1,7 @@
 package utils
 
 import kotlinx.serialization.json.Json
+import parchment.DeltaSerializer
 import parchment.NodeSerializer
 import kotlin.test.Test
 
@@ -190,7 +191,7 @@ class UtilsTests {
                 ]
             }
         """.trimIndent()
-        val blot = deltaToBlot(packet)
+        val blot = DeltaSerializer().parseToNode(packet)
         val content = NodeSerializer().encodeToJsonString(blot)
         println("content $content")
     }

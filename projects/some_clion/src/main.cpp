@@ -164,7 +164,9 @@ int main(int argc, char** argv) {
                     "                    }\n"
                     "                ]\n"
                     "            }";
-  libsome_kref_parchment_Node node = lib -> kotlin.root.utils.deltaToBlot(str);
+  auto deltaSerializer = lib -> kotlin.root.parchment.DeltaSerializer.DeltaSerializer();
+  libsome_kref_parchment_Node node = lib -> kotlin.root.parchment
+      .DeltaSerializer.parseToNode(deltaSerializer, str);
   auto newInstance = lib -> kotlin.root.parchment.NodeSerializer.NodeSerializer();
   const char* response = lib -> kotlin.root.parchment.NodeSerializer.
       encodeToJsonString(newInstance, node);

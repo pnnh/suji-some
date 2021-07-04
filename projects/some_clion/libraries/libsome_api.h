@@ -125,13 +125,16 @@ typedef struct {
 } libsome_kref_delta_OpString_Companion;
 typedef struct {
   libsome_KNativePtr pinned;
+} libsome_kref_parchment_DeltaSerializer;
+typedef struct {
+  libsome_KNativePtr pinned;
+} libsome_kref_parchment_Node;
+typedef struct {
+  libsome_KNativePtr pinned;
 } libsome_kref_parchment_HeaderNode;
 typedef struct {
   libsome_KNativePtr pinned;
 } libsome_kref_parchment_LinkNode;
-typedef struct {
-  libsome_KNativePtr pinned;
-} libsome_kref_parchment_Node;
 typedef struct {
   libsome_KNativePtr pinned;
 } libsome_kref_kotlin_collections_ArrayList;
@@ -333,6 +336,11 @@ typedef struct {
       struct {
         struct {
           libsome_KType* (*_type)(void);
+          libsome_kref_parchment_DeltaSerializer (*DeltaSerializer)();
+          libsome_kref_parchment_Node (*parseToNode)(libsome_kref_parchment_DeltaSerializer thiz, const char* deltaString);
+        } DeltaSerializer;
+        struct {
+          libsome_KType* (*_type)(void);
           libsome_kref_parchment_HeaderNode (*HeaderNode)(const char* text, libsome_KInt header);
           libsome_KInt (*get_header)(libsome_kref_parchment_HeaderNode thiz);
         } HeaderNode;
@@ -367,7 +375,6 @@ typedef struct {
         } TextNode;
       } parchment;
       struct {
-        libsome_kref_parchment_Node (*deltaToBlot)(const char* deltaString);
         const char* (*randomPassword)(libsome_KInt length, libsome_KBoolean number, libsome_KBoolean letter, libsome_KBoolean uppercaseLetter, libsome_KBoolean symbol);
         const char* (*randomString)(const char* chars, libsome_KInt length);
       } utils;
