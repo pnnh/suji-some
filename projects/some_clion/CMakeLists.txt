@@ -7,7 +7,10 @@ set( CMAKE_VERBOSE_MAKEFILE on )
 include_directories(${PROJECT_SOURCE_DIR}/libraries)
 link_directories(${PROJECT_SOURCE_DIR}/libraries)
 
+# C示例程序
+add_executable(cmain src/cmain/main.c)
+target_link_libraries(cmain some)
 
-add_executable(${PROJECT_NAME} src/main.cpp)
-
-target_link_libraries(${PROJECT_NAME} some)
+# CPP示例程序
+add_executable(cppmain src/cppmain/main.cpp)
+target_link_libraries(cppmain some)
