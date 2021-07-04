@@ -1,6 +1,7 @@
 package utils
 
 import kotlinx.serialization.json.Json
+import parchment.Node
 import parchment.TextNode
 import kotlin.test.Test
 
@@ -12,8 +13,6 @@ class UtilsTests {
     }
     @Test
     fun testDeltaToBlots() {
-        val blot = TextNode("jjjj")
-        print("jjjj22 ${blot.text}")
         var text = StringBuilder("标\n题一\n")
 
         val index = text.lastIndexOf("\n", text.lastIndex - 1)
@@ -193,7 +192,7 @@ class UtilsTests {
             }
         """.trimIndent()
         val blot = deltaToBlot(packet)
-        val content = printBlotJson(blot)
+        val content = Node.encodeToJson(blot)
         println("content $content")
     }
 }

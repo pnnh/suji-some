@@ -6,21 +6,6 @@ import kotlinx.serialization.json.*
 @Serializable
 data class ObjectValue(val formula: String = "", val image: String = "")
 
-object OpSerializer :
-    JsonContentPolymorphicSerializer<Op>(Op::class) {
-
-    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out Op> {
-        return when {
-            isString(element) -> OpString.serializer()
-            else -> OpObject.serializer()
-        }
-    }
-
-    private fun isString(element: JsonElement): Boolean {
-        val a = element.jsonObject["insert"]
-        return a is JsonPrimitive
-    }
-}
 
 @Serializable(with = OpSerializer::class)
 abstract class Op {
@@ -82,5 +67,22 @@ data class Delta(val ops: Array<Op> = emptyArray<Op>(),) {
 
     override fun hashCode(): Int {
         return ops.contentHashCode()
+    }
+}
+
+
+private object OpSerializer :
+    JsonContentPolymorphicSerializer<Op>(Op::class) {
+
+    override fun selectDeserializer(element: JsonElement): DeserializationStrategy<out Op> {
+        return when {
+            isString(element) -> OpString.serializer()
+            else -> OpObject.serializer()
+        }
+    }
+
+    private fun isString(element: JsonElement): Boolean {
+        val a = element.jsonObject["insert"]
+        return a is JsonPrimitive
     }
 }

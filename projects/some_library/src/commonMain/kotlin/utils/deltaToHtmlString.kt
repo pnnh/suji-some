@@ -6,11 +6,8 @@ import delta.OpObject
 import delta.OpString
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.*
-import parchment.Node
+import parchment.*
 import kotlin.text.lastIndex
-import parchment.HeaderNode
-import parchment.LinkNode
-import parchment.TextNode
 
 private val json = Json {
     isLenient = true
@@ -22,7 +19,7 @@ private val json = Json {
 fun deltaToBlot(deltaString: String): Node {
     val delta = json.decodeFromString<Delta>(deltaString)
     val builder = StringBuilder("")
-    var blot = Node()
+    val blot = TextNode()
     println("delta length ${delta.ops.count()}")
     for(a in delta.ops) {
         if (a is OpObject) {
@@ -45,7 +42,7 @@ fun deltaToBlot(deltaString: String): Node {
         }
     }
     if(builder.toString().isNotEmpty()) {
-        blot.children.add(TextNode(builder.toString()))
+        blot.children.add(TextNode(text = builder.toString()))
     }
     return blot
 }
@@ -77,39 +74,17 @@ fun tagLinkBlot(builder: StringBuilder, children: ArrayList<Node>, text: String,
 fun tagTextBlot(builder: StringBuilder, children: ArrayList<Node>, text: String, attributes: InsertAttributes) {
     val prevText = builder.toString()
     if(prevText.isNotEmpty()) {
-        //tagTextBlot(builder, children, prevText, InsertAttributes())
         children.add(TextNode(text = prevText))
     }
-    children.add(TextNode(text = text))
+    val textNode = TextNode(text = text,
+        bold = attributes.bold,
+        italic = attributes.italic,
+        font = attributes.font,
+        strike = attributes.strike,
+        underline = attributes.underline,
+        color = attributes.color,
+        background = attributes.background,
+    )
+    children.add(textNode)
     builder.clear()
-}
-
-fun encodeBlotHtml(blot: Node): String {
-    val builder = StringBuilder()
-    builder.append("<${blot.name}>${blot.text}")
-    for(b in blot.children) {
-        builder.append(encodeBlotHtml(b))
-    }
-    builder.append("</${blot.name}>")
-    return builder.toString()
-}
-
-fun printBlotJson(blot: Node): String {
-    val jsonObject = castBlot2Map(blot)
-    val a = json.encodeToString<JsonObject>(JsonObject.serializer(), jsonObject)
-    return a
-}
-
-private fun castBlot2Map(blot: Node): JsonObject {
-    val map = mutableMapOf<String, JsonElement>()
-    val jsonObject = JsonObject(content = map)
-    map["name"] = JsonPrimitive(blot.name)
-    map["text"] = JsonPrimitive(blot.text.toString())
-    val list = arrayListOf<JsonObject>()
-    for(b in blot.children) {
-        val subMap = castBlot2Map(b)
-        list.add(subMap)
-    }
-    map["children"] = JsonArray(list)
-    return jsonObject
 }
