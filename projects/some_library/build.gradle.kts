@@ -1,4 +1,5 @@
 plugins {
+    application
     kotlin("multiplatform") version "1.5.20"
     kotlin("plugin.serialization") version "1.5.20"
 }
@@ -9,10 +10,22 @@ version = "1.0"
 repositories {
     jcenter()
     mavenCentral()
+    maven { url = uri("https://maven.pkg.jetbrains.space/kotlin/p/kotlin/kotlin-js-wrappers") }
+    maven { url = uri("https://maven.pkg.jetbrains.space/public/p/kotlinx-html/maven") }
+}
+
+application {
+    mainClass.set("xyz.sfx.Main")
 }
 
 kotlin {
+    jvm {
+        compilations.all {
+            kotlinOptions.jvmTarget = "11"
+        }
+    }
     js(LEGACY) {
+        binaries.executable()
         browser {
             commonWebpackConfig {
                 cssSupport.enabled = true
@@ -44,6 +57,23 @@ kotlin {
                 implementation(kotlin("test"))
             }
         }
+        val jvmMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-server-core:1.5.4")
+                implementation("io.ktor:ktor-server-cio:1.5.4")
+                implementation("io.ktor:ktor-serialization:1.5.4")
+                implementation("io.ktor:ktor-html-builder:1.5.4")
+                implementation("org.jetbrains.kotlinx:kotlinx-html-jvm:0.7.3")
+                implementation("org.jetbrains:kotlin-css-jvm:1.0.0-pre.129-kotlin-1.4.20")
+                implementation("ch.qos.logback:logback-classic:1.2.3")
+                implementation("org.jetbrains.exposed:exposed-core:0.31.1")
+                implementation("org.jetbrains.exposed:exposed-dao:0.31.1")
+                implementation("org.jetbrains.exposed:exposed-jdbc:0.31.1")
+                implementation("org.jetbrains.exposed:exposed-jodatime:0.31.1")
+                implementation("org.postgresql:postgresql:42.1.4")
+            }
+        }
+        val jvmTest by getting
         val jsMain by getting {
             dependencies {
             }

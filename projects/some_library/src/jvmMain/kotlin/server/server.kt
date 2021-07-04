@@ -1,0 +1,27 @@
+package server
+
+import com.typesafe.config.ConfigFactory
+import io.ktor.config.*
+import io.ktor.server.engine.*
+import io.ktor.server.cio.*
+import org.jetbrains.exposed.sql.Database
+import org.slf4j.LoggerFactory
+import server.modules.*
+
+fun main() {
+    val dsn = "jdbc:postgresql://localhost/sfxdb?user=postgres&password=example&ssl=false"
+    Database.connect(dsn, driver = "org.postgresql.Driver")
+
+    embeddedServer(CIO, environment = applicationEngineEnvironment {
+        log = LoggerFactory.getLogger("ktor.application")
+        config = HoconApplicationConfig(ConfigFactory.load())
+        module {
+            configureRouting()
+        }
+        connector {
+            port = 8080
+            host = "0.0.0.0"
+        }
+    }) {
+    }.start(wait = true)
+}
