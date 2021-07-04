@@ -1,14 +1,20 @@
 package main
 
 import (
-	"sujiserv/application"
-	"sujiserv/clibs/some"
+	"log"
 
 	"github.com/sirupsen/logrus"
+	"sujiserv/application"
+	"sujiserv/server/utils"
 )
 
 func main() {
-	some.CPrintln()
+	//some.CPrintln()
+	key := "dae[8<Fj1Y8%RNk}SFuG_Q/.!5-%@?Lp"
+	out, err := utils.AesEncrypt("E3rTwpKAEAA", []byte(key))
+	log.Println("jjj", out, err)
+	a, b := utils.AesDecrypt(out, []byte(key))
+	log.Println("jjj22", a, b)
 	return
 	app := application.NewApplication()
 
