@@ -25,14 +25,14 @@ func AesEncrypt(str string, key []byte) (string, error) {
 	}
 	data := append(salt, crypted...)
 	//data := crypted
-	return base64.StdEncoding.EncodeToString(data), nil
+	return base64.RawURLEncoding.EncodeToString(data), nil
 }
 
 func AesDecrypt(str string, key []byte) (ret string, err error) {
 	if len(str) == 0 {
 		return "", nil
 	}
-	data, err := base64.StdEncoding.DecodeString(str)
+	data, err := base64.RawURLEncoding.DecodeString(str)
 	if err != nil {
 		return "", err
 	}

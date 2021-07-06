@@ -13,8 +13,6 @@ val Application.isRelease get() = envKind != "debug" && envKind != "test"
 
 fun Application.configurePlugins() {
     val env = environment.config.propertyOrNull("ktor.environment")?.getString()
-    println("env $env")
-    println("env22 $isDebug")
     install(Compression) {
         gzip {
             priority = 0.9

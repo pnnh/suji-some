@@ -1,21 +1,12 @@
 package main
 
 import (
-	"log"
-
 	"github.com/sirupsen/logrus"
 	"sujiserv/application"
-	"sujiserv/server/utils"
 )
 
 func main() {
 	//some.CPrintln()
-	key := "dae[8<Fj1Y8%RNk}SFuG_Q/.!5-%@?Lp"
-	out, err := utils.AesEncrypt("E3rTwpKAEAA", []byte(key))
-	log.Println("jjj", out, err)
-	a, b := utils.AesDecrypt(out, []byte(key))
-	log.Println("jjj22", a, b)
-	return
 	app := application.NewApplication()
 
 	if err := app.Init(); err != nil {

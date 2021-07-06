@@ -1,0 +1,9 @@
+<html lang="zh-cn">
+<body>
+    <h1>OTP二维码</h1>
+    <h2>{{.code}}</h2>
+    <p>请点击以下链接查看二维码图片，并扫描（5分钟内有效）</p>
+    <img src='data:image/gif;base64,%s' alt='TOTP二维码'/>
+    <a href="{{.url}}" target="_blank">{{.url}}</a>
+</body>
+</html>

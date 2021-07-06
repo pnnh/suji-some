@@ -21,7 +21,7 @@ class AESCrypt {
             cipher.init(Cipher.ENCRYPT_MODE, keySpec, ivParameterSpec)
             val encrypt = cipher.doFinal(input.toByteArray())
             val bytes = generateSalt(SALT_LENGTH).plus(encrypt)
-            val out = String(Base64.getEncoder().encode(bytes))
+            val out = String(Base64.getUrlEncoder().encode(bytes))
             return out
         }
 
@@ -37,7 +37,7 @@ class AESCrypt {
          */
         fun decrypt(input: String, password: String): String {
             val cipher = Cipher.getInstance("AES/CBC/PKCS5Padding")
-            val bytes = Base64.getDecoder().decode(input)
+            val bytes = Base64.getUrlDecoder().decode(input)
             val encrypted = bytes.copyOfRange(SALT_LENGTH, bytes.count())
             val keySpec = SecretKeySpec(password.toByteArray(),"AES")
             val ivParameterSpec = IvParameterSpec(ByteArray(cipher.blockSize))

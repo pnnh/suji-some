@@ -7,6 +7,7 @@ import (
 
 	"github.com/gorilla/csrf"
 	dbmodels "sujiserv/application/services/db/models"
+	"sujiserv/config"
 	"sujiserv/server/handlers/otp"
 	"sujiserv/server/middleware"
 	"sujiserv/server/utils"
@@ -76,8 +77,25 @@ func (s *accountHandler) SendOTPCode(gctx *gin.Context) {
 		return
 	}
 	from, to, subject := "support<support@sfx.xyz>", in.Email, "验证码"
-	mailBody := fmt.Sprintf("<html><body><h1>%s</h1><h2>TOTP二维码</h2><img src='data:image/gif;base64,%s' alt='TOTP二维码' /></body></html>",
-		code, account.Image)
+	//mailBody := fmt.Sprintf("<html><body><h1>%s</h1><h2>TOTP二维码</h2><img src='data:image/gif;base64,%s' alt='TOTP二维码' /></body></html>",
+	//	code, account.Image)
+	nowUnix := time.Now().Unix()
+	verify := fmt.Sprintf("%d,%s", nowUnix, "E3rTwpKAEAA")
+	questVerify, err := utils.AesEncrypt(verify, []byte(config.QuestKey))
+	if err != nil {
+		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+		return
+	}
+	otpUrl := fmt.Sprintf("%s/account/otp/image?v=%s", config.QuestApiUrl, questVerify)
+
+	//logrus.Debugln("otpUrl", otpUrl)
+	mailBody, err := s.middleware.Templs.Execute("mail.html", gin.H{
+		"code": code, "url": otpUrl,
+	})
+	if err != nil {
+		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+		return
+	}
 	//logrus.Debugln("mailBody", mailBody)
 	if err = s.middleware.Mail.SendMessage(from, subject, mailBody, to); err != nil {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
