@@ -10,5 +10,3 @@ build.sh
 bin/
 node_modules/
 dist/
-*.js
-*.js.map
