@@ -1,6 +1,5 @@
 package server.modules
 
-import db.queryAccount
 import io.ktor.application.*
 import io.ktor.features.*
 import io.ktor.http.*
@@ -8,6 +7,7 @@ import io.ktor.response.*
 import io.ktor.routing.*
 import org.joda.time.DateTime
 import org.joda.time.Seconds
+import server.db.queryAccount
 import utils.AESCrypt
 import java.util.*
 

@@ -10,9 +10,11 @@ val Application.envKind get() = environment.config.property("ktor.environment").
 val Application.isDebug get() = envKind == "debug"
 val Application.isTest get() = envKind == "test"
 val Application.isRelease get() = envKind != "debug" && envKind != "test"
+val Application.corsHost get() = if (isDebug) "127.0.0.1" else "sfx.xyz"
 
 fun Application.configurePlugins() {
-    val env = environment.config.propertyOrNull("ktor.environment")?.getString()
+    install(ForwardedHeaderSupport)
+    install(DefaultHeaders)
     install(Compression) {
         gzip {
             priority = 0.9
@@ -20,6 +22,27 @@ fun Application.configurePlugins() {
         deflate() {
             priority = 1.0
         }
+    }
+    install(CORS) {
+        method(HttpMethod.Options)
+        method(HttpMethod.Head)
+        method(HttpMethod.Get)
+        method(HttpMethod.Post)
+        method(HttpMethod.Put)
+        method(HttpMethod.Delete)
+        method(HttpMethod.Patch)
+        header(HttpHeaders.Authorization)
+        header(HttpHeaders.XForwardedProto)
+        header(HttpHeaders.Accept)
+        header(HttpHeaders.AcceptLanguage)
+        header(HttpHeaders.ContentType)
+        header(HttpHeaders.ContentLanguage)
+        header(HttpHeaders.AccessControlAllowHeaders)
+        header(HttpHeaders.AccessControlAllowOrigin)
+        allowSameOrigin = true
+        allowCredentials = true
+        allowNonSimpleContentTypes = true
+        maxAgeInSeconds = 3600 * 24
     }
     routing {
     }

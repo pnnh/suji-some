@@ -1,10 +1,8 @@
-package db
+package server.db
 
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.transactions.transaction
 import server.models.*
-
-val dbNameLength = 64
 
 object AccountTable : Table("accounts") {
     val pk = varchar("pk", dbNameLength)
