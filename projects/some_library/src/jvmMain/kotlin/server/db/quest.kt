@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.jodatime.datetime
 import org.jetbrains.exposed.sql.transactions.transaction
 import org.joda.time.DateTime
-import server.db.AccountTable.pk
+import server.db.QuestTable.pk
 import server.db.QuestTable.description
 import server.db.QuestTable.executor
 import server.db.QuestTable.organization

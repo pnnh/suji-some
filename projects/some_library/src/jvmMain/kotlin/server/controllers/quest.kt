@@ -45,6 +45,7 @@ fun Application.configureQuestController() {
                 call.response.status(HttpStatusCode.InternalServerError)
             } else {
                 newQuest(pk, questPost.title)
+                call.response.status(HttpStatusCode.OK)
             }
         }
 

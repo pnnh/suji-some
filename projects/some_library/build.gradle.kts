@@ -16,6 +16,7 @@ repositories {
 
 application {
     mainClass.set("xyz.sfx.Main")
+    applicationDefaultJvmArgs = listOf("-Dio.ktor.development=true")
 }
 
 kotlin {

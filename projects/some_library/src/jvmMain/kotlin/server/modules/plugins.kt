@@ -10,7 +10,7 @@ val Application.envKind get() = environment.config.property("ktor.environment").
 val Application.isDebug get() = envKind == "debug"
 val Application.isTest get() = envKind == "test"
 val Application.isRelease get() = envKind != "debug" && envKind != "test"
-val Application.corsHost get() = if (isDebug) "127.0.0.1:3000" else "sfx.xyz"
+val Application.corsHost get() = if (isDebug) "127.0.0.1:5000" else "sfx.xyz"
 
 fun Application.configurePlugins() {
     install(ForwardedHeaderSupport)
