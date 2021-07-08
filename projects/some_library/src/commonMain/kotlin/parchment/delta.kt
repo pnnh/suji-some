@@ -18,7 +18,7 @@ class DeltaSerializer() {
     fun parseToNode(deltaString: String): Node {
         val delta = json.decodeFromString<Delta>(deltaString)
         val builder = StringBuilder("")
-        val blot = TextNode()
+        val blot = ColumnNode()
         for(a in delta.ops) {
             if (a is OpObject) {
                 println("isObject")

@@ -41,7 +41,6 @@ fun Application.configureRouting() {
                 call.application.environment.log.error(e.toString())
                 call.respond("出现错误")
             }
-
         }
     }
 }

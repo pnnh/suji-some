@@ -3,6 +3,8 @@ package utils
 import kotlinx.serialization.json.Json
 import parchment.DeltaSerializer
 import parchment.NodeSerializer
+import parchment.deltaToHtmlString
+import parchment.deltaToJsonString
 import kotlin.test.Test
 
 class UtilsTests {
@@ -191,8 +193,74 @@ class UtilsTests {
                 ]
             }
         """.trimIndent()
-        val blot = DeltaSerializer().parseToNode(packet)
-        val content = NodeSerializer().encodeToJsonString(blot)
+        val content = deltaToJsonString(packet)
         println("content $content")
+    }
+    @Test
+    fun testHtmlPrint() {
+        val packet = """
+            {
+                "ops": [
+                    {
+                        "insert": "随机文本\n"
+                    },
+                    {
+                        "insert": "标题一"
+                    },
+                    {
+                        "attributes": {
+                            "header": 1
+                        },
+                        "insert": "\n"
+                    },
+                    {
+                        "insert": "丰富的发是\n的"
+                    },
+                    {
+                        "attributes": {
+                            "link": "https://www.jetbrains.com/idea/"
+                        },
+                        "insert": "IntelliJ IDEA"
+                    },
+                    {
+                        "attributes": {
+                            "italic": true,
+                            "bold": true
+                        },
+                        "insert": "加粗"
+                    },
+                    {
+                        "attributes": {
+                            "underline": true
+                        },
+                        "insert": "下划线"
+                    },
+                    {
+                        "attributes": {
+                            "color": "#e60000"
+                        },
+                        "insert": "颜色字体"
+                    },
+                    {
+                        "attributes": {
+                            "color": "#ffffff",
+                            "background": "#66b966"
+                        },
+                        "insert": "背景色"
+                    },
+                    {
+                        "attributes": {
+                            "code-block": true
+                        },
+                        "insert": "\n"
+                    },
+                    {
+                        "insert": "\n"
+                    }
+                ]
+            }
+        """.trimIndent()
+        val htmlString = deltaToHtmlString(packet)
+        println("htmlString $htmlString")
     }
 }
