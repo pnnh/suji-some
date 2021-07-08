@@ -6,7 +6,7 @@ const request = axios.create({
   // API 请求的默认前缀
   //baseURL: process.env.VUE_APP_API_BASE_URL,
   timeout: 20 * 1000, // 请求超时时间,
-  headers: { "r": getCSRF() }
+  // headers: { "r": getCSRF() }  // todo 这个暂时不能携带，因为在ktor服务端，这个被认为是未知header
 })
 
 export function sendRequest<T>(method: Method, url: string, params: unknown) {
