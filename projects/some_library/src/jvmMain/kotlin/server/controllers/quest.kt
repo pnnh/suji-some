@@ -32,7 +32,6 @@ fun Application.configureQuestController() {
     routing {
         get("/quest") {
             val questList = queryQuest("1")
-            println(questList.count())
             if (questList.count() > 0) {
                 call.respond(questList.first())     // 暂时不支持响应数组
             }
