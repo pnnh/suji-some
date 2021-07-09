@@ -12,8 +12,12 @@ import {
 import { withHistory } from 'slate-history'
 
 import {IconButton, IContextualMenuProps,Stack} from "@fluentui/react";
-import {css} from "@emotion/css";
-import SFNode, {SFHeaderNode, SFHeaderView, SFParagraphNode} from "@/js/components/editor/node";
+import SFNode, {
+    SFHeaderNode,
+    SFHeaderToolbar,
+    SFHeaderView,
+    SFParagraphNode
+} from "@/js/components/editor/node";
 
 interface SFEditorProps {
     value: SlateDescendant[],
@@ -46,10 +50,10 @@ class SFXEditor extends React.Component<SFEditorProps, SFEditorState> {
                        onChange={this.onChange}>
                     <Stack horizontal  horizontalAlign="space-between">
                         <Stack.Item>
-                            <SFHeaderView editor={this.editor} header={1}/>
-                            <SFHeaderView editor={this.editor} header={2}/>
-                            <SFHeaderView editor={this.editor} header={3}/>
-                            <SFHeaderView editor={this.editor} header={4}/>
+                            <SFHeaderToolbar editor={this.editor} header={1}/>
+                            <SFHeaderToolbar editor={this.editor} header={2}/>
+                            <SFHeaderToolbar editor={this.editor} header={3}/>
+                            <SFHeaderToolbar editor={this.editor} header={4}/>
                             <IconButton iconProps={{iconName: 'Bold'}} title="加粗"
                                         checked={isMarkActive(this.editor, "bold")}
                                         onClick={()=>{
@@ -96,48 +100,15 @@ const toggleMark = (editor, format) => {
     }
 }
 
-const toggleBlock = (editor: Editor, node: SFNode) => {
-    if (isBlockActive(editor, node.name)) {
-        node = new SFParagraphNode();
-    }
-    console.debug("toggleBlock", node);
-    Transforms.setNodes(editor, node);
-}
-
-const isBlockActive = (editor, format) => {
-    console.debug("isBlockActive", format);
-    const [match] = Editor.nodes(editor, {
-        match: (n: SlateNode, p: SlatePath) => {
-            const node = n as SFNode;
-            if (!node) {
-                return false
-            }
-            return !Editor.isEditor(n) && SlateElement.isElement(n) && node.name === format
-        },
-    })
-    return !!match
-}
-
 const isMarkActive = (editor, format) => {
     const marks = Editor.marks(editor)
     return marks ? marks[format] === true : false
 }
-const titleStyles = css`
-    margin: 0;
-`
+
 const renderElement = ({ attributes, children, element }) => {
     console.debug("renderElement", element, attributes, children);
     if (element.name === "header") {
-        switch (element.header) {
-            case 1:
-                return <h1 {...attributes} className={titleStyles}>{children}</h1>
-            case 2:
-                return <h2{...attributes} className={titleStyles}>{children}</h2>
-            case 3:
-                return <h3{...attributes} className={titleStyles}>{children}</h3>
-            case 4:
-                return <h4{...attributes} className={titleStyles}>{children}</h4>
-        }
+        return <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
     }
     return <p style={{marginTop:0, marginBottom:0, minHeight:16 }} {...attributes}>{children}</p>
 }

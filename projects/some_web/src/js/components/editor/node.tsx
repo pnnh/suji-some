@@ -35,7 +35,7 @@ export class SFNodeView<T> extends React.Component<T> {
     }
 }
 
-export class SFHeaderView extends SFNodeView<{editor: ReactEditor, header: number}> {
+export class SFHeaderToolbar extends SFNodeView<{editor: ReactEditor, header: number}> {
     node: SFHeaderNode;
     constructor(props) {
         super(props);
@@ -67,6 +67,21 @@ export class SFHeaderView extends SFNodeView<{editor: ReactEditor, header: numbe
         })
         return !!match
     }
+}
+
+
+export function SFHeaderView(props: {attributes, children, node: SFHeaderNode}) {
+    switch (props.node.header) {
+        case 1:
+            return <h1 {...props.attributes} >{props.children}</h1>
+        case 2:
+            return <h2{...props.attributes}>{props.children}</h2>
+        case 3:
+            return <h3{...props.attributes}>{props.children}</h3>
+        case 4:
+            return <h4{...props.attributes}>{props.children}</h4>
+    }
+    return <h1 {...props.attributes}>{props.children}</h1>
 }
 
 export class SFParagraphNode extends SFNode {

@@ -15,10 +15,8 @@ type NewPageState = {
 };
 
 const initialValue = {
-        type: 'paragraph',
-        children: [
-            { text: '' },
-        ],
+        name: 'column',
+        children: [{name: 'paragraph', text: '', }],
     };
 const sectionStackTokens: IStackTokens = { childrenGap: 16 };
 const rightStyles = css`
