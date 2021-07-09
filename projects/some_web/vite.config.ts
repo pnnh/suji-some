@@ -45,10 +45,7 @@ const config = defineConfig({
       { find: '~', replacement: path.resolve(__dirname, 'node_modules') }
     ]
   },
-  publicDir: "public",
-  css: {
-    preprocessorOptions: {}
-  }
+  publicDir: "public"
 })
 
 export default config;

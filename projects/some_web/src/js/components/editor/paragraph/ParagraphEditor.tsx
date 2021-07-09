@@ -17,13 +17,11 @@ interface SFEditorProps {
     value: SlateDescendant[],
     onChange: (nodes: SlateDescendant[]) => void
     readOnly?: boolean,
-    toolextra: JSX.Element
 }
 
 interface SFEditorState {
     value: SlateDescendant[]
     readOnly: boolean
-    active: boolean,
 }
 
 class SFXParagraphEditor extends React.Component<SFEditorProps, SFEditorState> {
@@ -32,7 +30,7 @@ class SFXParagraphEditor extends React.Component<SFEditorProps, SFEditorState> {
     constructor(props) {
         super(props);
         this.state = {
-            value: props.value, active: false, readOnly: false,
+            value: props.value, readOnly: false,
         }
     }
     onChange = (value) => {
@@ -41,16 +39,9 @@ class SFXParagraphEditor extends React.Component<SFEditorProps, SFEditorState> {
 
     render() {
         return (
-            <div onMouseEnter={()=>{
-                this.setState({active: true})
-            }}
-            onMouseLeave={()=>{
-                this.setState({active: false})
-            }}>
                 <Slate editor={this.editor} value={this.state.value}
                        onChange={this.onChange}>
-                    <Stack horizontal  horizontalAlign="space-between"
-                           style={{visibility: this.state.active ? 'visible' : 'hidden'}}>
+                    <Stack horizontal  horizontalAlign="space-between">
                         <Stack.Item>
                             <IconButton iconProps={{iconName: 'Bold'}} title="加粗"
                                         checked={isMarkActive(this.editor, "bold")}
@@ -73,9 +64,6 @@ class SFXParagraphEditor extends React.Component<SFEditorProps, SFEditorState> {
                                             toggleMark(this.editor, "code")
                                         }}/>
                         </Stack.Item>
-                        <Stack.Item>
-                            {this.props.toolextra}
-                        </Stack.Item>
                     </Stack>
 
                     <Editable
@@ -87,7 +75,6 @@ class SFXParagraphEditor extends React.Component<SFEditorProps, SFEditorState> {
                             paddingBottom: 8}}
                     />
                 </Slate>
-            </div>
         )
     }
 }

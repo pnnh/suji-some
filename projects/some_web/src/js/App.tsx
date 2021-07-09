@@ -42,6 +42,7 @@ const App = () =>{
                     <Route path="/post/read/:pk" component={PostShowPage} />
                     <Route path="/post/new" component={PostPage} />
                     <Route path="/post/edit/:pk" component={PostEditPage} />
+                    <Route path="/article/new" component={NewPage} />
                     <Route path="/quest" component={QuestPage} />
                     <Route path="/utils/random/password" component={RandomPasswordPage} />
                     <Route path="/account/login" component={AccountPage} />
