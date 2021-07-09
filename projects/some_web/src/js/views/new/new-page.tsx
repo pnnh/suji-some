@@ -3,12 +3,11 @@ import {ITextFieldStyles, TextField} from "@fluentui/react/lib/TextField";
 import {IStackItemStyles, IStackTokens, PrimaryButton, Stack} from '@fluentui/react';
 import SFXHeader from "@/js/views/layout/Header";
 import SFXLayout from "@/js/views/layout/Layout";
-import SFXEditor from "@/js/components/editor/editor";
 import SFXCard from "@/js/components/card/card";
 import {css} from "@emotion/css";
-const editorStyles = css`
-  height: 480px;
-`
+import {Descendant as SlateDescendant} from "slate/dist/interfaces/node";
+import SFXEditor from "@/js/components/editor/editor";
+
 type NewPageState = {
     title: string;
     email: string;
@@ -42,6 +41,14 @@ const useHeader = (onSave: () => void) => {
     return <SFXHeader center={useTitle()} end={useSave()}/>
 }
 
+const editorStyles = css`
+  border: 1px solid #605e5c;margin-bottom: 16px;
+  min-height: 300px;  
+`
+
+const editorBodyStyles = css`
+  margin-bottom: 32px;  
+`
 const NewPage = (props:{}, state: NewPageState) => {
 
     let [title, setTitle] = useState('')
@@ -61,7 +68,22 @@ const NewPage = (props:{}, state: NewPageState) => {
                                    }}/>
                     </Stack.Item>
                     <Stack.Item>
-                        <SFXEditor value={initialValue} />
+                        <div className={editorStyles}>
+                            <div className={editorBodyStyles}>
+                                <Stack tokens={{padding: 16, childrenGap: 8}}>
+                                    <Stack.Item>
+                                        <Stack tokens={{childrenGap: 8}}>
+                                            <Stack.Item grow={10}>
+                                                <SFXEditor value={[initialValue]}
+                                                           onChange={(value: SlateDescendant[]) => {
+                                                               console.debug("value", value);
+                                                                    }}/>
+                                            </Stack.Item>
+                                        </Stack>
+                                    </Stack.Item>
+                                </Stack>
+                            </div>
+                        </div>
                     </Stack.Item>
                 </Stack>
             </Stack.Item>
