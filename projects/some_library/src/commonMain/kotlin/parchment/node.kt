@@ -38,41 +38,28 @@ class NodeSerializer() {
         coerceInputValues = true
     }
     fun encodeToJsonString(node: Node): String {
-        val jsonObject = encodeToJsonObject(node)
+        val jsonObject = node.valueToJsonObject()
         val a = json.encodeToString<JsonObject>(JsonObject.serializer(), jsonObject)
         return a
     }
     fun encodeToHtmlString(node: Node): String {
-        val tagString = node.valueToHtmlString()
-        return tagString
-    }
-
-    private fun encodeToJsonObject(node: Node): JsonObject {
-        val map = mutableMapOf<String, JsonElement>()
-        val jsonObject = JsonObject(content = map)
-        map["name"] = JsonPrimitive(node.name)
-        map["value"] = node.valueToJsonObject()
-        val list = arrayListOf<JsonObject>()
-        for(b in node.children) {
-            val subMap = b.valueToJsonObject()
-            list.add(subMap)
-        }
-        map["children"] = JsonArray(list)
-        return jsonObject
+        return node.valueToHtmlString()
     }
 }
 
 class HeaderNode(private val text: String, private val header: Int = 0): Node(name = "header") {
     override fun valueToJsonObject(): JsonObject {
-        val map = mutableMapOf<String, JsonElement>()
-        val jsonObject = JsonObject(content = map)
-        map["text"] = JsonPrimitive(text)
-        map["header"] = JsonPrimitive(header)
-        return jsonObject
+        val valueMap = mutableMapOf<String, JsonElement>()
+        valueMap["text"] = JsonPrimitive(text)
+        valueMap["header"] = JsonPrimitive(header)
+        val nodeMap = mutableMapOf<String, JsonElement>()
+        nodeMap["name"] = JsonPrimitive(this.name)
+        nodeMap["value"] = JsonObject(content = valueMap)
+        return JsonObject(content = nodeMap)
     }
 
     override fun valueToHtmlString(): String {
-        val tagName = when(header){
+        val tagName = when (header) {
             1 -> "h1"
             2 -> "h2"
             3 -> "h3"
@@ -81,27 +68,41 @@ class HeaderNode(private val text: String, private val header: Int = 0): Node(na
             6 -> "h6"
             else -> ""
         }
-        val htmlString = "<$tagName>$text</$tagName>"
-        return htmlString
+        val encodedText = StringUtils.encodeHtml(text)
+        return "<$tagName>$encodedText</$tagName>"
     }
 }
 
-class LinkNode(private val text: String, val link: String = ""): Node(name = "link") {
+class LinkNode(private val text: String, private val link: String = ""): Node(name = "link") {
     override fun valueToJsonObject(): JsonObject {
-        val map = mutableMapOf<String, JsonElement>()
-        val jsonObject = JsonObject(content = map)
-        map["text"] = JsonPrimitive(text)
-        map["link"] = JsonPrimitive(link)
-        return jsonObject
+        val valueMap = mutableMapOf<String, JsonElement>()
+        valueMap["text"] = JsonPrimitive(text)
+        valueMap["link"] = JsonPrimitive(link)
+        val nodeMap = mutableMapOf<String, JsonElement>()
+        nodeMap["name"] = JsonPrimitive(this.name)
+        nodeMap["value"] = JsonObject(content = valueMap)
+        return JsonObject(content = nodeMap)
     }
-    val encodedText = StringUtils.encodeHtml(text)
     override fun valueToHtmlString(): String {
+        val encodedText = StringUtils.encodeHtml(text)
         return "<a href=$link>$encodedText</a>"
     }
 }
 
 // 容器节点
 class ColumnNode(): Node(name = "column") {
+    override fun valueToJsonObject(): JsonObject {
+        val map = mutableMapOf<String, JsonElement>()
+        val jsonObject = JsonObject(content = map)
+        map["name"] = JsonPrimitive(this.name)
+        val list = arrayListOf<JsonObject>()
+        for(b in this.children) {
+            val subMap = b.valueToJsonObject()
+            list.add(subMap)
+        }
+        map["children"] = JsonArray(list)
+        return jsonObject
+    }
     override fun valueToHtmlString(): String {
         val builder = StringBuilder()
         builder.append("<div>")
@@ -124,17 +125,19 @@ class TextNode(val text: String = "",
                val color: String = "",
                val background: String = "",): Node(name = "text") {
     override fun valueToJsonObject(): JsonObject {
-        val map = mutableMapOf<String, JsonElement>()
-        val jsonObject = JsonObject(content = map)
-        map["text"] = JsonPrimitive(text)
-        map["bold"] = JsonPrimitive(bold)
-        map["italic"] = JsonPrimitive(italic)
-        map["font"] = JsonPrimitive(font)
-        map["strike"] = JsonPrimitive(strike)
-        map["underline"] = JsonPrimitive(underline)
-        map["color"] = JsonPrimitive(color)
-        map["background"] = JsonPrimitive(background)
-        return jsonObject
+        val valueMap = mutableMapOf<String, JsonElement>()
+        valueMap["text"] = JsonPrimitive(text)
+        valueMap["bold"] = JsonPrimitive(bold)
+        valueMap["italic"] = JsonPrimitive(italic)
+        valueMap["font"] = JsonPrimitive(font)
+        valueMap["strike"] = JsonPrimitive(strike)
+        valueMap["underline"] = JsonPrimitive(underline)
+        valueMap["color"] = JsonPrimitive(color)
+        valueMap["background"] = JsonPrimitive(background)
+        val nodeMap = mutableMapOf<String, JsonElement>()
+        nodeMap["name"] = JsonPrimitive(this.name)
+        nodeMap["value"] = JsonObject(content = valueMap)
+        return JsonObject(content = nodeMap)
     }
     override fun valueToHtmlString(): String {
         var className = ""
@@ -166,6 +169,7 @@ class TextNode(val text: String = "",
         if(style.isNotEmpty()) {
             style = " style='$style'"
         }
-        return "<span$className$style>$text</span>"
+        val encodedText = StringUtils.encodeHtml(text)
+        return "<span$className$style>$encodedText</span>"
     }
 }

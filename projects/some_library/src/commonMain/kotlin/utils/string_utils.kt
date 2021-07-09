@@ -17,7 +17,7 @@ object StringUtils {
         var encoded_string: StringBuilder? = null
         val string_to_encode_array = source.toCharArray()
         var last_match = -1
-        var difference = 0
+        var difference: Int
         for (i in string_to_encode_array.indices) {
             val char_to_encode = string_to_encode_array[i]
             if (encodingTable.containsKey(char_to_encode)) {
