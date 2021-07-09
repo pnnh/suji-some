@@ -14,11 +14,6 @@ type NewPageState = {
     saveErrorMsg?: string;
 };
 
-const initialValue = {
-        name: 'column',
-        children: [{name: 'paragraph', text: '', }],
-    };
-const sectionStackTokens: IStackTokens = { childrenGap: 16 };
 const rightStyles = css`
   width: 240px;
 `
@@ -72,8 +67,7 @@ const NewPage = (props:{}, state: NewPageState) => {
                                     <Stack.Item>
                                         <Stack tokens={{childrenGap: 8}}>
                                             <Stack.Item grow={10}>
-                                                <SFXEditor value={[initialValue]}
-                                                           onChange={(value: SlateDescendant[]) => {
+                                                <SFXEditor onChange={(value: SlateDescendant[]) => {
                                                                console.debug("value", value);
                                                                     }}/>
                                             </Stack.Item>

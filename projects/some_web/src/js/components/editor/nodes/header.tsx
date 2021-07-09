@@ -1,3 +1,6 @@
+import SFNode, {SFNodeView} from "@/js/components/editor/nodes/node";
+import {ReactEditor} from "slate-react";
+import {IconButton} from "@fluentui/react";
 import {
     Editor,
     Element as SlateElement,
@@ -5,18 +8,8 @@ import {
     Path as SlatePath,
     Transforms
 } from "slate";
-import {Descendant as SlateDescendant} from "slate/dist/interfaces/node";
-import {ReactEditor} from "slate-react";
-import {IconButton} from "@fluentui/react";
 import React from "react";
-
-export default class SFNode implements SlateElement {
-    name: string;
-    children: SlateDescendant[] = [];
-    constructor(name: string) {
-        this.name = name;
-    }
-}
+import {SFParagraphNode} from "@/js/components/editor/nodes/paragraph";
 
 export class SFHeaderNode extends SFNode {
     header: number;
@@ -24,14 +17,6 @@ export class SFHeaderNode extends SFNode {
     constructor(header: number) {
         super("header");
         this.header = header;
-    }
-}
-
-export class SFNodeView<T> extends React.Component<T> {
-    editor: ReactEditor;
-    constructor(props) {
-        super(props);
-        this.editor = props.editor;
     }
 }
 
@@ -82,10 +67,4 @@ export function SFHeaderView(props: {attributes, children, node: SFHeaderNode}) 
             return <h4{...props.attributes}>{props.children}</h4>
     }
     return <h1 {...props.attributes}>{props.children}</h1>
-}
-
-export class SFParagraphNode extends SFNode {
-    constructor() {
-        super("paragraph");
-    }
 }
