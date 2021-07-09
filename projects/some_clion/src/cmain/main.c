@@ -1,6 +1,23 @@
 #include "stdio.h"
 #include "libsome_api.h"
 
+void encodeToJsonString(const libsome_ExportedSymbols* lib, const char* str) {
+  libsome_kref_parchment_DeltaSerializer deltaSerializer = lib -> kotlin.root.parchment.DeltaSerializer.DeltaSerializer();
+  libsome_kref_parchment_Node node = lib -> kotlin.root.parchment
+      .DeltaSerializer.parseToNode(deltaSerializer, str);
+  libsome_kref_parchment_NodeSerializer newInstance = lib -> kotlin.root.parchment.NodeSerializer.NodeSerializer();
+  const char* response = lib -> kotlin.root.parchment.NodeSerializer.
+      encodeToJsonString(newInstance, node);
+  printf("%s\n", response);
+  lib->DisposeString(response);
+}
+
+void encodeToHtmlString(const libsome_ExportedSymbols* lib, const char* str) {
+  const char* response = lib -> kotlin.root.parchment.deltaToHtmlString(str);
+  printf("%s\n", response);
+  lib->DisposeString(response);
+}
+
 int main(int argc, char** argv) {
   libsome_ExportedSymbols* lib = libsome_symbols();
 
@@ -163,13 +180,7 @@ int main(int argc, char** argv) {
                     "                    }\n"
                     "                ]\n"
                     "            }";
-  libsome_kref_parchment_DeltaSerializer deltaSerializer = lib -> kotlin.root.parchment.DeltaSerializer.DeltaSerializer();
-  libsome_kref_parchment_Node node = lib -> kotlin.root.parchment
-      .DeltaSerializer.parseToNode(deltaSerializer, str);
-  libsome_kref_parchment_NodeSerializer newInstance = lib -> kotlin.root.parchment.NodeSerializer.NodeSerializer();
-  const char* response = lib -> kotlin.root.parchment.NodeSerializer.
-      encodeToJsonString(newInstance, node);
-  printf("%s\n", response);
-  lib->DisposeString(response);
+  encodeToJsonString(lib, str);
+  encodeToHtmlString(lib, str);
   return 0;
 }

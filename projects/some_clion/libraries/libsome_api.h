@@ -125,6 +125,9 @@ typedef struct {
 } libsome_kref_delta_OpString_Companion;
 typedef struct {
   libsome_KNativePtr pinned;
+} libsome_kref_parchment_ColumnNode;
+typedef struct {
+  libsome_KNativePtr pinned;
 } libsome_kref_parchment_DeltaSerializer;
 typedef struct {
   libsome_KNativePtr pinned;
@@ -144,6 +147,9 @@ typedef struct {
 typedef struct {
   libsome_KNativePtr pinned;
 } libsome_kref_parchment_TextNode;
+typedef struct {
+  libsome_KNativePtr pinned;
+} libsome_kref_utils_StringUtils;
 
 
 typedef struct {
@@ -334,6 +340,13 @@ typedef struct {
         } OpString;
       } delta;
       struct {
+        const char* (*deltaToHtmlString)(const char* packet);
+        const char* (*deltaToJsonString)(const char* packet);
+        const char* (*htmlEncode)(const char* text);
+        struct {
+          libsome_KType* (*_type)(void);
+          libsome_kref_parchment_ColumnNode (*ColumnNode)();
+        } ColumnNode;
         struct {
           libsome_KType* (*_type)(void);
           libsome_kref_parchment_DeltaSerializer (*DeltaSerializer)();
@@ -342,12 +355,10 @@ typedef struct {
         struct {
           libsome_KType* (*_type)(void);
           libsome_kref_parchment_HeaderNode (*HeaderNode)(const char* text, libsome_KInt header);
-          libsome_KInt (*get_header)(libsome_kref_parchment_HeaderNode thiz);
         } HeaderNode;
         struct {
           libsome_KType* (*_type)(void);
           libsome_kref_parchment_LinkNode (*LinkNode)(const char* text, const char* link);
-          const char* (*get_link)(libsome_kref_parchment_LinkNode thiz);
         } LinkNode;
         struct {
           libsome_KType* (*_type)(void);
@@ -359,6 +370,7 @@ typedef struct {
         struct {
           libsome_KType* (*_type)(void);
           libsome_kref_parchment_NodeSerializer (*NodeSerializer)();
+          const char* (*encodeToHtmlString)(libsome_kref_parchment_NodeSerializer thiz, libsome_kref_parchment_Node node);
           const char* (*encodeToJsonString)(libsome_kref_parchment_NodeSerializer thiz, libsome_kref_parchment_Node node);
         } NodeSerializer;
         struct {
@@ -377,6 +389,11 @@ typedef struct {
       struct {
         const char* (*randomPassword)(libsome_KInt length, libsome_KBoolean number, libsome_KBoolean letter, libsome_KBoolean uppercaseLetter, libsome_KBoolean symbol);
         const char* (*randomString)(const char* chars, libsome_KInt length);
+        struct {
+          libsome_KType* (*_type)(void);
+          libsome_kref_utils_StringUtils (*_instance)();
+          const char* (*encodeHtml)(libsome_kref_utils_StringUtils thiz, const char* source);
+        } StringUtils;
       } utils;
     } root;
   } kotlin;
