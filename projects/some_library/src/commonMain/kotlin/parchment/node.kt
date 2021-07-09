@@ -1,6 +1,7 @@
 package parchment
 
 import kotlinx.serialization.json.*
+import utils.StringUtils
 
 expect fun htmlEncode(text:String): String
 
@@ -93,9 +94,9 @@ class LinkNode(private val text: String, val link: String = ""): Node(name = "li
         map["link"] = JsonPrimitive(link)
         return jsonObject
     }
-
+    val encodedText = StringUtils.encodeHtml(text)
     override fun valueToHtmlString(): String {
-        return "<a href=$link>$text</a>"
+        return "<a href=$link>$encodedText</a>"
     }
 }
 
