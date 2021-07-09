@@ -14,6 +14,7 @@ import { withHistory } from 'slate-history'
 import {IconButton, IContextualMenuProps,Stack} from "@fluentui/react";
 import SFXNode from "@/js/components/editor/models";
 import {css} from "@emotion/css";
+import SFNode, {SFHeaderNode, SFParagraphNode} from "@/js/components/editor/node";
 
 interface SFEditorProps {
     value: SlateDescendant[],
@@ -49,22 +50,22 @@ class SFXEditor extends React.Component<SFEditorProps, SFEditorState> {
                             <IconButton iconProps={{iconName: 'Header1'}} title="标题一"
                                         checked={isBlockActive(this.editor, "heading-one")}
                                         onClick={()=>{
-                                            toggleBlock(this.editor, "heading-one")
+                                            toggleBlock(this.editor, new SFHeaderNode(1))
                                         }}/>
                             <IconButton iconProps={{iconName: 'Header2'}} title="标题二"
                                         checked={isBlockActive(this.editor, "heading-two")}
                                         onClick={()=>{
-                                            toggleBlock(this.editor, "heading-two")
+                                            toggleBlock(this.editor, new SFHeaderNode(2))
                                         }}/>
                             <IconButton iconProps={{iconName: 'Header3'}} title="标题三"
                                         checked={isBlockActive(this.editor, "heading-three")}
                                         onClick={()=>{
-                                            toggleBlock(this.editor, "heading-three")
+                                            toggleBlock(this.editor, new SFHeaderNode(3))
                                         }}/>
                             <IconButton iconProps={{iconName: 'Header4'}} title="标题四"
                                         checked={isBlockActive(this.editor, "heading-four")}
                                         onClick={()=>{
-                                            toggleBlock(this.editor, "heading-four")
+                                            toggleBlock(this.editor, new SFHeaderNode(4))
                                         }}/>
                             <IconButton iconProps={{iconName: 'Bold'}} title="加粗"
                                         checked={isMarkActive(this.editor, "bold")}
@@ -111,22 +112,13 @@ const toggleMark = (editor, format) => {
         Editor.addMark(editor, format, true)
     }
 }
-class SFXTitleOne implements SlateElement {
-    type: string;
-    children: SlateDescendant[] = [];
-    constructor(type: string) {
-        this.type = type;
-    }
-}
-const toggleBlock = (editor: Editor, format: string) => {
-    const isActive = isBlockActive(editor, format)
 
-    if (isActive) {
-        format = "paragraph"
+const toggleBlock = (editor: Editor, node: SFNode) => {
+    if (isBlockActive(editor, node.name)) {
+        node = new SFParagraphNode();
     }
-
-    const newProperties2 = new SFXTitleOne(format);
-    Transforms.setNodes(editor, newProperties2)
+    console.debug("toggleBlock", node);
+    Transforms.setNodes(editor, node);
 }
 
 const isBlockActive = (editor, format) => {
@@ -150,15 +142,18 @@ const titleStyles = css`
     margin: 0;
 `
 const Element = ({ attributes, children, element }) => {
-    switch (element.type) {
-        case 'heading-one':
-            return <h1 {...attributes} className={titleStyles}>{children}</h1>
-        case 'heading-two':
-            return <h2{...attributes} className={titleStyles}>{children}</h2>
-        case 'heading-three':
-            return <h3{...attributes} className={titleStyles}>{children}</h3>
-        case 'heading-four':
-            return <h4{...attributes} className={titleStyles}>{children}</h4>
+    console.debug("renderElement", element, attributes, children);
+    if (element.name === "header") {
+        switch (element.header) {
+            case 1:
+                return <h1 {...attributes} className={titleStyles}>{children}</h1>
+            case 2:
+                return <h2{...attributes} className={titleStyles}>{children}</h2>
+            case 3:
+                return <h3{...attributes} className={titleStyles}>{children}</h3>
+            case 4:
+                return <h4{...attributes} className={titleStyles}>{children}</h4>
+        }
     }
     return <p style={{marginTop:0, marginBottom:0, minHeight:16 }} {...attributes}>{children}</p>
 }
