@@ -19,9 +19,9 @@ export default class SFNode implements SlateElement {
 }
 
 
-export class SFNodeView<T> extends React.Component<T> {
+export class SFNodeView<T extends {editor: ReactEditor}> extends React.Component<T> {
     editor: ReactEditor;
-    constructor(props) {
+    constructor(props: T) {
         super(props);
         this.editor = props.editor;
     }

@@ -22,7 +22,7 @@ export class SFHeaderNode extends SFNode {
 
 export class SFHeaderToolbar extends SFNodeView<{editor: ReactEditor, header: number}> {
     node: SFHeaderNode;
-    constructor(props) {
+    constructor(props: {editor: ReactEditor, header: number}) {
         super(props);
         this.node = new SFHeaderNode(props.header);
     }
@@ -55,7 +55,7 @@ export class SFHeaderToolbar extends SFNodeView<{editor: ReactEditor, header: nu
 }
 
 
-export function SFHeaderView(props: {attributes, children, node: SFHeaderNode}) {
+export function SFHeaderView(props: {attributes: any, children: any, node: SFHeaderNode}) {
     switch (props.node.header) {
         case 1:
             return <h1 {...props.attributes} >{props.children}</h1>

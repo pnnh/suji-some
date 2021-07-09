@@ -9,7 +9,6 @@ import {
     Transforms
 } from "slate";
 import React, {CSSProperties} from "react";
-import {SFParagraphNode} from "@/js/components/editor/nodes/paragraph";
 
 export class SFTextNode extends SFNode {
     bold: boolean = false;
@@ -23,7 +22,7 @@ export class SFTextNode extends SFNode {
 
 export class SFTextToolbar extends SFNodeView<{editor: ReactEditor}> {
     node: SFTextNode;
-    constructor(props) {
+    constructor(props: {editor: ReactEditor}) {
         super(props);
         this.node = new SFTextNode();
     }
@@ -41,37 +40,44 @@ export class SFTextToolbar extends SFNodeView<{editor: ReactEditor}> {
         </>
     }
 
-    toggleMark(format) {
+    toggleMark(format: string) {
         const isActive = this.isMarkActive(format)
 
         if (isActive) {
             Editor.removeMark(this.editor, format)
         } else {
-            Editor.addMark(this.editor, format, true)
+            Editor.addMark(this.editor, format, true);
         }
     }
 
-    isMarkActive(format) {
-        const marks = Editor.marks(this.editor)
-        return marks ? marks[format] === true : false
+    isMarkActive(format: string) {
+        const marks = Editor.marks(this.editor) as SFTextNode;
+        console.debug("isMarkActive", marks);
+        if (!marks) {
+            return false;
+        }
+        switch(format) {
+            case 'bold':
+                return marks.bold;
+            case 'italic':
+                return marks.italic;
+            case 'underline':
+                return marks.underline;
+        }
+        return false;
     }
-
 }
 
-export function SFTextView(props: {attributes, children, node: SFTextNode}) {
+export function SFTextView(props: {attributes: any, children: any, node: SFTextNode}) {
     let style: CSSProperties = {}
     if (props.node.bold) {
         style.fontWeight = "bold";
-        //return <strong {...props.attributes}>{props.children}</strong>
     }
     if (props.node.italic) {
         style.fontStyle = "italic";
-        //return <em {...props.attributes}>{props.children}</em>
     }
     if (props.node.underline) {
         style.textDecoration = "underline";
-        //return <u {...props.attributes}>{props.children}</u>
     }
-    //return <span {...props.attributes}>{props.children}</span>
     return <span {...props.attributes} style={style}>{props.children}</span>
 }

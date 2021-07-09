@@ -35,13 +35,13 @@ const initialValue = {
 class SFXEditor extends React.Component<SFEditorProps, SFEditorState> {
     editor = withHistory(withReact(createEditor() as ReactEditor))
 
-    constructor(props) {
+    constructor(props: SFEditorProps) {
         super(props);
         this.state = {
             value: [initialValue], readOnly: false,
         }
     }
-    onChange = (value) => {
+    onChange = (value: SlateDescendant[]) => {
         console.debug("value", value);
         this.setState({value: value});
     }
@@ -72,7 +72,7 @@ class SFXEditor extends React.Component<SFEditorProps, SFEditorState> {
         )
     }
 
-    renderElement({ attributes, children, element }) {
+    renderElement({ attributes, children, element }:{attributes: any, children: any, element: any}) {
         console.debug("renderElement", element, attributes, children);
         if (element.name === "header") {
             return <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
@@ -80,7 +80,7 @@ class SFXEditor extends React.Component<SFEditorProps, SFEditorState> {
         return <p style={{marginTop:0, marginBottom:0, minHeight:16 }} {...attributes}>{children}</p>
     }
 
-    renderLeaf({ attributes, children, leaf }) {
+    renderLeaf({ attributes, children, leaf }:{attributes: any, children: any, leaf: any}) {
         console.debug("renderLeaf", leaf, attributes, children);
         if (leaf.name === "text") {
             return <SFTextView attributes={attributes} children={children} node={leaf as SFTextNode}/>
