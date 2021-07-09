@@ -12,9 +12,8 @@ import {
 import { withHistory } from 'slate-history'
 
 import {IconButton, IContextualMenuProps,Stack} from "@fluentui/react";
-import SFXNode from "@/js/components/editor/models";
 import {css} from "@emotion/css";
-import SFNode, {SFHeaderNode, SFParagraphNode} from "@/js/components/editor/node";
+import SFNode, {SFHeaderNode, SFHeaderView, SFParagraphNode} from "@/js/components/editor/node";
 
 interface SFEditorProps {
     value: SlateDescendant[],
@@ -47,26 +46,10 @@ class SFXEditor extends React.Component<SFEditorProps, SFEditorState> {
                        onChange={this.onChange}>
                     <Stack horizontal  horizontalAlign="space-between">
                         <Stack.Item>
-                            <IconButton iconProps={{iconName: 'Header1'}} title="标题一"
-                                        checked={isBlockActive(this.editor, "heading-one")}
-                                        onClick={()=>{
-                                            toggleBlock(this.editor, new SFHeaderNode(1))
-                                        }}/>
-                            <IconButton iconProps={{iconName: 'Header2'}} title="标题二"
-                                        checked={isBlockActive(this.editor, "heading-two")}
-                                        onClick={()=>{
-                                            toggleBlock(this.editor, new SFHeaderNode(2))
-                                        }}/>
-                            <IconButton iconProps={{iconName: 'Header3'}} title="标题三"
-                                        checked={isBlockActive(this.editor, "heading-three")}
-                                        onClick={()=>{
-                                            toggleBlock(this.editor, new SFHeaderNode(3))
-                                        }}/>
-                            <IconButton iconProps={{iconName: 'Header4'}} title="标题四"
-                                        checked={isBlockActive(this.editor, "heading-four")}
-                                        onClick={()=>{
-                                            toggleBlock(this.editor, new SFHeaderNode(4))
-                                        }}/>
+                            <SFHeaderView editor={this.editor} header={1}/>
+                            <SFHeaderView editor={this.editor} header={2}/>
+                            <SFHeaderView editor={this.editor} header={3}/>
+                            <SFHeaderView editor={this.editor} header={4}/>
                             <IconButton iconProps={{iconName: 'Bold'}} title="加粗"
                                         checked={isMarkActive(this.editor, "bold")}
                                         onClick={()=>{
@@ -91,8 +74,8 @@ class SFXEditor extends React.Component<SFEditorProps, SFEditorState> {
                     </Stack>
 
                     <Editable
-                        renderElement={Element}
-                        renderLeaf={Leaf}
+                        renderElement={renderElement}
+                        renderLeaf={renderLeaf}
                         placeholder="请输入段落"
                         className={'editable'}
                         style={{minHeight:16, paddingLeft: 16, paddingRight: 16, paddingTop:8,
@@ -122,13 +105,14 @@ const toggleBlock = (editor: Editor, node: SFNode) => {
 }
 
 const isBlockActive = (editor, format) => {
+    console.debug("isBlockActive", format);
     const [match] = Editor.nodes(editor, {
         match: (n: SlateNode, p: SlatePath) => {
-            const node = n as SFXNode;
+            const node = n as SFNode;
             if (!node) {
                 return false
             }
-            return !Editor.isEditor(n) && SlateElement.isElement(n) && node.type === format
+            return !Editor.isEditor(n) && SlateElement.isElement(n) && node.name === format
         },
     })
     return !!match
@@ -141,7 +125,7 @@ const isMarkActive = (editor, format) => {
 const titleStyles = css`
     margin: 0;
 `
-const Element = ({ attributes, children, element }) => {
+const renderElement = ({ attributes, children, element }) => {
     console.debug("renderElement", element, attributes, children);
     if (element.name === "header") {
         switch (element.header) {
@@ -158,7 +142,7 @@ const Element = ({ attributes, children, element }) => {
     return <p style={{marginTop:0, marginBottom:0, minHeight:16 }} {...attributes}>{children}</p>
 }
 
-const Leaf = ({ attributes, children, leaf }) => {
+const renderLeaf = ({ attributes, children, leaf }) => {
     if (leaf.bold) {
         children = <strong>{children}</strong>
     }
