@@ -10,10 +10,10 @@ import {
 } from 'slate'
 import { withHistory } from 'slate-history'
 
-import { Button, Icon, Toolbar } from './components'
-import {SFHeaderNode, SFHeaderView} from "@/js/components/editor/nodes/header";
+import {SFHeaderNode, SFHeaderToolbar, SFHeaderView} from "@/js/components/editor/nodes/header";
 import {SFTextNode, SFTextView} from "@/js/components/editor/nodes/text";
 import {SFParagraphNode} from "@/js/components/editor/nodes/paragraph";
+import {IconButton} from "@fluentui/react";
 
 const HOTKEYS = {
     'mod+b': 'bold',
@@ -21,8 +21,6 @@ const HOTKEYS = {
     'mod+u': 'underline',
     'mod+`': 'code',
 }
-
-const LIST_TYPES = ['numbered-list', 'bulleted-list']
 
 const RichTextExample = () => {
     const [value, setValue] = useState<Descendant[]>(initialValue)
@@ -32,10 +30,10 @@ const RichTextExample = () => {
 
     return (
         <Slate editor={editor} value={value} onChange={value => setValue(value)}>
-            <Toolbar>
+            <div>
                 <BlockButton format="heading-one" icon="looks_one" />
-                <BlockButton format="heading-two" icon="looks_two" />
-            </Toolbar>
+                <SFHeaderToolbar2  format="heading-one"/>
+            </div>
             <Editable
                 renderElement={renderElement}
                 renderLeaf={renderLeaf}
@@ -90,18 +88,25 @@ function Leaf({ attributes, children, leaf }:{attributes: any, children: any, le
 const BlockButton = ({ format, icon }) => {
     const editor = useSlate()
     return (
-        <Button
-            active={isBlockActive(editor, {name:format})}
+        <button
+            //active={isBlockActive(editor, {name:format})}
             onMouseDown={event => {
                 event.preventDefault()
                 toggleBlock(editor, {name:format})
             }}
         >
-            <Icon>{icon}</Icon>
-        </Button>
+            title_one
+        </button>
     )
 }
 
+export function SFHeaderToolbar2({ format, icon }) {
+    const editor = useSlate();
+    return <button  onMouseDown={(event)=> {
+                           event.preventDefault()
+                           toggleBlock(editor, {name:format})
+    } }>标题一</button>
+}
 const initialValue: Descendant[] = [
     {
         name: 'paragraph',
