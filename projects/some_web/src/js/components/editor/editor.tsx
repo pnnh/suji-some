@@ -26,7 +26,7 @@ const initialValue = [{
 }];
 
 function SFXEditor() {
-    console.debug("SFXEditor constructor")
+    //console.debug("SFXEditor constructor")
     const [value, setValue] = useState<SlateDescendant[]>(initialValue)
     const renElement = useCallback(props => <Element {...props}/>, [])
     const renLeaf = useCallback(props => <Leaf {...props}/>, [])
@@ -37,14 +37,10 @@ function SFXEditor() {
                    onChange={value => setValue(value)}>
                 <Stack horizontal  horizontalAlign="space-between">
                     <Stack.Item>
-                        <SFHeaderToolbar header={1}/>
-                        <SFHeaderToolbar header={2}/>
-                        <SFHeaderToolbar header={3}/>
-                        <SFHeaderToolbar header={4}/>
-                        <SFTextToolbar editor={editor}/>
+                        <SFHeaderToolbar />
+                        <SFTextToolbar />
                     </Stack.Item>
                 </Stack>
-
                 <Editable
                     renderElement={renElement}
                     renderLeaf={renLeaf}
@@ -63,7 +59,6 @@ function Element({ attributes, children, element }:{attributes: any, children: a
     console.debug("renderElement", element, attributes, children);
     if (element.name === "header") {
         return <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
-        //return <h1 {...attributes} >{children}</h1>
     }
     return <span style={{marginTop:0, marginBottom:0, minHeight:16 }} {...attributes}>{children}</span>
 }

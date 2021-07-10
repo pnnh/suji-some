@@ -1,5 +1,5 @@
 import SFNode, {SFNodeView} from "@/js/components/editor/nodes/node";
-import {ReactEditor} from "slate-react";
+import {ReactEditor, useSlate} from "slate-react";
 import {IconButton} from "@fluentui/react";
 import {
     Editor,
@@ -20,52 +20,12 @@ export class SFTextNode extends SFNode {
     }
 }
 
-export class SFTextToolbar extends SFNodeView<{editor: ReactEditor}> {
-    node: SFTextNode;
-    constructor(props: {editor: ReactEditor}) {
-        super(props);
-        this.node = new SFTextNode();
-    }
-    render() {
-        return <>
-            <IconButton iconProps={{iconName: 'Bold'}} title="加粗"
-                        checked={this.isMarkActive('bold')}
-                        onClick={()=>this.toggleMark("bold")}/>
-            <IconButton iconProps={{iconName: 'Italic'}} title="斜体"
-                        checked={this.isMarkActive('italic')}
-                        onClick={()=> this.toggleMark("italic") }/>
-            <IconButton iconProps={{iconName: 'Underline'}} title="下划线"
-                        checked={this.isMarkActive('underline')}
-                        onClick={()=> this.toggleMark("underline") }/>
-        </>
-    }
-
-    toggleMark(format: string) {
-        const isActive = this.isMarkActive(format)
-
-        if (isActive) {
-            Editor.removeMark(this.editor, format)
-        } else {
-            Editor.addMark(this.editor, format, true);
-        }
-    }
-
-    isMarkActive(format: string) {
-        const marks = Editor.marks(this.editor) as SFTextNode;
-        //console.debug("isMarkActive", marks);
-        if (!marks) {
-            return false;
-        }
-        switch(format) {
-            case 'bold':
-                return marks.bold;
-            case 'italic':
-                return marks.italic;
-            case 'underline':
-                return marks.underline;
-        }
-        return false;
-    }
+export function SFTextToolbar() {
+    return <>
+        <SFIcon iconName={"Bold"} format={"bold"} />
+        <SFIcon iconName={"Italic"} format={"italic"} />
+        <SFIcon iconName={"Underline"} format={"underline"} />
+    </>
 }
 
 export function SFTextView(props: {attributes: any, children: any, node: SFTextNode}) {
@@ -80,4 +40,40 @@ export function SFTextView(props: {attributes: any, children: any, node: SFTextN
         style.textDecoration = "underline";
     }
     return <span {...props.attributes} style={style}>{props.children}</span>
+}
+
+function SFIcon(props: {iconName: string, format: string}) {
+    const editor = useSlate() as ReactEditor;
+    return <IconButton iconProps={{iconName: props.iconName}} title="加粗"
+                checked={isMarkActive(editor, props.format)}
+                onMouseDown={(event) => {
+                    event.preventDefault();
+                    toggleMark(editor, props.format);
+                }}/>
+}
+
+function toggleMark(editor: ReactEditor, format: string) {
+    const isActive = isMarkActive(editor, format)
+
+    if (isActive) {
+        Editor.removeMark(editor, format)
+    } else {
+        Editor.addMark(editor, format, true);
+    }
+}
+
+function isMarkActive(editor: ReactEditor, format: string) {
+    const marks = Editor.marks(editor) as SFTextNode;
+    if (!marks) {
+        return false;
+    }
+    switch(format) {
+        case 'bold':
+            return marks.bold;
+        case 'italic':
+            return marks.italic;
+        case 'underline':
+            return marks.underline;
+    }
+    return false;
 }

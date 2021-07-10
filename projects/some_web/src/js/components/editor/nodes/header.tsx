@@ -20,26 +20,24 @@ export class SFHeaderNode extends SFNode {
     }
 }
 
-export function SFHeaderToolbar(props: {header: number}) {
-    const node = new SFHeaderNode(props.header);
-    const editor = useSlate() as ReactEditor;
-    return <IconButton iconProps={{iconName: `Header${props.header}`}}
-                       checked={isHeaderActive(editor, node)}
-                       onClick={(event)=> {
-                           event.preventDefault()
-                           toggleBlock(editor, node)
-                       } }/>
+export function SFHeaderToolbar() {
+    return <>
+        <HeaderIcon header={1} />
+        <HeaderIcon header={2} />
+        <HeaderIcon header={3} />
+        <HeaderIcon header={4} />
+    </>
 }
 
-function toggleBlock(editor: ReactEditor, node: SFHeaderNode) {
-    let props: any = node;
-    if (isHeaderActive(editor, node)) {
+function toggleBlock(editor: ReactEditor, header: number) {
+    let props: any = new SFHeaderNode(header);
+    if (isActive(editor, header)) {
         props = new SFParagraphNode();
     }
     Transforms.setNodes(editor, props);
 }
 
-function isHeaderActive(editor: ReactEditor, headerNode: SFHeaderNode): boolean {
+function isActive(editor: ReactEditor, header: number): boolean {
     const [match] = Editor.nodes(editor, {
         match: (n: SlateNode, p: SlatePath) => {
             const node = n as SFHeaderNode;
@@ -47,7 +45,7 @@ function isHeaderActive(editor: ReactEditor, headerNode: SFHeaderNode): boolean 
                 return false
             }
             return !Editor.isEditor(n) && SlateElement.isElement(n) &&
-                node.name === headerNode.name && node.header == headerNode.header;
+                node.name === "header" && node.header == header;
         },
     })
     return !!match
@@ -65,4 +63,14 @@ export function SFHeaderView(props: {attributes: any, children: any, node: SFHea
             return <h4{...props.attributes}>{props.children}</h4>
     }
     return <h1 {...props.attributes}>{props.children}</h1>
+}
+
+function HeaderIcon(props: {header: number}) {
+    const editor = useSlate() as ReactEditor;
+    return <IconButton iconProps={{iconName: `Header${props.header}`}} title="加粗"
+                       checked={isActive(editor, props.header)}
+                       onMouseDown={(event) => {
+                           event.preventDefault();
+                           toggleBlock(editor, props.header);
+                       }}/>
 }
