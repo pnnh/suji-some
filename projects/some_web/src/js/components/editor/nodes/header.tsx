@@ -1,5 +1,5 @@
 import SFNode, {SFNodeView} from "@/js/components/editor/nodes/node";
-import {ReactEditor} from "slate-react";
+import {ReactEditor, useSlate} from "slate-react";
 import {IconButton} from "@fluentui/react";
 import {
     Editor,
@@ -20,40 +20,38 @@ export class SFHeaderNode extends SFNode {
     }
 }
 
-export class SFHeaderToolbar extends SFNodeView<{editor: ReactEditor, header: number}> {
-    node: SFHeaderNode;
-    constructor(props: {editor: ReactEditor, header: number}) {
-        super(props);
-        this.node = new SFHeaderNode(props.header);
-    }
-    render() {
-        return <IconButton iconProps={{iconName: `Header${this.node.header}`}}
-                           checked={this.isActive()}
-                           onClick={()=> this.toggleBlock() }/>
-    }
-    toggleBlock() {
-        let node: any = this.node;
-        if (this.isActive()) {
-            node = new SFParagraphNode();
-        }
-        Transforms.setNodes(this.editor, node);
-    }
-    isActive(): boolean {
-        //console.debug("isHeaderActive");
-        const [match] = Editor.nodes(this.editor, {
-            match: (n: SlateNode, p: SlatePath) => {
-                const node = n as SFHeaderNode;
-                if (!node) {
-                    return false
-                }
-                return !Editor.isEditor(n) && SlateElement.isElement(n) &&
-                    node.name === this.node.name && node.header == this.node.header;
-            },
-        })
-        return !!match
-    }
+export function SFHeaderToolbar(props: {header: number}) {
+    const node = new SFHeaderNode(props.header);
+    const editor = useSlate() as ReactEditor;
+    return <IconButton iconProps={{iconName: `Header${props.header}`}}
+                       checked={isHeaderActive(editor, node)}
+                       onClick={(event)=> {
+                           event.preventDefault()
+                           toggleBlock(editor, node)
+                       } }/>
 }
 
+function toggleBlock(editor: ReactEditor, node: SFHeaderNode) {
+    let props: any = node;
+    if (isHeaderActive(editor, node)) {
+        props = new SFParagraphNode();
+    }
+    Transforms.setNodes(editor, props);
+}
+
+function isHeaderActive(editor: ReactEditor, headerNode: SFHeaderNode): boolean {
+    const [match] = Editor.nodes(editor, {
+        match: (n: SlateNode, p: SlatePath) => {
+            const node = n as SFHeaderNode;
+            if (!node) {
+                return false
+            }
+            return !Editor.isEditor(n) && SlateElement.isElement(n) &&
+                node.name === headerNode.name && node.header == headerNode.header;
+        },
+    })
+    return !!match
+}
 
 export function SFHeaderView(props: {attributes: any, children: any, node: SFHeaderNode}) {
     switch (props.node.header) {

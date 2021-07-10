@@ -24,11 +24,12 @@ const initialValue = [{
     name: 'paragraph',
     children: [{name: 'text', text: '', }],
 }];
+
 function SFXEditor() {
     console.debug("SFXEditor constructor")
     const [value, setValue] = useState<SlateDescendant[]>(initialValue)
-    const renElement = useCallback(props => renderElement(props), [])
-    const renLeaf = useCallback(props => renderLeaf(props), [])
+    const renElement = useCallback(props => <Element {...props}/>, [])
+    const renLeaf = useCallback(props => <Leaf {...props}/>, [])
     const editor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), [])
 
     return (
@@ -36,17 +37,17 @@ function SFXEditor() {
                    onChange={value => setValue(value)}>
                 <Stack horizontal  horizontalAlign="space-between">
                     <Stack.Item>
-                        <SFHeaderToolbar editor={editor} header={1}/>
-                        <SFHeaderToolbar editor={editor} header={2}/>
-                        <SFHeaderToolbar editor={editor} header={3}/>
-                        <SFHeaderToolbar editor={editor} header={4}/>
+                        <SFHeaderToolbar header={1}/>
+                        <SFHeaderToolbar header={2}/>
+                        <SFHeaderToolbar header={3}/>
+                        <SFHeaderToolbar header={4}/>
                         <SFTextToolbar editor={editor}/>
                     </Stack.Item>
                 </Stack>
 
                 <Editable
-                    renderElement={renderElement}
-                    renderLeaf={renderLeaf}
+                    renderElement={renElement}
+                    renderLeaf={renLeaf}
                     placeholder="请输入段落"
                     className={'editable'}
                     autoFocus={true}
@@ -58,7 +59,7 @@ function SFXEditor() {
     )
 }
 
-function renderElement({ attributes, children, element }:{attributes: any, children: any, element: any}) {
+function Element({ attributes, children, element }:{attributes: any, children: any, element: any}) {
     console.debug("renderElement", element, attributes, children);
     if (element.name === "header") {
         return <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
@@ -67,7 +68,7 @@ function renderElement({ attributes, children, element }:{attributes: any, child
     return <span style={{marginTop:0, marginBottom:0, minHeight:16 }} {...attributes}>{children}</span>
 }
 
-function renderLeaf({ attributes, children, leaf }:{attributes: any, children: any, leaf: any}) {
+function Leaf({ attributes, children, leaf }:{attributes: any, children: any, leaf: any}) {
     console.debug("renderLeaf", leaf, attributes, children);
     if (leaf.name === "text") {
         return <SFTextView attributes={attributes} children={children} node={leaf as SFTextNode}/>
