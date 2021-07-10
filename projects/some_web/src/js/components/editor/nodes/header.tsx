@@ -1,6 +1,13 @@
 import SFNode, {SFNodeView} from "@/js/components/editor/nodes/node";
 import {ReactEditor, useSlate} from "slate-react";
-import {IconButton} from "@fluentui/react";
+import {
+    Dropdown,
+    DropdownMenuItemType,
+    IconButton,
+    IDropdownOption,
+    IDropdownStyles,
+    Stack
+} from "@fluentui/react";
 import {
     Editor,
     Element as SlateElement,
@@ -8,7 +15,7 @@ import {
     Path as SlatePath,
     Transforms
 } from "slate";
-import React from "react";
+import React, {CSSProperties} from "react";
 import {SFParagraphNode} from "@/js/components/editor/nodes/paragraph";
 
 export class SFHeaderNode extends SFNode {
@@ -21,12 +28,12 @@ export class SFHeaderNode extends SFNode {
 }
 
 export function SFHeaderToolbar() {
-    return <>
+    return <Stack horizontal  horizontalAlign="space-between">
         <HeaderIcon header={1} />
         <HeaderIcon header={2} />
         <HeaderIcon header={3} />
         <HeaderIcon header={4} />
-    </>
+    </Stack>
 }
 
 function toggleBlock(editor: ReactEditor, header: number) {
