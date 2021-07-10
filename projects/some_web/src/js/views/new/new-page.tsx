@@ -7,6 +7,7 @@ import SFXCard from "@/js/components/card/card";
 import {css} from "@emotion/css";
 import {Descendant as SlateDescendant} from "slate/dist/interfaces/node";
 import SFXEditor from "@/js/components/editor/editor";
+import RichTextExample from "@/js/views/example/richtext";
 
 type NewPageState = {
     title: string;
@@ -67,7 +68,8 @@ const NewPage = (props:{}, state: NewPageState) => {
                                     <Stack.Item>
                                         <Stack tokens={{childrenGap: 8}}>
                                             <Stack.Item grow={10}>
-                                                <SFXEditor />
+                                                {/*<SFXEditor />*/}
+                                                <RichTextExample/>
                                             </Stack.Item>
                                         </Stack>
                                     </Stack.Item>
