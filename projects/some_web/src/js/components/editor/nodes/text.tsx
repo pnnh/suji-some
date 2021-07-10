@@ -52,7 +52,7 @@ export class SFTextToolbar extends SFNodeView<{editor: ReactEditor}> {
 
     isMarkActive(format: string) {
         const marks = Editor.marks(this.editor) as SFTextNode;
-        console.debug("isMarkActive", marks);
+        //console.debug("isMarkActive", marks);
         if (!marks) {
             return false;
         }

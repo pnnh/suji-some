@@ -43,7 +43,7 @@ const editorBodyStyles = css`
   margin-bottom: 32px;  
 `
 const NewPage = (props:{}, state: NewPageState) => {
-
+    console.debug("NewPage");
     let [title, setTitle] = useState('')
     let [errMsg, setErrMsg] = useState('')
 
@@ -67,9 +67,7 @@ const NewPage = (props:{}, state: NewPageState) => {
                                     <Stack.Item>
                                         <Stack tokens={{childrenGap: 8}}>
                                             <Stack.Item grow={10}>
-                                                <SFXEditor onChange={(value: SlateDescendant[]) => {
-                                                               console.debug("value", value);
-                                                                    }}/>
+                                                <SFXEditor />
                                             </Stack.Item>
                                         </Stack>
                                     </Stack.Item>

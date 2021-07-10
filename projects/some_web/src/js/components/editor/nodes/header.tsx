@@ -39,7 +39,7 @@ export class SFHeaderToolbar extends SFNodeView<{editor: ReactEditor, header: nu
         Transforms.setNodes(this.editor, node);
     }
     isActive(): boolean {
-        console.debug("isHeaderActive");
+        //console.debug("isHeaderActive");
         const [match] = Editor.nodes(this.editor, {
             match: (n: SlateNode, p: SlatePath) => {
                 const node = n as SFHeaderNode;
