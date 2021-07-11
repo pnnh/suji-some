@@ -1,3 +1,4 @@
+import React from "react";
 import {
     Editor,
     Element as SlateElement,
@@ -6,23 +7,22 @@ import {
     Transforms
 } from "slate";
 import {Descendant as SlateDescendant} from "slate/dist/interfaces/node";
-import {ReactEditor} from "slate-react";
-import {IconButton} from "@fluentui/react";
-import React from "react";
 
-export default class SFNode implements SlateElement {
-    name: string;
-    children: SlateDescendant[] = [];
-    constructor(name: string) {
-        this.name = name;
+export default class SFProp implements SlateElement {
+    constructor(public name: string,
+                public children: SlateDescendant[] = []) {}
+    isActive(props: any): boolean {
+        throw new Error("not Implemented");
     }
 }
 
 
-export class SFNodeView<T extends {editor: ReactEditor}> extends React.Component<T> {
-    editor: ReactEditor;
-    constructor(props: T) {
-        super(props);
-        this.editor = props.editor;
+export class SFMark<T> implements SlateElement {
+    constructor(public name: string,
+                public key: string,
+                public value: T,
+                public children: SlateDescendant[] = []) {}
+    isActive(props: any): boolean {
+        throw new Error("not Implemented");
     }
 }

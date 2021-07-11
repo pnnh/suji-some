@@ -1,4 +1,4 @@
-import SFNode, {SFNodeView} from "@/js/components/editor/nodes/node";
+import SFProp from "@/js/components/editor/nodes/node";
 import {ReactEditor, useSlate} from "slate-react";
 import {
     Dropdown,
@@ -16,47 +16,31 @@ import {
     Transforms
 } from "slate";
 import React, {CSSProperties} from "react";
-import {SFParagraphNode} from "@/js/components/editor/nodes/paragraph";
+import {isBlockActive, toggleBlock} from "@/js/components/editor/nodes/paragraph";
 
-export class SFHeaderNode extends SFNode {
-    header: number;
-
-    constructor(header: number) {
+export class SFHeaderNode extends SFProp {
+    constructor(public header: number) {
         super("header");
-        this.header = header;
+    }
+
+    isActive(props: any): boolean {
+        const node = props as SFHeaderNode;
+        if (!node) {
+            return false
+        }
+        return node.name === "header" && node.header == this.header;
     }
 }
 
 export function SFHeaderToolbar() {
     return <Stack horizontal  horizontalAlign="space-between">
-        <HeaderIcon header={1} />
-        <HeaderIcon header={2} />
-        <HeaderIcon header={3} />
-        <HeaderIcon header={4} />
+        <HeaderIcon iconName={'Header1'} header={1} />
+        <HeaderIcon iconName={'Header2'} header={2} />
+        <HeaderIcon iconName={'Header3'} header={3} />
+        <HeaderIcon iconName={'Header4'} header={4} />
     </Stack>
 }
 
-function toggleBlock(editor: ReactEditor, header: number) {
-    let props: any = new SFHeaderNode(header);
-    if (isActive(editor, header)) {
-        props = new SFParagraphNode();
-    }
-    Transforms.setNodes(editor, props);
-}
-
-function isActive(editor: ReactEditor, header: number): boolean {
-    const [match] = Editor.nodes(editor, {
-        match: (n: SlateNode, p: SlatePath) => {
-            const node = n as SFHeaderNode;
-            if (!node) {
-                return false
-            }
-            return !Editor.isEditor(n) && SlateElement.isElement(n) &&
-                node.name === "header" && node.header == header;
-        },
-    })
-    return !!match
-}
 
 export function SFHeaderView(props: {attributes: any, children: any, node: SFHeaderNode}) {
     switch (props.node.header) {
@@ -72,12 +56,13 @@ export function SFHeaderView(props: {attributes: any, children: any, node: SFHea
     return <h1 {...props.attributes}>{props.children}</h1>
 }
 
-function HeaderIcon(props: {header: number}) {
+function HeaderIcon(props: {iconName: string, header: number}) {
     const editor = useSlate() as ReactEditor;
-    return <IconButton iconProps={{iconName: `Header${props.header}`}} title="加粗"
-                       checked={isActive(editor, props.header)}
+    const node = new SFHeaderNode(props.header);
+    return <IconButton iconProps={{iconName: props.iconName}} title="加粗"
+                       checked={isBlockActive(editor, node)}
                        onMouseDown={(event) => {
                            event.preventDefault();
-                           toggleBlock(editor, props.header);
+                           toggleBlock(editor, node);
                        }}/>
 }

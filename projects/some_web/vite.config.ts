@@ -12,7 +12,7 @@ const config = defineConfig({
   ],
   base: "/",
   server: {
-    hmr: true,
+    hmr: false,
   },
   build: {
     emptyOutDir: true,

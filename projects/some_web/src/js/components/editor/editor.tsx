@@ -17,7 +17,13 @@ import {
     SFHeaderToolbar,
     SFHeaderView,
 } from "@/js/components/editor/nodes/header";
-import {SFTextNode, SFTextToolbar, SFTextView} from "@/js/components/editor/nodes/text";
+import {SFTextMark, SFTextToolbar, SFTextView} from "@/js/components/editor/nodes/text";
+import {
+    SFParagraphNode,
+    SFParagraphToolbar,
+    SFParagraphView
+} from "@/js/components/editor/nodes/paragraph";
+
 
 const initialValue = [{
     name: 'paragraph',
@@ -43,6 +49,9 @@ function SFXEditor() {
                    onChange={value => setValue(value)}>
                 <Stack horizontal >
                     <Stack.Item>
+                        <SFParagraphToolbar/>
+                    </Stack.Item>
+                    <Stack.Item>
                         <SFHeaderToolbar />
                     </Stack.Item>
                     <Stack.Item>
@@ -56,8 +65,6 @@ function SFXEditor() {
                     className={'editable'}
                     autoFocus={true}
                     readOnly={false}
-                    // style={{minHeight:16, paddingLeft: 16, paddingRight: 16, paddingTop:8,
-                    //     paddingBottom: 8}}
                     onKeyDown={event => {
                         for (const hotkey in HOTKEYS) {
                             if (isHotkey(hotkey, event as any)) {
@@ -77,13 +84,13 @@ function Element({ attributes, children, element }:{attributes: any, children: a
     if (element.name === "header") {
         return <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
     }
-    return <p {...attributes}>{children}</p>
+    return <SFParagraphView attributes={attributes} children={children} node={element as SFParagraphNode}/>
 }
 
 function Leaf({ attributes, children, leaf }:{attributes: any, children: any, leaf: any}) {
     //console.debug("renderLeaf", leaf, attributes, children);
     if (leaf.name === "text") {
-        return <SFTextView attributes={attributes} children={children} node={leaf as SFTextNode}/>
+        return <SFTextView attributes={attributes} children={children} node={leaf as SFTextMark}/>
     }
     return <span {...attributes}>{children}</span>
 }
