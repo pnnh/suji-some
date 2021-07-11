@@ -36,6 +36,7 @@ export function SFTextToolbar() {
         <SFIcon iconName={"Bold"} format={"bold"} />
         <SFIcon iconName={"Italic"} format={"italic"} />
         <SFIcon iconName={"Underline"} format={"underline"} />
+        <SFIcon iconName={"Strikethrough"} format={"strike"} />
     </>
 }
 
@@ -55,6 +56,9 @@ export function SFTextView(props: {attributes: any, children: any, node: SFTextM
                 break;
             case 'underline':
                 style.textDecoration = "underline";
+                break;
+            case 'strike':
+                style.textDecoration = "line-through";
                 break;
         }
     }

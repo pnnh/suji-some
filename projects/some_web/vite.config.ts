@@ -1,11 +1,9 @@
 import { defineConfig } from 'vite'
 import path from "path";
 import { visualizer } from 'rollup-plugin-visualizer';
-import strip from '@rollup/plugin-strip';
 
 const config = defineConfig({
   plugins:[
-    strip({debugger: true, sourceMap: true}),
     visualizer({
       filename: 'dist/status.html'
     })

@@ -33,7 +33,6 @@
     "some_utils": "file:packages/some_utils"
   },
   "devDependencies": {
-    "@rollup/plugin-strip": "^2.0.1",
     "@types/estree": "^0.0.50",
     "@types/node": "^16.3.0",
     "@types/quill": "^2.0.8",
