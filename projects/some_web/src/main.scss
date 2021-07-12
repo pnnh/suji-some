@@ -1,9 +1,9 @@
 @charset "UTF-8";
 
-@import "/src/css/fonts";
-@import "/node_modules/@fluentui/react/dist/css/fabric";
-@import "/node_modules/quill/dist/quill.snow";
-@import '/node_modules/katex/dist/katex';
+@import "src/css/fonts";
+@import "node_modules/@fluentui/react/dist/css/fabric";
+@import "node_modules/quill/dist/quill.snow";
+@import 'node_modules/katex/dist/katex';
 
 html {
     height: 100%;

@@ -7,7 +7,7 @@ import {
     Path as SlatePath,
     Node as SlateNode,
     Descendant as SlateDescendant,
-    Element as SlateElement, BaseElement, ExtendedType, BaseEditor,
+    Element as SlateElement, BaseElement, ExtendedType, BaseEditor, Descendant,
 } from 'slate'
 import { withHistory } from 'slate-history'
 import isHotkey from 'is-hotkey'
@@ -23,12 +23,9 @@ import {
     SFParagraphToolbar,
     SFParagraphView
 } from "@/js/components/editor/nodes/paragraph";
+import {SFCodeblockToolbar, SFCodeblockView} from "@/js/components/editor/nodes/codeblock";
 
 
-const initialValue = [{
-    name: 'paragraph',
-    children: [{name: 'text', text: '', }],
-}];
 
 const HOTKEYS = {
     'mod+b': 'bold',
@@ -37,16 +34,19 @@ const HOTKEYS = {
     'mod+`': 'code',
 }
 
-function SFXEditor() {
-    //console.debug("SFXEditor constructor")
-    const [value, setValue] = useState<SlateDescendant[]>(initialValue)
+function SFXEditor(props: { value: SlateDescendant[], onChange: (value: SlateDescendant[]) => void }) {
+    console.debug("SFXEditor create");
+    //const [value, setValue] = useState<SlateDescendant[]>(initialValue)
     const renElement = useCallback(props => <Element {...props}/>, [])
     const renLeaf = useCallback(props => <Leaf {...props}/>, [])
     const editor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), [])
 
     return (
-            <Slate editor={ editor} value={ value}
-                   onChange={value => setValue(value)}>
+            <Slate editor={ editor} value={props.value}
+                   onChange={value => {
+                       props.onChange(value);
+                       //setValue(value);
+                   }}>
                 <Stack horizontal >
                     <Stack.Item>
                         <SFParagraphToolbar/>
@@ -56,6 +56,9 @@ function SFXEditor() {
                     </Stack.Item>
                     <Stack.Item>
                         <SFTextToolbar />
+                    </Stack.Item>
+                    <Stack.Item>
+                        <SFCodeblockToolbar/>
                     </Stack.Item>
                 </Stack>
                 <Editable
@@ -83,6 +86,8 @@ function Element({ attributes, children, element }:{attributes: any, children: a
     //console.debug("renderElement", element, attributes, children);
     if (element.name === "header") {
         return <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
+    } else if (element.name === "codeblock") {
+        return <SFCodeblockView attributes={attributes} children={children} node={element}/>
     }
     return <SFParagraphView attributes={attributes} children={children} node={element as SFParagraphNode}/>
 }

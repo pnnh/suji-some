@@ -42,12 +42,21 @@ const editorStyles = css`
 const editorBodyStyles = css`
   margin-bottom: 32px;  
 `
+
+const initialValue = [{
+    name: 'paragraph',
+    children: [{name: 'text', text: '', }],
+}];
+
 const NewPage = (props:{}, state: NewPageState) => {
     console.debug("NewPage");
-    let [title, setTitle] = useState('')
-    let [errMsg, setErrMsg] = useState('')
+    let [title, setTitle] = useState('');
+    let [errMsg, setErrMsg] = useState('');
+    let [editorValue, setEditorValue] = useState<any>(initialValue);
 
-    return <SFXLayout header={useHeader(()=>{})} footer={<span></span>}>
+    return <SFXLayout header={useHeader(()=>{
+        console.debug("onSave", editorValue);
+    })} footer={<span></span>}>
         <Stack horizontal horizontalAlign={'space-between'} tokens={{childrenGap:16}}>
             <Stack.Item grow={1}>
                 <Stack tokens={{childrenGap: 8}}>
@@ -67,7 +76,10 @@ const NewPage = (props:{}, state: NewPageState) => {
                                     <Stack.Item>
                                         <Stack tokens={{childrenGap: 8}}>
                                             <Stack.Item grow={10}>
-                                                <SFXEditor />
+                                                <SFXEditor value={editorValue} onChange={(value) => {
+                                                    console.debug("onChange222",  );
+                                                    setEditorValue(value);
+                                                }} />
                                             </Stack.Item>
                                         </Stack>
                                     </Stack.Item>
