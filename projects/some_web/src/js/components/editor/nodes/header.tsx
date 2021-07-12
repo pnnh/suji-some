@@ -41,7 +41,6 @@ export function SFHeaderToolbar() {
     </Stack>
 }
 
-
 export function SFHeaderView(props: {attributes: any, children: any, node: SFHeaderNode}) {
     switch (props.node.header) {
         case 1:
