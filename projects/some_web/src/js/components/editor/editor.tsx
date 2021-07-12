@@ -7,7 +7,7 @@ import {
     Path as SlatePath,
     Node as SlateNode,
     Descendant as SlateDescendant,
-    Element as SlateElement, BaseElement, ExtendedType, BaseEditor, Descendant,
+    Element as SlateElement, BaseElement, ExtendedType, BaseEditor, Descendant, Text,
 } from 'slate'
 import { withHistory } from 'slate-history'
 import isHotkey from 'is-hotkey'
@@ -23,8 +23,12 @@ import {
     SFParagraphToolbar,
     SFParagraphView
 } from "@/js/components/editor/nodes/paragraph";
-import {SFCodeblockToolbar, SFCodeblockView} from "@/js/components/editor/nodes/codeblock";
-
+import {SFCodeblockLeafView, SFCodeblockToolbar, SFCodeblockView} from "@/js/components/editor/nodes/codeblock";
+import Prism from 'prismjs'
+import 'prismjs/components/prism-python'
+import 'prismjs/components/prism-php'
+import 'prismjs/components/prism-sql'
+import 'prismjs/components/prism-java'
 
 
 const HOTKEYS = {
@@ -40,7 +44,7 @@ function SFXEditor(props: { value: SlateDescendant[], onChange: (value: SlateDes
     const renElement = useCallback(props => <Element {...props}/>, [])
     const renLeaf = useCallback(props => <Leaf {...props}/>, [])
     const editor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), [])
-
+    const decorate = useCallback(decorateElement, []);
     return (
             <Slate editor={ editor} value={props.value}
                    onChange={value => {
@@ -62,6 +66,7 @@ function SFXEditor(props: { value: SlateDescendant[], onChange: (value: SlateDes
                     </Stack.Item>
                 </Stack>
                 <Editable
+                    decorate={decorate}
                     renderElement={renElement}
                     renderLeaf={renLeaf}
                     placeholder="请输入段落"
@@ -81,9 +86,44 @@ function SFXEditor(props: { value: SlateDescendant[], onChange: (value: SlateDes
             </Slate>
     )
 }
+const getLength = token => {
+    if (typeof token === 'string') {
+        return token.length
+    } else if (typeof token.content === 'string') {
+        return token.content.length
+    } else {
+        return token.content.reduce((l, t) => l + getLength(t), 0)
+    }
+}
+function decorateElement([node, path]) {
+    console.debug("decorateElement", node, Text.isText(node));
+    const ranges = []
+    if (!Text.isText(node)) {
+        return ranges
+    }
+    const tokens = Prism.tokenize(node.text, Prism.languages["html"])
+    let start = 0
+
+    for (const token of tokens) {
+        const length = getLength(token)
+        const end = start + length
+
+        if (typeof token !== 'string') {
+            ranges.push({
+                [token.type]: true,
+                anchor: { path, offset: start },
+                focus: { path, offset: end },
+            })
+        }
+
+        start = end
+    }
+
+    return ranges
+}
 
 function Element({ attributes, children, element }:{attributes: any, children: any, element: any}) {
-    //console.debug("renderElement", element, attributes, children);
+    console.debug("renderElement", element, attributes, children);
     if (element.name === "header") {
         return <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
     } else if (element.name === "codeblock") {
@@ -93,9 +133,11 @@ function Element({ attributes, children, element }:{attributes: any, children: a
 }
 
 function Leaf({ attributes, children, leaf }:{attributes: any, children: any, leaf: any}) {
-    //console.debug("renderLeaf", leaf, attributes, children);
+    console.debug("renderLeaf", leaf, attributes, children);
     if (leaf.name === "text") {
         return <SFTextView attributes={attributes} children={children} node={leaf as SFTextMark}/>
+    } else if(leaf.name == "code") {
+        return <SFCodeblockLeafView attributes={attributes} children={children} node={leaf}/>
     }
     return <span {...attributes}>{children}</span>
 }

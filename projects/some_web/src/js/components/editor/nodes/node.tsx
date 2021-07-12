@@ -2,6 +2,7 @@ import React from "react";
 import {
     Editor,
     Element as SlateElement,
+    Text as SlateText,
     Node as SlateNode,
     Path as SlatePath,
     Transforms
@@ -25,4 +26,8 @@ export class SFMark<T> implements SlateElement {
     isActive(props: any): boolean {
         throw new Error("not Implemented");
     }
+}
+
+export class SFCode implements SlateText {
+    constructor(public name: string, public text: string) {}
 }
