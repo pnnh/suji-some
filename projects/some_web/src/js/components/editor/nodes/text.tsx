@@ -44,7 +44,7 @@ export function SFTextView(props: {attributes: any, children: any, node: any}) {
                 break;
         }
     }
-    return <span {...props.attributes} style={style}>{props.children}</span>
+    return <span data-name={TextName} {...props.attributes} style={style}>{props.children}</span>
 }
 
 function SFIcon(props: {iconName: string, format: string}) {

@@ -36,7 +36,7 @@ function isActive(props: any): boolean {
     return node.name === "paragraph";
 }
 export function SFParagraphView(props: {attributes: any, children: any, node: SFParagraphNode}) {
-    return <p {...props.attributes}>{props.children}</p>
+    return <p data-name={ParagraphName} {...props.attributes}>{props.children}</p>
 }
 
 export function toggleBlock(editor: ReactEditor, node: SFElement, isActive: (node: any) => boolean) {

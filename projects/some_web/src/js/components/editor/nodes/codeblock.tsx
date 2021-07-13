@@ -6,17 +6,20 @@ import {Selection, Transforms} from 'slate';
 import {SFHeaderNode} from "@/js/components/editor/nodes/header";
 import {css} from "@emotion/css";
 
+export const CodeblockName = "codeblock";
+export const CodeName = "code";
+
 export interface SFCodeblockNode extends SFElement {
     language: string;
 }
 
 export function SFCodeblockView(props: {attributes: any, children: any, node: any}) {
-    return <div {...props.attributes}>{props.children}</div>
+    return <div data-name={CodeblockName} {...props.attributes}>{props.children}</div>
 }
 
 export function SFCodeblockLeafView(props: {attributes: any, children: any, node: any}) {
     return (
-        <span
+        <span data-name={CodeName}
             {...props.attributes}
             className={css`
             font-family: monospace;
@@ -68,8 +71,8 @@ export function SFCodeblockLeafView(props: {attributes: any, children: any, node
 
 export function SFCodeblockToolbar() {
     const editor = useSlate() as ReactEditor;
-    const node: SFCodeblockNode = {name: "codeblock", children: [], language: "html"};
-    node.children.push({name: "code", text: "<h1>hello</h1>"});
+    const node: SFCodeblockNode = {name: CodeblockName, children: [], language: "html"};
+    node.children.push({name: CodeName, text: "<h1>hello</h1>"});
     console.debug("SFCodeblockToolbar", node);
     return <> <IconButton iconProps={{iconName: "CodeEdit"}} title="代码块"
                        onMouseDown={(event) => {

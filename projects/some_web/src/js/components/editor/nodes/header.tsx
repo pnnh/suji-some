@@ -44,15 +44,19 @@ export function SFHeaderToolbar() {
 export function SFHeaderView(props: {attributes: any, children: any, node: SFHeaderNode}) {
     switch (props.node.header) {
         case 1:
-            return <h1 {...props.attributes} >{props.children}</h1>
+            return <h1 data-name={HeaderName} {...props.attributes} >{props.children}</h1>
         case 2:
-            return <h2{...props.attributes}>{props.children}</h2>
+            return <h2 data-name={HeaderName} {...props.attributes}>{props.children}</h2>
         case 3:
-            return <h3{...props.attributes}>{props.children}</h3>
+            return <h3 data-name={HeaderName} {...props.attributes}>{props.children}</h3>
         case 4:
-            return <h4{...props.attributes}>{props.children}</h4>
+            return <h4 data-name={HeaderName} {...props.attributes}>{props.children}</h4>
+        case 5:
+            return <h5 data-name={HeaderName} {...props.attributes}>{props.children}</h5>
+        case 6:
+            return <h6 data-name={HeaderName} {...props.attributes}>{props.children}</h6>
     }
-    return <h1 {...props.attributes}>{props.children}</h1>
+    throw new Error(`未知标题: ${props.node.header}`);
 }
 
 function HeaderIcon(props: {iconName: string, header: number}) {
