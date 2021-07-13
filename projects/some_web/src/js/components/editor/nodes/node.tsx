@@ -9,14 +9,6 @@ import {
 } from "slate";
 import {Descendant as SlateDescendant} from "slate/dist/interfaces/node";
 
-export default class SFProp implements SlateElement {
-    constructor(public name: string,
-                public children: SlateDescendant[] = []) {}
-    isActive(props: any): boolean {
-        throw new Error("not Implemented");
-    }
-}
-
 export class SFMark<T> {
     constructor(public name: string,
                 public key: string,

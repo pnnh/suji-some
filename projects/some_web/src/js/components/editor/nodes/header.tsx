@@ -1,4 +1,4 @@
-import SFProp from "@/js/components/editor/nodes/node";
+import {SFElement} from "@/js/components/editor/nodes/node";
 import {ReactEditor, useSlate} from "slate-react";
 import {
     Dropdown,
@@ -18,17 +18,17 @@ import {
 import React, {CSSProperties} from "react";
 import {isBlockActive, toggleBlock} from "@/js/components/editor/nodes/paragraph";
 
-export class SFHeaderNode extends SFProp {
-    constructor(public header: number) {
-        super("header");
-    }
+export interface SFHeaderNode extends SFElement {
+    header: number;
 
-    isActive(props: any): boolean {
-        const node = props as SFHeaderNode;
-        if (!node) {
-            return false
-        }
-        return node.name === "header" && node.header == this.header;
+}
+export const HeaderName = "header";
+
+export function NewHeaderNode(header: number): SFHeaderNode {
+    return {
+        name: HeaderName,
+        children: [],
+        header: header
     }
 }
 
@@ -57,11 +57,17 @@ export function SFHeaderView(props: {attributes: any, children: any, node: SFHea
 
 function HeaderIcon(props: {iconName: string, header: number}) {
     const editor = useSlate() as ReactEditor;
-    const node = new SFHeaderNode(props.header);
+    const headerNode = NewHeaderNode(props.header);
+    const isHeaderActive = (element: any): boolean => {
+        if (!element) {
+            return false
+        }
+        return element.name === HeaderName && element.header == props.header;
+    }
     return <IconButton iconProps={{iconName: props.iconName}} title="加粗"
-                       checked={isBlockActive(editor, node)}
+                       checked={isBlockActive(editor, isHeaderActive)}
                        onMouseDown={(event) => {
                            event.preventDefault();
-                           toggleBlock(editor, node);
+                           toggleBlock(editor, headerNode, isHeaderActive);
                        }}/>
 }
