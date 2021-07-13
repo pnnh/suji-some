@@ -7,16 +7,6 @@ import {
     Path as SlatePath,
     Transforms
 } from "slate";
-import {Descendant as SlateDescendant} from "slate/dist/interfaces/node";
-
-export class SFMark<T> {
-    constructor(public name: string,
-                public key: string,
-                public value: T) {}
-    isActive(props: any): boolean {
-        throw new Error("not Implemented");
-    }
-}
 
 export interface SFElement extends SlateElement {
     name: string;

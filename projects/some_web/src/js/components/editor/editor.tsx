@@ -6,8 +6,9 @@ import {
     createEditor,
     Path as SlatePath,
     Node as SlateNode,
+    Range as SlateRange,
     Descendant as SlateDescendant,
-    Element as SlateElement, BaseElement, ExtendedType, BaseEditor, Descendant, Text,
+    Element as SlateElement, BaseElement, ExtendedType, BaseEditor, Descendant, Text, NodeEntry,
 } from 'slate'
 import { withHistory } from 'slate-history'
 import isHotkey from 'is-hotkey'
@@ -17,7 +18,7 @@ import {
     SFHeaderToolbar,
     SFHeaderView,
 } from "@/js/components/editor/nodes/header";
-import {SFTextMark, SFTextToolbar, SFTextView} from "@/js/components/editor/nodes/text";
+import { SFTextToolbar, SFTextView} from "@/js/components/editor/nodes/text";
 import {
     SFParagraphNode,
     SFParagraphToolbar,
@@ -86,18 +87,22 @@ function SFXEditor(props: { value: SlateDescendant[], onChange: (value: SlateDes
             </Slate>
     )
 }
-const getLength = token => {
+
+const getLength = (token: string | Prism.Token): number => {
     if (typeof token === 'string') {
         return token.length
     } else if (typeof token.content === 'string') {
         return token.content.length
-    } else {
-        return token.content.reduce((l, t) => l + getLength(t), 0)
+    } else if (Array.isArray(token.content)) {
+        console.debug("getLength", typeof token.content, token.content);
+        return token.content.reduce((l, t) => l + getLength(t), 0);
     }
+    throw new Error("未知token类型");
 }
-function decorateElement([node, path]) {
+
+function decorateElement([node, path]: NodeEntry): SlateRange[] {
     console.debug("decorateElement", node, Text.isText(node));
-    const ranges = []
+    const ranges: SlateRange[] = []
     if (!Text.isText(node)) {
         return ranges
     }
@@ -135,7 +140,7 @@ function Element({ attributes, children, element }:{attributes: any, children: a
 function Leaf({ attributes, children, leaf }:{attributes: any, children: any, leaf: any}) {
     console.debug("renderLeaf", leaf, attributes, children);
     if (leaf.name === "text") {
-        return <SFTextView attributes={attributes} children={children} node={leaf as SFTextMark}/>
+        return <SFTextView attributes={attributes} children={children} node={leaf}/>
     } else if(leaf.name == "code") {
         return <SFCodeblockLeafView attributes={attributes} children={children} node={leaf}/>
     }

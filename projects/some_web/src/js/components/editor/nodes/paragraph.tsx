@@ -1,4 +1,4 @@
-import {SFElement, SFMark} from "@/js/components/editor/nodes/node";
+import {SFElement,} from "@/js/components/editor/nodes/node";
 import {ReactEditor, useSlate} from "slate-react";
 import {IconButton} from "@fluentui/react";
 import React from "react";
@@ -57,19 +57,18 @@ export function isBlockActive(editor: ReactEditor, isActive: (node: any) => bool
     return !!match
 }
 
-export function toggleMark<T>(editor: ReactEditor, mark: SFMark<T>) {
-    const isActive = isMarkActive(editor, mark);
-    if (isActive) {
-        Editor.removeMark(editor, mark.key);
+export function toggleMark<T>(editor: ReactEditor, key: string, value: any, isActive: (node: any) => boolean) {
+    if (isMarkActive(editor, isActive)) {
+        Editor.removeMark(editor, key);
     } else {
-        Editor.addMark(editor, mark.key, mark.value);
+        Editor.addMark(editor, key, value);
     }
 }
 
-export function isMarkActive<T>(editor: ReactEditor, mark: SFMark<T>): boolean {
+export function isMarkActive<T>(editor: ReactEditor, isActive: (node: any) => boolean): boolean {
     const marks = Editor.marks(editor);
     if (!marks) {
         return false;
     }
-    return mark.isActive(marks);
+    return isActive(marks);
 }

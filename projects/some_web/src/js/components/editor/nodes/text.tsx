@@ -1,4 +1,4 @@
-import SFProp, {SFMark} from "@/js/components/editor/nodes/node";
+
 import {ReactEditor, useSlate} from "slate-react";
 import {IconButton} from "@fluentui/react";
 import {
@@ -11,25 +11,7 @@ import {
 import React, {CSSProperties} from "react";
 import {isMarkActive, toggleMark} from "@/js/components/editor/nodes/paragraph";
 
-export class SFTextMark extends SFMark<boolean> {
-    constructor(format: string) {
-        super("text", format, true);
-    }
-    isActive(marks: any): boolean {
-        if (!marks || marks.name != this.name) {
-            return false;
-        }
-        for(let key in marks) {
-            if (!marks.hasOwnProperty(key)) {
-                continue;
-            }
-            if (key == this.key && typeof marks[key] == "boolean") {
-                return Boolean(marks[key]);
-            }
-        }
-        return false;
-    }
-}
+export const TextName = "text";
 
 export function SFTextToolbar() {
     return <>
@@ -40,7 +22,7 @@ export function SFTextToolbar() {
     </>
 }
 
-export function SFTextView(props: {attributes: any, children: any, node: SFTextMark}) {
+export function SFTextView(props: {attributes: any, children: any, node: any}) {
     let style: CSSProperties = {}
 
     for(let key in props.node) {
@@ -67,11 +49,24 @@ export function SFTextView(props: {attributes: any, children: any, node: SFTextM
 
 function SFIcon(props: {iconName: string, format: string}) {
     const editor = useSlate() as ReactEditor;
-    let mark: SFMark<boolean> = new SFTextMark(props.format);
-    return <IconButton iconProps={{iconName: props.iconName}} title="加粗"
-                checked={isMarkActive(editor, mark)}
+    const isActive = (marks: any): boolean => {
+        if (!marks || marks.name != TextName) {
+            return false;
+        }
+        for(let key in marks) {
+            if (!marks.hasOwnProperty(key)) {
+                continue;
+            }
+            if (key == props.format && typeof marks[key] == "boolean") {
+                return Boolean(marks[key]);
+            }
+        }
+        return false;
+    }
+    return <IconButton iconProps={{iconName: props.iconName}}
+                checked={isMarkActive(editor, isActive)}
                 onMouseDown={(event) => {
                     event.preventDefault();
-                    toggleMark(editor, mark);
+                    toggleMark(editor, props.format, true, isActive);
                 }}/>
 }

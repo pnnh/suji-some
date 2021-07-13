@@ -1,5 +1,5 @@
 import React, {CSSProperties} from "react";
-import {SFCode, SFElement, SFMark} from "@/js/components/editor/nodes/node";
+import {SFCode, SFElement,} from "@/js/components/editor/nodes/node";
 import {IconButton, Stack} from "@fluentui/react";
 import {ReactEditor, useSlate} from "slate-react";
 import {Selection, Transforms} from 'slate';
