@@ -45,8 +45,6 @@ const HOTKEYS = {
     'mod+`': 'code',
 }
 
-//let editorValue: SlateDescendant[];
-let editorNode: ReactEditor;
 let rootNode: {children: SlateDescendant[]} = {children: []}
 
 
@@ -55,7 +53,7 @@ function SFXEditor(props: { value: SlateDescendant[], onChange: (value: SlateDes
     //const [value, setValue] = useState<SlateDescendant[]>(initialValue)
     const renElement = useCallback(props => <Element {...props}/>, [])
     const renLeaf = useCallback(props => <Leaf {...props}/>, []);
-    editorNode = withHistory(withReact(createEditor() as ReactEditor));
+    const editorNode = withHistory(withReact(createEditor() as ReactEditor));
     const editor = useMemo(() => editorNode, []);
     const decorate = useCallback(decorateElement, []);
     return (

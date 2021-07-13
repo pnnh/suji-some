@@ -10,7 +10,7 @@ import {
     Stack
 } from "@fluentui/react";
 import {ReactEditor, useSlate} from "slate-react";
-import {Selection, Transforms} from 'slate';
+import {Node as SlateNode, Path as SlatePath, Selection, Transforms} from 'slate';
 import {css} from "@emotion/css";
 
 export const CodeblockName = "codeblock";
@@ -118,18 +118,21 @@ function SelectLanguage(props: {element: SFCodeblockNode}) {
         styles={dropdownStyles}
         defaultSelectedKey={props.element.language}
         onChange={(event, value) => {
-            console.debug("Select Language", value);
+            console.debug("Select Language", editor);
             if (value && typeof value.key == "string") {
-                // let children: SFCodeText[] = [];
-                // for(let key in props.element.children) {
-                //     children.push({name: CodeName, text: props.element.children[key].text,
-                //         language: value.key});
-                // }
-                // const codeblockNode: SFCodeblockNode = {name: CodeblockName,
-                //     children: children, language: value.key,
-                // }
-                // console.debug("Select Language2", codeblockNode);
-                //Transforms.setNodes(editor, codeblockNode);
+                const selection = editor.selection;
+                if (!selection) {
+                    return;
+                }
+                const codeblockNode = SlateNode.parent(editor, selection.focus.path);
+                const parentPath = SlatePath.parent(selection.focus.path);
+                console.debug("Select Language2", codeblockNode, parentPath);
+                const newCodeblockNode: SFCodeblockNode = {name: CodeblockName,
+                    children: props.element.children, language: value.key,
+                }
+                Transforms.setNodes(editor, newCodeblockNode, {
+                    at: parentPath
+                });
             }
         }}
     />
