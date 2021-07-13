@@ -1,21 +1,13 @@
 import React, {CSSProperties} from "react";
-import SFProp, {SFCode, SFMark} from "@/js/components/editor/nodes/node";
+import SFProp, {SFCode, SFElement, SFMark} from "@/js/components/editor/nodes/node";
 import {IconButton, Stack} from "@fluentui/react";
 import {ReactEditor, useSlate} from "slate-react";
 import {Selection, Transforms} from 'slate';
 import {SFHeaderNode} from "@/js/components/editor/nodes/header";
 import {css} from "@emotion/css";
 
-export class SFCodeProp extends SFCode {
-    constructor(public text: string) {
-        super("code", text);
-    }
-}
-
-export class SFCodeblockNode extends SFProp {
-    constructor(public language: string = "html") {
-        super("codeblock");
-    }
+export interface SFCodeblockNode extends SFElement {
+    language: string;
 }
 
 export function SFCodeblockView(props: {attributes: any, children: any, node: any}) {
@@ -76,21 +68,15 @@ export function SFCodeblockLeafView(props: {attributes: any, children: any, node
 
 export function SFCodeblockToolbar() {
     const editor = useSlate() as ReactEditor;
-    const node = new SFCodeblockNode();
-    node.children.push(new SFCodeProp("<h1>hello</h1>"));
+    const node: SFCodeblockNode = {name: "codeblock", children: [], language: "html"};
+    node.children.push({name: "code", text: "<h1>hello</h1>"});
     console.debug("SFCodeblockToolbar", node);
     return <> <IconButton iconProps={{iconName: "CodeEdit"}} title="代码块"
                        onMouseDown={(event) => {
                            event.preventDefault();
                            Transforms.insertNodes(
                                editor,
-                               {
-                                   name: "codeblock",
-                                   children: [{
-                                       name: "code",
-                                       text: "<h1>hello</h1>"
-                                   }]
-                               }
+                               node
                            )
                        }}/>
     </>

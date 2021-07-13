@@ -24,7 +24,7 @@ import {
     SFParagraphView
 } from "@/js/components/editor/nodes/paragraph";
 import {SFCodeblockLeafView, SFCodeblockToolbar, SFCodeblockView} from "@/js/components/editor/nodes/codeblock";
-import Prism from 'prismjs'
+import Prism from "prismjs"
 import 'prismjs/components/prism-python'
 import 'prismjs/components/prism-php'
 import 'prismjs/components/prism-sql'

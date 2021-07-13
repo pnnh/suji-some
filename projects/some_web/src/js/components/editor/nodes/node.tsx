@@ -17,17 +17,27 @@ export default class SFProp implements SlateElement {
     }
 }
 
-
-export class SFMark<T> implements SlateElement {
+export class SFMark<T> {
     constructor(public name: string,
                 public key: string,
-                public value: T,
-                public children: SlateDescendant[] = []) {}
+                public value: T) {}
     isActive(props: any): boolean {
         throw new Error("not Implemented");
     }
 }
 
-export class SFCode implements SlateText {
-    constructor(public name: string, public text: string) {}
+export interface SFElement extends SlateElement {
+    name: string;
+    children: SFDescendant[];
+}
+
+export interface SFText extends SlateText {
+    name: string;
+}
+
+export declare type SFDescendant = SFElement | SFText;
+
+
+export interface SFCode extends SlateText {
+    name: string;
 }
