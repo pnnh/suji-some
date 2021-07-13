@@ -30,7 +30,7 @@ export function SFToolbox(props: {descendant: SFDescendant}) {
         if (typeof node.name == "string") {
             const plugin = getPlugin(node.name);
             if (plugin) {
-                child = plugin.renderToolbox();
+                child = plugin.renderToolbox(node);
             }
         }
     }

@@ -114,11 +114,17 @@ const getLength = (token: string | Prism.Token): number => {
 
 function decorateElement([node, path]: NodeEntry): SlateRange[] {
     console.debug("decorateElement", node, Text.isText(node));
-    const ranges: SlateRange[] = []
+
+    const ranges: SlateRange[] = [];
     if (!Text.isText(node)) {
         return ranges
     }
-    const tokens = Prism.tokenize(node.text, Prism.languages["html"])
+    let textNode = node as any;
+    if (typeof textNode.language != "string") {
+        return ranges;
+    }
+    //console.debug("decorateElement parent", SlateNode.parent(node, path));
+    const tokens = Prism.tokenize(node.text, Prism.languages[textNode.language])
     let start = 0
 
     for (const token of tokens) {

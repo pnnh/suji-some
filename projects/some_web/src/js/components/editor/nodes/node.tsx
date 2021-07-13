@@ -20,5 +20,5 @@ export interface SFText extends SlateText {
 export declare type SFDescendant = SFElement | SFText;
 
 export interface SFPlugin {
-    renderToolbox(): JSX.Element
+    renderToolbox(element: SFElement): JSX.Element
 }
