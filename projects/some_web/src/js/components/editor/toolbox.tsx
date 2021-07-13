@@ -1,7 +1,5 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import {SFDescendant} from "@/js/components/editor/nodes/node";
-import {HeaderName, isHeaderElement} from "@/js/components/editor/nodes/header";
-import {ParagraphName} from "@/js/components/editor/nodes/paragraph";
 import {Editor, Element as SlateElement, Node as SlateNode} from "slate";
 import {ReactEditor, useSlate} from "slate-react";
 import {getPlugin} from "@/js/components/editor/plugins";
@@ -36,13 +34,6 @@ export function SFToolbox(props: {descendant: SFDescendant}) {
             }
         }
     }
-
-    // switch(props.descendant.name) {
-    //     case HeaderName:
-    //         return <div>header</div>
-    //     case ParagraphName:
-    //         return <div>paragraph</div>
-    // }
     return <div>
         {child}
     </div>

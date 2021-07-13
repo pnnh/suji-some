@@ -18,7 +18,7 @@ import {
     SFHeaderToolbar,
     SFHeaderView,
 } from "@/js/components/editor/nodes/header";
-import { SFTextToolbar, SFTextView} from "@/js/components/editor/nodes/text";
+import { SFTextView} from "@/js/components/editor/nodes/text";
 import {
     SFParagraphNode,
     SFParagraphToolbar,
@@ -62,9 +62,6 @@ function SFXEditor(props: { value: SlateDescendant[], onChange: (value: SlateDes
                             </Stack.Item>
                             <Stack.Item>
                                 <SFHeaderToolbar />
-                            </Stack.Item>
-                            <Stack.Item>
-                                <SFTextToolbar />
                             </Stack.Item>
                             <Stack.Item>
                                 <SFCodeblockToolbar/>

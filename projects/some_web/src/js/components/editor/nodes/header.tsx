@@ -17,6 +17,8 @@ import {
 } from "slate";
 import React, {CSSProperties} from "react";
 import {isBlockActive, toggleBlock} from "@/js/components/editor/nodes/paragraph";
+import {CodeblockName, CodeName, SFCodeblockNode} from "@/js/components/editor/nodes/codeblock";
+import {TextName} from "@/js/components/editor/nodes/text";
 
 export interface SFHeaderNode extends SFElement {
     header: number;
@@ -41,10 +43,7 @@ export function isHeaderElement(element: any): boolean {
 
 export function SFHeaderToolbar() {
     return <Stack horizontal  horizontalAlign="space-between">
-        <HeaderIcon iconName={'Header1'} header={1} />
-        <HeaderIcon iconName={'Header2'} header={2} />
-        <HeaderIcon iconName={'Header3'} header={3} />
-        <HeaderIcon iconName={'Header4'} header={4} />
+        <ToolbarIcon iconName={'Header1'} header={1} />
     </Stack>
 }
 
@@ -66,7 +65,23 @@ export function SFHeaderView(props: {attributes: any, children: any, node: SFHea
     throw new Error(`未知标题: ${props.node.header}`);
 }
 
-function HeaderIcon(props: {iconName: string, header: number}) {
+function ToolbarIcon(props: {iconName: string, header: number}) {
+    const editor = useSlate() as ReactEditor;
+    const node: SFHeaderNode = {name: HeaderName, children: [], header: 1};
+    node.children.push({name: TextName, text: ""});
+    console.debug("SFHeaderToolbar", node);
+    return <> <IconButton iconProps={{iconName: "Header1"}} title="标题"
+                          onMouseDown={(event) => {
+                              event.preventDefault();
+                              Transforms.insertNodes(
+                                  editor,
+                                  node
+                              );
+                          }}/>
+    </>
+}
+
+function ToolboxIcon(props: {iconName: string, header: number}) {
     const editor = useSlate() as ReactEditor;
     const headerNode = NewHeaderNode(props.header);
     const isHeaderActive = (element: any): boolean => {
@@ -85,6 +100,13 @@ function HeaderIcon(props: {iconName: string, header: number}) {
 
 export const HeaderPlugin: SFPlugin = {
     renderToolbox() {
-        return <div>headerPlugin</div>
+        return <div>
+            <Stack horizontal  horizontalAlign="start">
+                <ToolboxIcon iconName={'Header1'} header={1} />
+                <ToolboxIcon iconName={'Header2'} header={2} />
+                <ToolboxIcon iconName={'Header3'} header={3} />
+                <ToolboxIcon iconName={'Header4'} header={4} />
+            </Stack>
+        </div>
     }
 }

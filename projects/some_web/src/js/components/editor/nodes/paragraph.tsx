@@ -9,17 +9,24 @@ import {
     Path as SlatePath,
     Transforms
 } from "slate";
+import {TextName} from "@/js/components/editor/nodes/text";
+import {HeaderName, SFHeaderNode} from "@/js/components/editor/nodes/header";
 
 export const ParagraphName = "paragraph";
 
 export function SFParagraphToolbar() {
     const editor = useSlate() as ReactEditor;
     const paragraph = NewParagraphNode();
+    paragraph.children.push({name: TextName, text: ""});
+    console.debug("SFParagraphToolbar", paragraph);
     return <IconButton iconProps={{iconName: "HalfAlpha"}} title="加粗"
                        checked={isBlockActive(editor, isActive)}
                        onMouseDown={(event) => {
                            event.preventDefault();
-                           toggleBlock(editor, paragraph, isActive);
+                           Transforms.insertNodes(
+                               editor,
+                               paragraph
+                           );
                        }}/>
 }
 export interface SFParagraphNode extends SFElement  {
@@ -73,8 +80,37 @@ export function isMarkActive<T>(editor: ReactEditor, isActive: (node: any) => bo
     return isActive(marks);
 }
 
+function SFIcon(props: {iconName: string, format: string}) {
+    const editor = useSlate() as ReactEditor;
+    const isActive = (marks: any): boolean => {
+        if (!marks || marks.name != TextName) {
+            return false;
+        }
+        for(let key in marks) {
+            if (!marks.hasOwnProperty(key)) {
+                continue;
+            }
+            if (key == props.format && typeof marks[key] == "boolean") {
+                return Boolean(marks[key]);
+            }
+        }
+        return false;
+    }
+    return <IconButton iconProps={{iconName: props.iconName}}
+                       checked={isMarkActive(editor, isActive)}
+                       onMouseDown={(event) => {
+                           event.preventDefault();
+                           toggleMark(editor, props.format, true, isActive);
+                       }}/>
+}
+
 export const ParagraphPlugin: SFPlugin = {
     renderToolbox() {
-        return <div>paragraphPlugin</div>
+        return <div>
+            <SFIcon iconName={"Bold"} format={"bold"} />
+            <SFIcon iconName={"Italic"} format={"italic"} />
+            <SFIcon iconName={"Underline"} format={"underline"} />
+            <SFIcon iconName={"Strikethrough"} format={"strike"} />
+        </div>
     }
 }
