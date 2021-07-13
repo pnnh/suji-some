@@ -24,7 +24,13 @@ import {
     SFParagraphToolbar,
     SFParagraphView
 } from "@/js/components/editor/nodes/paragraph";
-import {SFCodeblockLeafView, SFCodeblockToolbar, SFCodeblockView} from "@/js/components/editor/nodes/codeblock";
+import {
+    CodeblockName,
+    SFCodeblockLeafView,
+    SFCodeblockNode,
+    SFCodeblockToolbar,
+    SFCodeblockView
+} from "@/js/components/editor/nodes/codeblock";
 import Prism from "prismjs"
 import 'prismjs/components/prism-python'
 import 'prismjs/components/prism-php'
@@ -39,19 +45,25 @@ const HOTKEYS = {
     'mod+`': 'code',
 }
 
+//let editorValue: SlateDescendant[];
+let editorNode: ReactEditor;
+let rootNode: {children: SlateDescendant[]} = {children: []}
+
+
 function SFXEditor(props: { value: SlateDescendant[], onChange: (value: SlateDescendant[]) => void }) {
     console.debug("SFXEditor create");
     //const [value, setValue] = useState<SlateDescendant[]>(initialValue)
     const renElement = useCallback(props => <Element {...props}/>, [])
-    const renLeaf = useCallback(props => <Leaf {...props}/>, [])
-    const editor = useMemo(() => withHistory(withReact(createEditor() as ReactEditor)), [])
+    const renLeaf = useCallback(props => <Leaf {...props}/>, []);
+    editorNode = withHistory(withReact(createEditor() as ReactEditor));
+    const editor = useMemo(() => editorNode, []);
     const decorate = useCallback(decorateElement, []);
     return (
             <Slate editor={ editor} value={props.value}
                    onChange={value => {
                        console.log("onChange", value);
                        props.onChange(value);
-                       //setValue(value);
+                       rootNode = {children: value};
                    }}>
 
                 <Stack tokens={{padding: 16, childrenGap: 8}}>
@@ -119,12 +131,19 @@ function decorateElement([node, path]: NodeEntry): SlateRange[] {
     if (!Text.isText(node)) {
         return ranges
     }
-    let textNode = node as any;
-    if (typeof textNode.language != "string") {
+    //if (editorValue.length > 0) {
+    console.debug("decorateElement parent1", rootNode);
+    if (rootNode.children.length < 1) {
         return ranges;
     }
-    //console.debug("decorateElement parent", SlateNode.parent(node, path));
-    const tokens = Prism.tokenize(node.text, Prism.languages[textNode.language])
+    const parentNode = SlateNode.parent(rootNode, path) as SFCodeblockNode;
+    console.debug("decorateElement parent", parentNode);
+
+    if (!parentNode || parentNode.name != CodeblockName) {
+        return ranges;
+    }
+    //}
+    const tokens = Prism.tokenize(node.text, Prism.languages[parentNode.language])
     let start = 0
 
     for (const token of tokens) {
