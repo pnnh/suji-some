@@ -19,7 +19,6 @@ export interface SFText extends SlateText {
 
 export declare type SFDescendant = SFElement | SFText;
 
-
-export interface SFCode extends SlateText {
-    name: string;
+export interface SFPlugin {
+    renderToolbox(): JSX.Element
 }

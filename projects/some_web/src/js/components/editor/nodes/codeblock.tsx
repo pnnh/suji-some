@@ -1,5 +1,5 @@
 import React, {CSSProperties} from "react";
-import {SFCode, SFElement,} from "@/js/components/editor/nodes/node";
+import {SFElement, SFPlugin,} from "@/js/components/editor/nodes/node";
 import {IconButton, Stack} from "@fluentui/react";
 import {ReactEditor, useSlate} from "slate-react";
 import {Selection, Transforms} from 'slate';
@@ -83,4 +83,10 @@ export function SFCodeblockToolbar() {
                            )
                        }}/>
     </>
+}
+
+export const CodeblockPlugin: SFPlugin = {
+    renderToolbox() {
+        return <div>codeblockPlugin</div>
+    }
 }

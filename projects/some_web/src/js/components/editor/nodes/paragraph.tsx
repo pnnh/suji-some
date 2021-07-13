@@ -1,4 +1,4 @@
-import {SFElement,} from "@/js/components/editor/nodes/node";
+import {SFElement, SFPlugin,} from "@/js/components/editor/nodes/node";
 import {ReactEditor, useSlate} from "slate-react";
 import {IconButton} from "@fluentui/react";
 import React from "react";
@@ -53,7 +53,7 @@ export function isBlockActive(editor: ReactEditor, isActive: (node: any) => bool
         match: (n: SlateNode) => {
             return !Editor.isEditor(n) && SlateElement.isElement(n) && isActive(n);
         },
-    })
+    });
     return !!match
 }
 
@@ -71,4 +71,10 @@ export function isMarkActive<T>(editor: ReactEditor, isActive: (node: any) => bo
         return false;
     }
     return isActive(marks);
+}
+
+export const ParagraphPlugin: SFPlugin = {
+    renderToolbox() {
+        return <div>paragraphPlugin</div>
+    }
 }

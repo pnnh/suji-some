@@ -1,4 +1,4 @@
-import {SFElement} from "@/js/components/editor/nodes/node";
+import {SFElement, SFPlugin} from "@/js/components/editor/nodes/node";
 import {ReactEditor, useSlate} from "slate-react";
 import {
     Dropdown,
@@ -30,6 +30,13 @@ export function NewHeaderNode(header: number): SFHeaderNode {
         children: [],
         header: header
     }
+}
+
+export function isHeaderElement(element: any): boolean {
+    if (element && element.name == HeaderName) {
+        return true;
+    }
+    return false;
 }
 
 export function SFHeaderToolbar() {
@@ -74,4 +81,10 @@ function HeaderIcon(props: {iconName: string, header: number}) {
                            event.preventDefault();
                            toggleBlock(editor, headerNode, isHeaderActive);
                        }}/>
+}
+
+export const HeaderPlugin: SFPlugin = {
+    renderToolbox() {
+        return <div>headerPlugin</div>
+    }
 }

@@ -72,28 +72,13 @@ const NewPage = (props:{}, state: NewPageState) => {
                     <Stack.Item>
                         <div className={editorStyles}>
                             <div className={editorBodyStyles}>
-                                <Stack tokens={{padding: 16, childrenGap: 8}}>
-                                    <Stack.Item>
-                                        <Stack tokens={{childrenGap: 8}}>
-                                            <Stack.Item grow={10}>
-                                                <SFXEditor value={editorValue} onChange={(value) => {
-                                                    console.debug("onChange222",  );
-                                                    setEditorValue(value);
-                                                }} />
-                                            </Stack.Item>
-                                        </Stack>
-                                    </Stack.Item>
-                                </Stack>
+                                <SFXEditor value={editorValue} onChange={(value) => {
+                                    console.debug("onChange222",  );
+                                    setEditorValue(value);
+                                }} />
                             </div>
                         </div>
                     </Stack.Item>
-                </Stack>
-            </Stack.Item>
-            <Stack.Item>
-                <Stack className={rightStyles} tokens={{childrenGap: 16}}>
-                    <SFXCard title={'其它信息'}>
-                        <span>body</span>
-                    </SFXCard>
                 </Stack>
             </Stack.Item>
         </Stack>

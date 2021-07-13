@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react';
 import {Editable, withReact, useSlate, Slate, ReactEditor, } from 'slate-react'
 import {
     Editor,
@@ -30,7 +30,7 @@ import 'prismjs/components/prism-python'
 import 'prismjs/components/prism-php'
 import 'prismjs/components/prism-sql'
 import 'prismjs/components/prism-java'
-
+import {SFToolbox} from "@/js/components/editor/toolbox";
 
 const HOTKEYS = {
     'mod+b': 'bold',
@@ -49,41 +49,56 @@ function SFXEditor(props: { value: SlateDescendant[], onChange: (value: SlateDes
     return (
             <Slate editor={ editor} value={props.value}
                    onChange={value => {
+                       console.log("onChange", value);
                        props.onChange(value);
                        //setValue(value);
                    }}>
-                <Stack horizontal >
+
+                <Stack tokens={{padding: 16, childrenGap: 8}}>
                     <Stack.Item>
-                        <SFParagraphToolbar/>
+                        <Stack horizontal >
+                            <Stack.Item>
+                                <SFParagraphToolbar/>
+                            </Stack.Item>
+                            <Stack.Item>
+                                <SFHeaderToolbar />
+                            </Stack.Item>
+                            <Stack.Item>
+                                <SFTextToolbar />
+                            </Stack.Item>
+                            <Stack.Item>
+                                <SFCodeblockToolbar/>
+                            </Stack.Item>
+                        </Stack>
                     </Stack.Item>
                     <Stack.Item>
-                        <SFHeaderToolbar />
-                    </Stack.Item>
-                    <Stack.Item>
-                        <SFTextToolbar />
-                    </Stack.Item>
-                    <Stack.Item>
-                        <SFCodeblockToolbar/>
+                        <Stack horizontal >
+                            <Stack.Item grow={1}>
+                                <Editable
+                                    decorate={decorate}
+                                    renderElement={renElement}
+                                    renderLeaf={renLeaf}
+                                    placeholder="请输入段落"
+                                    className={'editable'}
+                                    autoFocus={true}
+                                    readOnly={false}
+                                    onKeyDown={event => {
+                                        for (const hotkey in HOTKEYS) {
+                                            if (isHotkey(hotkey, event as any)) {
+                                                event.preventDefault()
+                                                // const mark = HOTKEYS[hotkey]
+                                                // toggleMark(editor, mark)
+                                            }
+                                        }
+                                    }}
+                                />
+                            </Stack.Item>
+                            <Stack.Item styles={{root: {width: 200}}}>
+                                <SFToolbox descendant={{name:"header",children:[]}} />
+                            </Stack.Item>
+                        </Stack>
                     </Stack.Item>
                 </Stack>
-                <Editable
-                    decorate={decorate}
-                    renderElement={renElement}
-                    renderLeaf={renLeaf}
-                    placeholder="请输入段落"
-                    className={'editable'}
-                    autoFocus={true}
-                    readOnly={false}
-                    onKeyDown={event => {
-                        for (const hotkey in HOTKEYS) {
-                            if (isHotkey(hotkey, event as any)) {
-                                event.preventDefault()
-                                // const mark = HOTKEYS[hotkey]
-                                // toggleMark(editor, mark)
-                            }
-                        }
-                    }}
-                />
             </Slate>
     )
 }
