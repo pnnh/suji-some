@@ -56,6 +56,7 @@ const NewPage = (props:{}, state: NewPageState) => {
 
     return <SFXLayout header={useHeader(()=>{
         console.debug("onSave", editorValue);
+        console.debug("onSave2", JSON.stringify(editorValue));
     })} footer={<span></span>}>
         <Stack horizontal horizontalAlign={'space-between'} tokens={{childrenGap:16}}>
             <Stack.Item grow={1}>
