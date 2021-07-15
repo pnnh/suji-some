@@ -39,10 +39,31 @@ fun buildEditor(editor: SFEditor): String {
             editor.children.forEach { it ->
                 buildNode(it, builder)
             }
+            div {
+                getDiv1()()
+                getDiv2()
+            }
         }
     }
     return builder.toString()
 }
+
+
+fun getDiv1(): DIV.() -> Unit {
+    return {
+        p {
+            +"first try 1"
+        }
+    }
+}
+
+val getDiv2: DIV.() -> Unit
+    get() =  {
+        p {
+            +"first try 2"
+        }
+    }
+
 
 fun buildNode(node: SFNode, builder: StringBuilder) {
     when(node.name) {
@@ -60,7 +81,7 @@ fun buildParagraph(node: SFParagraph, builder: StringBuilder) {
     builder.appendHTML().p {
         node.children.forEach { it ->
             when(it.name) {
-                "text" -> buildText(it as SFText, builder)
+                "text" -> buildText(it as SFText, builder)()
                 else -> throw IllegalArgumentException()
             }
         }
@@ -90,9 +111,11 @@ fun buildCodeBlock(node: SFCodeBlock, builder: StringBuilder) {
     }
 }
 
-fun buildText(node: SFText, builder: StringBuilder) {
-    builder.appendHTML().span {
-        +node.text
+fun buildText(node: SFText, builder: StringBuilder): P.() -> Unit {
+    return {
+        span {
+            +node.text
+        }
     }
 }
 
