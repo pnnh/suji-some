@@ -48,6 +48,7 @@ fun buildNode(node: SFNode, builder: StringBuilder) {
     when(node.name) {
         "paragraph" -> buildParagraph(node as SFParagraph, builder)
         "header" -> buildHeader(node as SFHeader, builder)
+        "codeblock" -> buildCodeBlock(node as SFCodeBlock, builder)
         else ->
             builder.appendHTML().div {
                 +node.name
@@ -57,7 +58,12 @@ fun buildNode(node: SFNode, builder: StringBuilder) {
 
 fun buildParagraph(node: SFParagraph, builder: StringBuilder) {
     builder.appendHTML().p {
-        +node.name
+        node.children.forEach { it ->
+            when(it.name) {
+                "text" -> buildText(it as SFText, builder)
+                else -> throw IllegalArgumentException()
+            }
+        }
     }
 }
 
@@ -70,5 +76,28 @@ fun buildHeader(node: SFHeader, builder: StringBuilder) {
             +node.name
         }
         else -> throw IllegalArgumentException("无效标题 ${node.header}")
+    }
+}
+
+fun buildCodeBlock(node: SFCodeBlock, builder: StringBuilder) {
+    builder.appendHTML().div("code-block") {
+        node.children.forEach { it ->
+            when(it.name) {
+                "code" -> buildCode(it as SFCode, builder)
+                else -> throw IllegalArgumentException()
+            }
+        }
+    }
+}
+
+fun buildText(node: SFText, builder: StringBuilder) {
+    builder.appendHTML().span {
+        +node.text
+    }
+}
+
+fun buildCode(node: SFCode, builder: StringBuilder) {
+    builder.appendHTML().span {
+        +node.text
     }
 }
