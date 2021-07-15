@@ -18,4 +18,5 @@ data class SFEditor(val children: Array<SFNode> = emptyArray<SFNode>()) {
     override fun hashCode(): Int {
         return children.contentHashCode()
     }
+
 }

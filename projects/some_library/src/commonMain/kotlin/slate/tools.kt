@@ -2,7 +2,6 @@ package slate
 
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.json.Json
-import slate.SFEditor
 
 private val json = Json {
     isLenient = true
@@ -11,7 +10,8 @@ private val json = Json {
     coerceInputValues = true
 }
 
-fun decodeEditorFromString(editor: String) {
+fun decodeEditorFromString(editor: String): SFEditor {
     val editor = json.decodeFromString<SFEditor>(editor)
-    println("editor $editor")
+    //println("editor $editor")
+    return editor
 }
