@@ -10,6 +10,7 @@ import {
     Link
 } from "react-router-dom";
 import UserMenu from "@/js/views/layout/partial/UserMenu";
+import {ApiUrl} from "@/services/utils/config";
 
 const useHeader = () => {
     return <SFXHeader start={<NavMenu/>} end={<UserMenu/>}/>
@@ -51,7 +52,7 @@ export default function HomePage() {
     const listItems = list.map((o) =>
         <Stack.Item key={o.pk} className={itemStyles}>
             <div>
-                <a href={'/post/read/' + o.pk} className={titleStyles}>
+                <a href={ApiUrl.article.read + o.pk} className={titleStyles}>
                     {o.title}
                 </a>
             </div>

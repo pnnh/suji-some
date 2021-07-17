@@ -37,6 +37,7 @@ import 'prismjs/components/prism-php'
 import 'prismjs/components/prism-sql'
 import 'prismjs/components/prism-java'
 import {SFToolbox} from "@/js/components/editor/toolbox";
+import {parseDescendantArray, SFDescendant, SFEditor} from "@/js/components/editor/nodes/node";
 
 const HOTKEYS = {
     'mod+b': 'bold',
@@ -45,23 +46,27 @@ const HOTKEYS = {
     'mod+`': 'code',
 }
 
-let rootNode: {children: SlateDescendant[]} = {children: []}
+// 这里是单例的，一个页面只能有一个Editor
+let editorObject: ReactEditor;
+//let rootNode: {children: SFDescendant[]} = {children: []}
 
-
-function SFXEditor(props: { value: SlateDescendant[], onChange: (value: SlateDescendant[]) => void }) {
+function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void }) {
     console.debug("SFXEditor create");
     //const [value, setValue] = useState<SlateDescendant[]>(initialValue)
     const renElement = useCallback(props => <Element {...props}/>, [])
     const renLeaf = useCallback(props => <Leaf {...props}/>, []);
     const editorNode = withHistory(withReact(createEditor() as ReactEditor));
-    const editor = useMemo(() => editorNode, []);
+    editorObject = useMemo(() => editorNode, []);
     const decorate = useCallback(decorateElement, []);
     return (
-            <Slate editor={ editor} value={props.value}
+            <Slate editor={editorObject} value={props.value.children}
                    onChange={value => {
                        console.log("onChange", value);
-                       props.onChange(value);
-                       rootNode = {children: value};
+                       const editorValue = {
+                           children: parseDescendantArray(value)
+                       };
+                       props.onChange(editorValue);
+                       //rootNode = {children: descendants};
                    }}>
 
                 <Stack tokens={{padding: 16, childrenGap: 8}}>
@@ -130,11 +135,11 @@ function decorateElement([node, path]: NodeEntry): SlateRange[] {
         return ranges
     }
     //if (editorValue.length > 0) {
-    console.debug("decorateElement parent1", rootNode);
-    if (rootNode.children.length < 1) {
+    console.debug("decorateElement parent1", editorObject);
+    if (editorObject.children.length < 1) {
         return ranges;
     }
-    const parentNode = SlateNode.parent(rootNode, path) as SFCodeblockNode;
+    const parentNode = SlateNode.parent(editorObject, path) as SFCodeblockNode;
     console.debug("decorateElement parent", parentNode);
 
     if (!parentNode || parentNode.name != CodeBlockName) {

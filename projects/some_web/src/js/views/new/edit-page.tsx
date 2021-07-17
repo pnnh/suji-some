@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {ITextFieldStyles, TextField} from "@fluentui/react/lib/TextField";
 import {IStackItemStyles, IStackTokens, PrimaryButton, Stack} from '@fluentui/react';
 import SFXHeader from "@/js/views/layout/Header";
@@ -9,6 +9,7 @@ import {Descendant as SlateDescendant} from "slate/dist/interfaces/node";
 import SFXEditor from "@/js/components/editor/editor";
 import {articlePost, articlePut} from "@/services/some/article";
 import {SFDescendant, SFEditor} from "@/js/components/editor/nodes/node";
+import {getJsonData} from "@/services/utils/helpers";
 import {ApiUrl} from "@/services/utils/config";
 
 type NewPageState = {
@@ -53,12 +54,12 @@ const initialValue = {
     }]
 };
 
-function onSave(title: string, editorValue: SFEditor) {
+function onSave(pk: string, title: string, editorValue: SFEditor) {
     const postData = {
         title: title,
         body: JSON.stringify(editorValue),
     }
-    articlePost(postData).then((out)=>{
+    articlePut(pk, postData).then((out)=>{
         console.debug("articlePost", out);
         if(out) {
             window.location.href = ApiUrl.article.read + out.pk;
@@ -66,16 +67,23 @@ function onSave(title: string, editorValue: SFEditor) {
     })
 }
 
-const NewPage = (props:{}, state: NewPageState) => {
-    console.debug("NewPage");
+const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState) => {
+    console.debug("EditPage");
     let [title, setTitle] = useState('');
     let [errMsg, setErrMsg] = useState('');
     let [editorValue, setEditorValue] = useState<SFEditor>(initialValue);
 
+    useEffect(() => {
+        const serverData = getJsonData<any>();
+        console.debug("NewPage useEffect", serverData);
+        setTitle(serverData.title);
+        setEditorValue(serverData.body);
+    }, [])
+
     return <SFXLayout header={useHeader(()=>{
         console.debug("onSave", editorValue);
         console.debug("onSave2", JSON.stringify(editorValue));
-        onSave(title, editorValue);
+        onSave(props.match.params.pk, title, editorValue);
     })} footer={<span></span>}>
         <Stack horizontal horizontalAlign={'space-between'} tokens={{childrenGap:16}}>
             <Stack.Item grow={1}>
@@ -105,5 +113,5 @@ const NewPage = (props:{}, state: NewPageState) => {
     </SFXLayout>
 }
 
-export default NewPage
+export default EditPage
 

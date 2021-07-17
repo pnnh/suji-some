@@ -5,12 +5,13 @@ import {
     Stack
 } from '@fluentui/react';
 import { getJsonData} from "@/services/utils/helpers";
+import {ApiUrl} from "@/services/utils/config";
 
 const useActionButton = () => {
     const auth = getJsonData<any>();
     if (auth && auth.login) {
         return <PrimaryButton onClick={()=>{
-            window.location.href = "/post/new"
+            window.location.href = ApiUrl.article.new;
         }}>
             创作
         </PrimaryButton>

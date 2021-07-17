@@ -20,6 +20,8 @@ import RandomPasswordPage from "@/js/views/utils/random-password";
 import * as katex from "katex";
 import QuestPage from "@/js/views/quest/quest";
 import ExamplePage from "@/js/views/example/example";
+import EditPage from "@/js/views/new/edit-page";
+import ReadPage from "@/js/views/new/read-page";
 (window as any).katex = katex;
 
 const renderExceptionPage = (status: number) => {
@@ -40,10 +42,11 @@ const App = () =>{
     }
     return <Router>
                 <Switch>
-                    <Route path="/post/read/:pk" component={PostShowPage} />
-                    <Route path="/post/new" component={PostPage} />
-                    <Route path="/post/edit/:pk" component={PostEditPage} />
+                    {/*<Route path="/post/read/:pk" component={PostShowPage} />*/}
+                    {/*<Route path="/post/new" component={PostPage} />*/}
+                    {/*<Route path="/post/edit/:pk" component={PostEditPage} />*/}
                     <Route path="/article/new" component={NewPage} />
+                    <Route path="/article/edit/:pk" component={EditPage} />
                     <Route path="/quest" component={QuestPage} />
                     <Route path="/utils/random/password" component={RandomPasswordPage} />
                     <Route path="/account/login" component={AccountPage} />
