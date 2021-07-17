@@ -13,7 +13,9 @@ import kotlinx.serialization.json.Json
 
 fun Application.configureArticleController() {
     routing {
-        get("/article") {
+        get("/blog/article/{pk}") {
+            val pk = call.parameters["pk"]
+            println("pk is $pk")
             val editorString = """
             {
 	"children": [{"name":"paragraph","children":[{"name":"text","text":"a"}]},{"name":"header","text":"b","header":1},{"name":"code-block","children":[{"name":"code","text":"<h1>hello</h1>console.log(\"hello\");"}],"language":"js"},{"name":"paragraph","children":[{"name":"text","text":"c"}]}]
