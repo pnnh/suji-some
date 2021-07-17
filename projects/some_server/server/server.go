@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"os"
 	"regexp"
+	"strings"
 	"time"
 
-	"github.com/gorilla/csrf"
 	"sujiserv/config"
 	"sujiserv/server/handlers"
 	"sujiserv/server/handlers/resources"
@@ -86,8 +86,13 @@ func (s *WebServer) Start() error {
 	if len(port) < 1 {
 		port = "8080"
 	}
-	handler := csrf.Protect([]byte(config.CSRFToken),
-		csrf.CookieName("r"), csrf.RequestHeader("r"))(s)
+	handler := s
+
+	// 暂时禁言csrf保护，因为它只支持从header、form表单的地方获取，不能从cookie中获取
+	// kotlin ktor框架将这里的header视为非法，所以ktor的csrf校验无法通过
+	// 考虑用移至的方式校验
+	//handler := csrf.Protect([]byte(config.CSRFToken),
+	//	csrf.CookieName("r"))(s)
 
 	//if config.Release() {
 	//	m := newMinify()
@@ -109,5 +114,9 @@ func (s *WebServer) Start() error {
 }
 
 func (s *WebServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	if config.Debug() && strings.HasPrefix(r.URL.Path, "/blog/") {
+		devBlogHandler(w, r)
+		return
+	}
 	s.router.ServeHTTP(w, r)
 }

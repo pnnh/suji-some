@@ -92,17 +92,13 @@ func (w *devResponseWriter) Pusher() (pusher http.Pusher) {
 	return nil
 }
 
-func devAssetsHandler(w http.ResponseWriter, r *http.Request) {
-	target := "localhost:3000"
-	realPath := r.URL.Path
-	//if strings.HasPrefix(realPath, "/u/") {
-	//	realPath = realPath[2:]
-	//}
+func devBlogHandler(w http.ResponseWriter, r *http.Request) {
+	target := "localhost:8080"
 	//devUrl := fmt.Sprintf("http://localhost:3000%s", realPath)
 	proxy := &httputil.ReverseProxy{Director: func(req *http.Request) {
 		req.URL.Scheme = "http"
 		req.URL.Host = target
-		req.URL.Path = realPath //"/svc/css/index.scss"
+		req.URL.Path = r.URL.Path //"/svc/css/index.scss"
 		req.Host = target
 	}}
 

@@ -252,8 +252,8 @@ func (s *articleHandler) Delete(gctx *gin.Context) {
 }
 
 func (s *articleHandler) RegisterRouter(router *gin.Engine, _ string) {
-	router.GET("/post/read/:pk", s.Read) // 查看不需要授权
-	group := router.Group("post")
+	router.GET("/article/read/:pk", s.Read) // 查看不需要授权
+	group := router.Group("article")
 	group.Use(s.middleware.Auth.NeedLogin)
 	{
 		group.GET("/new", s.New)
