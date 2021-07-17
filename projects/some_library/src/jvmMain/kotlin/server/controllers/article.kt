@@ -159,7 +159,7 @@ fun buildHeader(node: SFHeader): DIV.() -> Unit {
 
 fun buildCodeBlock(node: SFCodeBlock): DIV.() -> Unit {
     return {
-        div("code-block") {
+        pre("code-block") {
             attributes["a"] = "b"
             node.children.forEach { it ->
                 when (it.name) {
@@ -179,7 +179,7 @@ fun buildText(node: SFText): P.() -> Unit {
     }
 }
 
-fun buildCode(node: SFCode): DIV.() -> Unit {
+fun buildCode(node: SFCode): PRE.() -> Unit {
     return {
         span {
             +node.text
