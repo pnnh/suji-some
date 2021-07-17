@@ -1,0 +1,75 @@
+<html lang="zh">
+<head>
+    {{ template "headmeta.html" }}
+    <title>{{.title}} - 泛函</title>
+    {{ cssLink "/src/main.scss" "/main.css" }}
+</head>
+<body>
+    <noscript id="noscript" data-s="{{.status}}">{{.noscript}}</noscript>
+    <script id="data" type="application/json">{{.data}}</script>
+
+
+    <div class="ms-Grid" dir="ltr">
+        <div class="ms-Grid-row">
+            <div class="ms-Grid-col ms-sm0 ms-xl2">
+            </div>
+            <div class="ms-Grid-col ms-sm12 ms-xl8">
+                <header>
+                    <nav>
+                        <div class="ms-Grid-row">
+                            <div class="ms-Grid-col ms-sm0 ms-xl2">
+                                <a href="/" class='logo' title='首页'>sfx.xyz</a>
+                            </div>
+                            <div class="ms-Grid-col ms-sm0 ms-xl2">
+                                <a href='/'>文章</a>&nbsp;
+                                <a href='/'>工具</a>
+                            </div>
+                        </div>
+                    </nav>
+                </header>
+            </div>
+            <div class="ms-Grid-col ms-sm0 ms-xl2">
+            </div>
+        </div>
+        <div class="ms-Grid-row">
+            <div class="ms-Grid-col ms-sm0 ms-xl2">
+            </div>
+            <div class="ms-Grid-col ms-sm12 ms-xl8">
+                <main>
+                    <div data-name="data" data-type="object">
+                        <div data-name="rows" data-type="array">
+                            {{range .list}}
+                                <div>
+                                    <div data-name="{{.Pk}}" data-type="object">
+                                        <input type="hidden" data-name="pk" data-value="{{.Pk}}" />
+                                        <div>
+                                            <a href="/blog/article/{{.Pk}}">
+                                                <h3 data-name="title">{{.Title}}</h3>
+                                            </a>
+                                        </div>
+                                        <span data-name="update_time" data-value="{{.UpdateTime}}">{{.UpdateTimeFormatted}}</span>
+                                    </div>
+                                </div>
+                            {{end}}
+                        </div>
+                        <div data-name="count">{{.count}}</div>
+                    </div>
+                </main>
+            </div>
+            <div class="ms-Grid-col ms-sm0 ms-xl2">
+            </div>
+        </div>
+        <div class="ms-Grid-row">
+            <div class="ms-Grid-col ms-sm0 ms-xl2">
+            </div>
+            <div class="ms-Grid-col ms-sm12 ms-xl8">
+                <footer>
+                </footer>
+            </div>
+            <div class="ms-Grid-col ms-sm0 ms-xl2">
+            </div>
+        </div>
+    </div>
+    {{ jsLink "/src/main.tsx" "/main.js" }}
+</body>
+</html>

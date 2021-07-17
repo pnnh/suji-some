@@ -1,10 +1,8 @@
 package handlers
 
 import (
-	"html/template"
 	"net/http"
 
-	"github.com/gorilla/csrf"
 	dbmodels "sujiserv/application/services/db/models"
 	"sujiserv/server/middleware"
 	"sujiserv/server/models"
@@ -28,20 +26,12 @@ func (s *indexHandler) Handle(gctx *gin.Context) {
 	for k, v := range tables {
 		list[k] = models.ParseArticleView(v)
 	}
-	sfx, err := s.md.Templs.Execute("index.html", gin.H{
+	auth := s.md.Auth.GetAuth(gctx)
+	gctx.HTML(http.StatusOK, "index.html", gin.H{
+		"title": "首页",
 		"list":  list,
 		"count": result.RowsAffected,
-	})
-	if err != nil {
-		utils.ResponseServerError(gctx, "序列化响应出错", err)
-		return
-	}
-	auth := s.md.Auth.GetAuth(gctx)
-	gctx.HTML(http.StatusOK, "client.html", gin.H{
-		"title": "首页",
-		"noscript": template.HTML(sfx),
 		"data": gin.H{
-			"csrf": csrf.Token(gctx.Request),
 			"login": auth != nil && len(auth.UName) > 0,
 		},
 	})

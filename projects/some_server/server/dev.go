@@ -99,7 +99,7 @@ func devBlogHandler(w http.ResponseWriter, r *http.Request) {
 		req.URL.Scheme = "http"
 		req.URL.Host = target
 		req.URL.Path = r.URL.Path //"/svc/css/index.scss"
-		req.Host = target
+		//r.Host = target
 	}}
 
 	proxy.ServeHTTP(w, r)
