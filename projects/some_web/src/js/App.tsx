@@ -5,7 +5,6 @@ import {
     Route,
     Link
 } from "react-router-dom";
-import HomePage from "@/js/views/home/home-page";
 import NewPage from "@/js/views/new/new-page";
 import AccountPage from "@/js/views/account/account-page";
 import {getPageStatus} from "@/services/utils/helpers";
@@ -17,6 +16,7 @@ import RandomPasswordPage from "@/js/views/utils/random-password";
 import QuestPage from "@/js/views/quest/quest";
 import ExamplePage from "@/js/views/example/example";
 import EditPage from "@/js/views/new/edit-page";
+import "@/js/components/components";
 
 const renderExceptionPage = (status: number) => {
     switch(status) {
@@ -45,7 +45,6 @@ const App = () =>{
                     <Route path="/utils/random/password" component={RandomPasswordPage} />
                     <Route path="/account/login" component={AccountPage} />
                     <Route path="/example" component={ExamplePage} />
-                    <Route path="/" component={HomePage} />
                 </Switch>
         </Router>
 }

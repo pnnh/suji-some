@@ -1,8 +1,14 @@
 import ReactDOM from "react-dom";
 import React from "react";
 import App from "./js/App";
-import { initializeIcons } from '@fluentui/react/lib/Icons';
-import { registerDefaultFontFaces } from '@fluentui/theme'
+import { initializeIcons } from "@fluentui/react/lib/Icons";
+import { registerDefaultFontFaces } from "@fluentui/theme";
+import { DesignSystem } from "@microsoft/fast-foundation";
+import { allComponents } from "@fluentui/web-components";
+
+DesignSystem.getOrCreate().register(
+    Object.values(allComponents).map(definition => definition())
+);
 
 interface viteEnv {
     BASE_URL: string,
@@ -20,4 +26,7 @@ if(importMeta.DEV) {
 }
 
 // 不直接呈现React组件了，而是通过Web Component呈现
-//ReactDOM.render(<App />, document.getElementById('root'))
+const rootElement = document.getElementById('root');
+if (rootElement) {
+    ReactDOM.render(<App />, rootElement);
+}
