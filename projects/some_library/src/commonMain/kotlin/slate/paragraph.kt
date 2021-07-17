@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SFParagraph(override val name: String,
-                       override val children: Array<SFNode>): SFElement() {
+                       override val children: Array<SFNode>): SFElementNode() {
     override fun equals(other: Any?): Boolean {
         if (this === other) return true
         if (other == null || this::class != other::class) return false
