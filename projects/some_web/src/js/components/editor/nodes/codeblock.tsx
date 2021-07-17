@@ -13,7 +13,7 @@ import {ReactEditor, useSlate} from "slate-react";
 import {Node as SlateNode, Path as SlatePath, Selection, Transforms} from 'slate';
 import {css} from "@emotion/css";
 
-export const CodeblockName = "codeblock";
+export const CodeBlockName = "code-block";
 export const CodeName = "code";
 
 export interface SFCodeblockNode extends SFElement {
@@ -22,7 +22,7 @@ export interface SFCodeblockNode extends SFElement {
 
 function NewCodeblockNode(language: string, text: string): SFCodeblockNode {
     const block: SFCodeblockNode = {
-        name: CodeblockName, children: [], language: language
+        name: CodeBlockName, children: [], language: language
     }
     const codeText: SFText = {name: CodeName, text: text, }
     block.children.push(codeText);
@@ -30,7 +30,7 @@ function NewCodeblockNode(language: string, text: string): SFCodeblockNode {
 }
 
 export function SFCodeblockView(props: {attributes: any, children: any, node: any}) {
-    return <div data-name={CodeblockName} {...props.attributes}>{props.children}</div>
+    return <div data-name={CodeBlockName} {...props.attributes}>{props.children}</div>
 }
 
 export function SFCodeblockLeafView(props: {attributes: any, children: any, node: any}) {
@@ -88,7 +88,7 @@ export function SFCodeblockLeafView(props: {attributes: any, children: any, node
 export function SFCodeblockToolbar() {
     const editor = useSlate() as ReactEditor;
     const node = NewCodeblockNode("js", "<h1>hello</h1>console.log(\"hello\");");
-    console.debug("SFCodeblockToolbar", node);
+    console.debug("SFCodeBlockToolbar", node);
     return <> <IconButton iconProps={{iconName: "CodeEdit"}} title="代码块"
                        onMouseDown={(event) => {
                            event.preventDefault();
@@ -127,7 +127,7 @@ function SelectLanguage(props: {element: SFCodeblockNode}) {
                 const codeblockNode = SlateNode.parent(editor, selection.focus.path);
                 const parentPath = SlatePath.parent(selection.focus.path);
                 console.debug("Select Language2", codeblockNode, parentPath);
-                const newCodeblockNode: SFCodeblockNode = {name: CodeblockName,
+                const newCodeblockNode: SFCodeblockNode = {name: CodeBlockName,
                     children: props.element.children, language: value.key,
                 }
                 Transforms.setNodes(editor, newCodeblockNode, {

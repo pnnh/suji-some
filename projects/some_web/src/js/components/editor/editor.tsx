@@ -25,7 +25,7 @@ import {
     SFParagraphView
 } from "@/js/components/editor/nodes/paragraph";
 import {
-    CodeblockName,
+    CodeBlockName,
     SFCodeblockLeafView,
     SFCodeblockNode,
     SFCodeblockToolbar,
@@ -137,7 +137,7 @@ function decorateElement([node, path]: NodeEntry): SlateRange[] {
     const parentNode = SlateNode.parent(rootNode, path) as SFCodeblockNode;
     console.debug("decorateElement parent", parentNode);
 
-    if (!parentNode || parentNode.name != CodeblockName) {
+    if (!parentNode || parentNode.name != CodeBlockName) {
         return ranges;
     }
     //}
@@ -166,7 +166,7 @@ function Element({ attributes, children, element }:{attributes: any, children: a
     console.debug("renderElement", element, attributes, children);
     if (element.name === "header") {
         return <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
-    } else if (element.name === "codeblock") {
+    } else if (element.name === "code-block") {
         return <SFCodeblockView attributes={attributes} children={children} node={element}/>
     }
     return <SFParagraphView attributes={attributes} children={children} node={element as SFParagraphNode}/>

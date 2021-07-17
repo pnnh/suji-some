@@ -17,12 +17,11 @@ import {
 } from "slate";
 import React, {CSSProperties} from "react";
 import {isBlockActive, toggleBlock} from "@/js/components/editor/nodes/paragraph";
-import {CodeblockName, CodeName, SFCodeblockNode} from "@/js/components/editor/nodes/codeblock";
+import {CodeBlockName, CodeName, SFCodeblockNode} from "@/js/components/editor/nodes/codeblock";
 import {TextName} from "@/js/components/editor/nodes/text";
 
 export interface SFHeaderNode extends SFElement {
     header: number;
-
 }
 export const HeaderName = "header";
 
