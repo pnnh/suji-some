@@ -5,7 +5,7 @@ import {css} from "@emotion/css";
 import SFXLayout from "@/js/views/layout/Layout";
 import SFXHeader from "@/js/views/layout/Header";
 import {getDocument, INavLink, INavLinkGroup, IStackItemStyles, Nav, PrimaryButton, Stack} from "@fluentui/react";
-import {getJsonData, getXmlData} from "@/services/utils/helpers";
+import {getJsonData,} from "@/services/utils/helpers";
 
 const ShowHeader = (props: {pk: string}) => {
     const auth = getJsonData<any>();

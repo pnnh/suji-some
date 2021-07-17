@@ -29,8 +29,7 @@
     "slate": "^0.63.0",
     "slate-history": "^0.62.0",
     "slate-react": "^0.65.2",
-    "some_library": "file:packages/some_library",
-    "some_utils": "file:packages/some_utils"
+    "some_library": "file:packages/some_library"
   },
   "devDependencies": {
     "@types/estree": "^0.0.50",

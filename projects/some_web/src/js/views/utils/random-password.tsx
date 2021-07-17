@@ -23,7 +23,7 @@ import {
     IDropdownStyles,
     Slider, SpinButton
 } from "@fluentui/react";
-import {getJsonData, getXmlData} from "@/services/utils/helpers";
+import {getJsonData,} from "@/services/utils/helpers";
 import NavMenu from "@/js/views/layout/partial/NavMenu";
 import sfxlib from "some_library";
 

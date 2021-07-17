@@ -2,8 +2,6 @@ import React, {useEffect, useState} from "react";
 import SFXLayout from "@/js/views/layout/Layout";
 import SFXHeader from "@/js/views/layout/Header";
 import NavMenu from "@/js/views/layout/partial/NavMenu";
-import Quill from "quill";
-import {getXmlData} from "@/services/utils/helpers";
 import {Icon, Link, MessageBar, MessageBarType, PrimaryButton, Stack, TextField} from "@fluentui/react";
 import {articlePost} from "@/services/some/article";
 import {accountPost} from "@/services/some/account";
@@ -15,7 +13,7 @@ const useHeader = () => {
     return <SFXHeader start={<NavMenu/>}/>
 }
 
-function sendCodeToMail(mail: string, callback: (msg)=>void) {
+function sendCodeToMail(mail: string, callback: (msg: any)=>void) {
     const postData = {
         email: mail,
     }
@@ -27,7 +25,7 @@ function sendCodeToMail(mail: string, callback: (msg)=>void) {
     });
 }
 
-function loginByCode(mail: string, code: string, callback: (msg)=>void) {
+function loginByCode(mail: string, code: string, callback: (msg: any)=>void) {
     const postData = {
         email: mail,
         code: code,

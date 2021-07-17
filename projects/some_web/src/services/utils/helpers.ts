@@ -25,6 +25,7 @@ function parseValue(element: HTMLElement): any {
         }
         if(dataName) {
             let data = {};
+            // @ts-ignore
             data[dataName] = dataValue;
             dataValue = data;
         }
@@ -50,6 +51,7 @@ function parseValue(element: HTMLElement): any {
                 if (!childData.hasOwnProperty(name)) {
                     continue;
                 }
+                // @ts-ignore
                 propValue[name] = childData[name];
             }
         }
@@ -57,11 +59,13 @@ function parseValue(element: HTMLElement): any {
     }
     if(dataName) {
         let data = {};
+        // @ts-ignore
         data[dataName] = dataValue;
         dataValue = data;
     }
     return dataValue;
 }
+
 
 export function getPageStatus(): number {
     const dataEl = document.getElementById("noscript");

@@ -2,7 +2,6 @@ import React, {useEffect, useState} from "react";
 import SFXLayout from "@/js/views/layout/Layout";
 import SFXHeader from "@/js/views/layout/Header";
 import NavMenu from "@/js/views/layout/partial/NavMenu";
-import {getJsonData, getXmlData} from "@/services/utils/helpers";
 import {PrimaryButton, Stack, TextField} from "@fluentui/react";
 import {css} from "@emotion/css";
 import UserMenu from "@/js/views/layout/partial/UserMenu";

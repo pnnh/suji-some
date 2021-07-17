@@ -35,7 +35,7 @@ const ApiUrl = {
     article: {
         new: "/article/new",
         edit: "/article/edit/",
-        read: getApiUrl() + "/blog/article/",
+        read: "/blog/article/",
     }
 }
 
