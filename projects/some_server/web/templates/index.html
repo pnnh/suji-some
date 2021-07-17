@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="zh">
 <head>
     {{ template "headmeta.html" }}
@@ -8,7 +9,9 @@
     <noscript id="noscript" data-s="{{.status}}">{{.noscript}}</noscript>
     <script id="data" type="application/json">{{.data}}</script>
 
-
+    <fast-design-system-provider use-defaults>
+        <sfx-header></sfx-header>
+    </fast-design-system-provider>
     <div class="ms-Grid" dir="ltr">
         <div class="ms-Grid-row">
             <div class="ms-Grid-col ms-sm0 ms-xl2">
@@ -71,5 +74,6 @@
         </div>
     </div>
     {{ jsLink "/src/main.tsx" "/main.js" }}
+
 </body>
 </html>
