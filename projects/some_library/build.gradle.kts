@@ -72,6 +72,7 @@ kotlin {
                 implementation("org.jetbrains.exposed:exposed-jdbc:0.31.1")
                 implementation("org.jetbrains.exposed:exposed-jodatime:0.31.1")
                 implementation("org.postgresql:postgresql:42.1.4")
+                implementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.12.4")
             }
         }
         val jvmTest by getting

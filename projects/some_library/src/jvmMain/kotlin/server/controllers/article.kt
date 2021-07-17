@@ -9,6 +9,7 @@ import kotlinx.html.*
 import kotlinx.serialization.encodeToString
 import slate.*
 import kotlinx.serialization.json.Json
+import server.db.queryArticle
 
 val Application.envKind get() = environment.config.property("ktor.environment").getString()
 val Application.isDebug get() = envKind == "debug"
@@ -33,89 +34,79 @@ fun Application.configureArticleController() {
         get("/blog/article/{pk}") {
             val pk = call.parameters["pk"]
             println("pk is $pk")
-            val editorString = """
+            var editorString = """
             {
 	"children": [{"name":"paragraph","children":[{"name":"text","text":"a"}]},{"name":"header","text":"b","header":1},{"name":"code-block","children":[{"name":"code","text":"<h1>hello</h1>console.log(\"hello\");"}],"language":"js"},{"name":"paragraph","children":[{"name":"text","text":"c"}]}]
 }
         """.trimIndent()
-            val editor = decodeEditorFromString(editorString)
-            val testJson = Json.encodeToString(editor)
-            println("text $testJson")
 
-            call.respondHtml() {
-                head {
-                    meta(charset = "utf-8")
-                    meta("viewport", "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no")
-                    meta("render", "webkit")
-                    meta() {
-                        httpEquiv = "X-UA-Compatible"
-                        content = "IE=edge,chrome=1"
-                    }
-                    link("https://res.sfx.xyz/favicon.ico", "icon", "image/x-icon")
-                    link("https://res.sfx.xyz/favicon.ico", "shortcut icon", "image/x-icon")
-                    title("泛函")
-                    link(cssLink("/src/main.scss", "/main.css"), "stylesheet", "text/css")
+            if (pk != null) {
+                val article = queryArticle(pk)
+                if(article != null) {
+                    editorString = article.body
                 }
-                body {
-                    div("ms-Grid") {
-                        dir = Dir.ltr
-                        div("ms-Grid-row") {
-                            div("ms-Grid-col ms-sm0 ms-xl2")
-                            div("ms-Grid-col ms-sm12 ms-xl8") {
-                                header {
-                                    nav {
-                                        div() {
-                                            a("/", "", "logo") {
-                                                title = "首页"
-                                                +"sfx.xyz"
-                                            }
-                                            a("/",  "") {
-                                                title = "文章"
-                                                +"文章"
-                                            }
-                                            a("/",  "") {
-                                                title = "工具"
-                                                +"工具"
+            }
+            if (editorString.isNotEmpty()) {
+                val editor = decodeEditorFromString(editorString)
+                val testJson = Json.encodeToString(editor)
+                println("text $testJson")
+
+                call.respondHtml() {
+                    head {
+                        meta(charset = "utf-8")
+                        meta("viewport", "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no")
+                        meta("render", "webkit")
+                        meta() {
+                            httpEquiv = "X-UA-Compatible"
+                            content = "IE=edge,chrome=1"
+                        }
+                        link("https://res.sfx.xyz/favicon.ico", "icon", "image/x-icon")
+                        link("https://res.sfx.xyz/favicon.ico", "shortcut icon", "image/x-icon")
+                        title("泛函")
+                        link(cssLink("/src/main.scss", "/main.css"), "stylesheet", "text/css")
+                    }
+                    body {
+                        div("ms-Grid") {
+                            dir = Dir.ltr
+                            div("ms-Grid-row") {
+                                div("ms-Grid-col ms-sm0 ms-xl2")
+                                div("ms-Grid-col ms-sm12 ms-xl8") {
+                                    header {
+                                        nav {
+                                            div() {
+                                                a("/", "", "logo") {
+                                                    title = "首页"
+                                                    +"sfx.xyz"
+                                                }
+                                                a("/",  "") {
+                                                    title = "文章"
+                                                    +"文章"
+                                                }
+                                                a("/",  "") {
+                                                    title = "工具"
+                                                    +"工具"
+                                                }
                                             }
                                         }
                                     }
                                 }
+                                div("ms-Grid-col ms-sm0 ms-xl2")
                             }
-                            div("ms-Grid-col ms-sm0 ms-xl2")
                         }
-                    }
-                    div() {
-                        editor.children.forEach { it ->
-                            buildNode(it)()
+                        div() {
+                            editor.children.forEach { it ->
+                                buildNode(it)()
+                            }
                         }
+                        script("module", jsLink("/src/main.tsx", "/main.js")) {}
                     }
-                    div {
-                        getDiv1()()
-                        getDiv2()
-                    }
-                    script("module", jsLink("/src/main.tsx", "/main.js")) {}
                 }
+            } else {
+                call.respondText("文章不存在")
             }
         }
     }
 }
-
-
-fun getDiv1(): DIV.() -> Unit {
-    return {
-        p {
-            +"first try 1"
-        }
-    }
-}
-
-val getDiv2: DIV.() -> Unit
-    get() = {
-        p {
-            +"first try 2"
-        }
-    }
-
 
 fun buildNode(node: SFNode): DIV.() -> Unit {
     return when (node.name) {
@@ -140,25 +131,26 @@ fun buildParagraph(node: SFParagraph): DIV.() -> Unit {
 }
 
 fun buildHeader(node: SFHeader): DIV.() -> Unit {
+    val textNode = node.children.first() as SFText
     return {
         when (node.header) {
             1 -> h1 {
-                +node.text
+                +textNode.text
             }
             2 -> h2 {
-                +node.text
+                +textNode.text
             }
             3 -> h3 {
-                +node.text
+                +textNode.text
             }
             4 -> h4 {
-                +node.text
+                +textNode.text
             }
             5 -> h5 {
-                +node.text
+                +textNode.text
             }
             6 -> h6 {
-                +node.text
+                +textNode.text
             }
             else -> throw IllegalArgumentException("无效标题 ${node.header}")
         }
