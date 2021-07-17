@@ -1,18 +1,8 @@
 import ReactDOM from 'react-dom'
 import React, {useEffect, useRef, useState} from 'react'
 import {
-    ActionButton,
-    IStackItemStyles,
-    IStackTokens,
-    Link as FluentLink,
-    PrimaryButton,
     Stack
 } from '@fluentui/react';
-import {
-    Link
-} from "react-router-dom";
-import {css} from "@emotion/css";
-import {useHistory} from "react-router";
 import {IStackStyles} from "@fluentui/react";
 
 export interface SFXHeaderProps {

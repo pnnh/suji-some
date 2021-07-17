@@ -7,22 +7,16 @@ import {
 } from "react-router-dom";
 import HomePage from "@/js/views/home/home-page";
 import NewPage from "@/js/views/new/new-page";
-import PostPage from "@/js/views/post/post";
-import PostShowPage from "@/js/views/post/show";
 import AccountPage from "@/js/views/account/account-page";
 import {getPageStatus} from "@/services/utils/helpers";
 import {StatusInternalServerError, StatusNotFound, StatusOK, StatusUnauthorized} from "@/services/models/status";
 import UnauthorizedPage from "@/js/views/exception/Unauthorized";
 import NotFoundPage from "@/js/views/exception/NotFound";
 import InternalServerErrorPage from "@/js/views/exception/InternalServerError";
-import PostEditPage from "@/js/views/post/edit";
 import RandomPasswordPage from "@/js/views/utils/random-password";
-import * as katex from "katex";
 import QuestPage from "@/js/views/quest/quest";
 import ExamplePage from "@/js/views/example/example";
 import EditPage from "@/js/views/new/edit-page";
-import ReadPage from "@/js/views/new/read-page";
-(window as any).katex = katex;
 
 const renderExceptionPage = (status: number) => {
     switch(status) {

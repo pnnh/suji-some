@@ -63,7 +63,6 @@ export default function HomePage() {
     );
     return <SFXLayout header={useHeader()} footer={<span></span>}>
         <>
-
             <div className="ms-Grid" dir="ltr">
                 <div className="ms-Grid-row">
                     <div className="ms-Grid-col ms-sm12 ms-xl12">

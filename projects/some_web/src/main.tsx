@@ -19,4 +19,5 @@ if(importMeta.DEV) {
     registerDefaultFontFaces('https://res.sfx.xyz/fluentui');  // 从自定义路劲加载FluentUI字体
 }
 
-ReactDOM.render(<App />, document.getElementById('root'))
+// 不直接呈现React组件了，而是通过Web Component呈现
+//ReactDOM.render(<App />, document.getElementById('root'))
