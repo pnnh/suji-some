@@ -9,8 +9,13 @@ import {
     Transforms
 } from "slate";
 import React, {CSSProperties} from "react";
+import {SFText} from "@/js/components/editor/nodes/node";
 
 export const TextName = "text";
+
+export function NewTextNode(text: string): SFText {
+    return {name: TextName, text: text}
+}
 
 export function SFTextView(props: {attributes: any, children: any, node: any}) {
     let style: CSSProperties = {}

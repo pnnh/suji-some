@@ -48,8 +48,6 @@ fun Application.configureArticleController() {
             }
             if (editorString.isNotEmpty()) {
                 val editor = decodeEditorFromString(editorString)
-                val testJson = Json.encodeToString(editor)
-                println("text $testJson")
 
                 call.respondHtml() {
                     head {

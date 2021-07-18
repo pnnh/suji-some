@@ -15,9 +15,8 @@ import {
     Path as SlatePath,
     Transforms
 } from "slate";
-import React, {CSSProperties} from "react";
-import {isBlockActive, toggleBlock} from "@/js/components/editor/nodes/paragraph";
-import {CodeBlockName, CodeName, SFCodeblockNode} from "@/js/components/editor/nodes/codeblock";
+import React, {CSSProperties, KeyboardEventHandler} from "react";
+import {isBlockActive} from "@/js/components/editor/nodes/paragraph";
 import {TextName} from "@/js/components/editor/nodes/text";
 
 export interface SFHeaderNode extends SFElement {
@@ -89,11 +88,14 @@ function ToolboxIcon(props: {iconName: string, header: number}) {
         }
         return element.name === HeaderName && element.header == props.header;
     }
-    return <IconButton iconProps={{iconName: props.iconName}} title="加粗"
+    return <IconButton iconProps={{iconName: props.iconName}}
                        checked={isBlockActive(editor, isHeaderActive)}
                        onMouseDown={(event) => {
                            event.preventDefault();
-                           toggleBlock(editor, headerNode, isHeaderActive);
+                           // toggleBlock(editor, headerNode, isHeaderActive);
+                           // 在设置样式之前其实已经不需要检测header是否激活了，直接设置即可
+                           // 所以也没必要再经过toggleBlock方法
+                           Transforms.setNodes(editor, headerNode);
                        }}/>
 }
 

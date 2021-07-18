@@ -9,15 +9,13 @@ import {
     Path as SlatePath,
     Transforms
 } from "slate";
-import {TextName} from "@/js/components/editor/nodes/text";
-import {HeaderName, SFHeaderNode} from "@/js/components/editor/nodes/header";
+import {NewTextNode, TextName} from "@/js/components/editor/nodes/text";
 
 export const ParagraphName = "paragraph";
 
 export function SFParagraphToolbar() {
     const editor = useSlate() as ReactEditor;
-    const paragraph = NewParagraphNode();
-    paragraph.children.push({name: TextName, text: ""});
+    const paragraph = NewParagraphNode("");
     console.debug("SFParagraphToolbar", paragraph);
     return <IconButton iconProps={{iconName: "HalfAlpha"}} title="加粗"
                        checked={isBlockActive(editor, isActive)}
@@ -31,10 +29,10 @@ export function SFParagraphToolbar() {
 }
 export interface SFParagraphNode extends SFElement  {
 }
-export function NewParagraphNode(): SFParagraphNode {
+export function NewParagraphNode(text: string): SFParagraphNode {
     return {
         name: ParagraphName,
-        children: []
+        children: [NewTextNode(text)]
     }
 }
 
@@ -46,14 +44,14 @@ export function SFParagraphView(props: {attributes: any, children: any, node: SF
     return <p data-name={ParagraphName} {...props.attributes}>{props.children}</p>
 }
 
-export function toggleBlock(editor: ReactEditor, node: SFElement, isActive: (node: any) => boolean) {
-    const paragraph = NewParagraphNode();
-    if (isBlockActive(editor, isActive)) {
-        Transforms.setNodes(editor, paragraph);
-    } else {
-        Transforms.setNodes(editor, node);
-    }
-}
+// export function toggleBlock(editor: ReactEditor, node: SFElement, isActive: (node: any) => boolean) {
+//     const paragraph = NewParagraphNode("");
+//     if (isBlockActive(editor, isActive)) {
+//         Transforms.setNodes(editor, paragraph);
+//     } else {
+//         Transforms.setNodes(editor, node);
+//     }
+// }
 
 export function isBlockActive(editor: ReactEditor, isActive: (node: any) => boolean): boolean {
     const [match] = Editor.nodes(editor, {

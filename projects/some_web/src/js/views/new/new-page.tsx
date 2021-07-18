@@ -58,12 +58,13 @@ function onSave(title: string, editorValue: SFEditor) {
         title: title,
         body: JSON.stringify(editorValue),
     }
-    articlePost(postData).then((out)=>{
-        console.debug("articlePost", out);
-        if(out) {
-            window.location.href = ApiUrl.article.read + out.pk;
-        }
-    })
+    console.debug("postData", postData);
+    // articlePost(postData).then((out)=>{
+    //     console.debug("articlePost", out);
+    //     if(out) {
+    //         window.location.href = ApiUrl.article.read + out.pk;
+    //     }
+    // });
 }
 
 const NewPage = (props:{}, state: NewPageState) => {

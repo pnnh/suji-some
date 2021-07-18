@@ -14,12 +14,14 @@ import { withHistory } from 'slate-history'
 import isHotkey from 'is-hotkey'
 import {IconButton, IContextualMenuProps,Stack} from "@fluentui/react";
 import {
+    HeaderName,
     SFHeaderNode,
     SFHeaderToolbar,
     SFHeaderView,
 } from "@/js/components/editor/nodes/header";
 import { SFTextView} from "@/js/components/editor/nodes/text";
 import {
+    NewParagraphNode,
     SFParagraphNode,
     SFParagraphToolbar,
     SFParagraphView
@@ -95,12 +97,41 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                                     autoFocus={true}
                                     readOnly={false}
                                     onKeyDown={event => {
-                                        for (const hotkey in HOTKEYS) {
-                                            if (isHotkey(hotkey, event as any)) {
-                                                event.preventDefault()
-                                                // const mark = HOTKEYS[hotkey]
-                                                // toggleMark(editor, mark)
+                                        // for (const hotkey in HOTKEYS) {
+                                        //     if (isHotkey(hotkey, event as any)) {
+                                        //         event.preventDefault()
+                                        //         // const mark = HOTKEYS[hotkey]
+                                        //         // toggleMark(editor, mark)
+                                        //     }
+                                        // }
+                                        console.debug("event", event);
+                                        if (event.key !== 'Enter') {
+                                            return;
+                                        }
+                                        console.debug("selection", editorObject.selection);
+                                        const selection = editorObject.selection;
+                                        if (!selection) {
+                                            return;
+                                        }
+                                        console.debug("anchor", selection.anchor);
+                                        const selectedElement = SlateNode.descendant(editorObject, selection.anchor.path.slice(0, -1));
+                                        console.debug("selectedElement", selectedElement);
+                                        const selectedLeaf = SlateNode.descendant(editorObject, selection.anchor.path);
+                                        console.debug("selectedLeaf", selectedLeaf);
+                                        if (selectedElement.name === HeaderName) {
+                                            event.preventDefault();
+                                            if (selectedLeaf.text.length === selection.anchor.offset) {
+                                                // Transforms.insertNodes(editor, {
+                                                //     type: 'paragraph',
+                                                //     children: [{text: '', marks: []}],
+                                                // });
+                                                console.debug("selectedLeaf2");
+                                                Transforms.insertNodes(editorObject, NewParagraphNode(""));
                                             }
+                                            // else {
+                                            //     Transforms.splitNodes(editor);
+                                            //     Transforms.setNodes(editor, {type: 'paragraph'});
+                                            // }
                                         }
                                     }}
                                 />
