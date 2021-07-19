@@ -27,11 +27,11 @@ import {
     SFParagraphView
 } from "@/js/components/editor/nodes/paragraph";
 import {
-    CodeBlockName,
-    SFCodeblockLeafView,
-    SFCodeblockNode,
-    SFCodeblockToolbar,
-    SFCodeblockView
+    CodeBlockName, NewCodeNode,
+    SFCodeBlockLeafView,
+    SFCodeBlockNode,
+    SFCodeBlockToolbar,
+    SFCodeBlockView
 } from "@/js/components/editor/nodes/codeblock";
 import Prism from "prismjs"
 import 'prismjs/components/prism-python'
@@ -39,7 +39,13 @@ import 'prismjs/components/prism-php'
 import 'prismjs/components/prism-sql'
 import 'prismjs/components/prism-java'
 import {SFToolbox} from "@/js/components/editor/toolbox";
-import {parseDescendantArray, SFDescendant, SFEditor} from "@/js/components/editor/nodes/node";
+import {
+    parseDescendant,
+    parseDescendantArray,
+    parseText,
+    SFDescendant,
+    SFEditor
+} from "@/js/components/editor/nodes/node";
 
 const HOTKEYS = {
     'mod+b': 'bold',
@@ -81,7 +87,7 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                                 <SFHeaderToolbar />
                             </Stack.Item>
                             <Stack.Item>
-                                <SFCodeblockToolbar/>
+                                <SFCodeBlockToolbar/>
                             </Stack.Item>
                         </Stack>
                     </Stack.Item>
@@ -118,9 +124,11 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                                         console.debug("selectedElement", selectedElement);
                                         const selectedLeaf = SlateNode.descendant(editorObject, selection.anchor.path);
                                         console.debug("selectedLeaf", selectedLeaf);
-                                        if (selectedElement.name === HeaderName) {
+                                        const element = parseDescendant(selectedElement);
+                                        const leaf = parseText(selectedLeaf);
+                                        if (element.name === HeaderName) {
                                             event.preventDefault();
-                                            if (selectedLeaf.text.length === selection.anchor.offset) {
+                                            if (leaf.text.length === selection.anchor.offset) {
                                                 // Transforms.insertNodes(editor, {
                                                 //     type: 'paragraph',
                                                 //     children: [{text: '', marks: []}],
@@ -132,6 +140,10 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                                             //     Transforms.splitNodes(editor);
                                             //     Transforms.setNodes(editor, {type: 'paragraph'});
                                             // }
+                                        } else if(element.name == CodeBlockName) {
+                                            event.preventDefault();
+                                            console.debug("selectedLeaf3");
+                                            Transforms.insertNodes(editorObject, NewCodeNode("\n"));
                                         }
                                     }}
                                 />
@@ -170,7 +182,7 @@ function decorateElement([node, path]: NodeEntry): SlateRange[] {
     if (editorObject.children.length < 1) {
         return ranges;
     }
-    const parentNode = SlateNode.parent(editorObject, path) as SFCodeblockNode;
+    const parentNode = SlateNode.parent(editorObject, path) as SFCodeBlockNode;
     console.debug("decorateElement parent", parentNode);
 
     if (!parentNode || parentNode.name != CodeBlockName) {
@@ -203,7 +215,7 @@ function Element({ attributes, children, element }:{attributes: any, children: a
     if (element.name === "header") {
         return <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
     } else if (element.name === "code-block") {
-        return <SFCodeblockView attributes={attributes} children={children} node={element}/>
+        return <SFCodeBlockView attributes={attributes} children={children} node={element}/>
     }
     return <SFParagraphView attributes={attributes} children={children} node={element as SFParagraphNode}/>
 }
@@ -213,7 +225,7 @@ function Leaf({ attributes, children, leaf }:{attributes: any, children: any, le
     if (leaf.name === "text") {
         return <SFTextView attributes={attributes} children={children} node={leaf}/>
     } else if(leaf.name == "code") {
-        return <SFCodeblockLeafView attributes={attributes} children={children} node={leaf}/>
+        return <SFCodeBlockLeafView attributes={attributes} children={children} node={leaf}/>
     }
     return <span {...attributes}>{children}</span>
 }

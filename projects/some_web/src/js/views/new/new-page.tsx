@@ -17,9 +17,6 @@ type NewPageState = {
     saveErrorMsg?: string;
 };
 
-const rightStyles = css`
-  width: 240px;
-`
 const useTitle = () => {
     const titleStyles = css`
       font-weight: 500; font-size: 20px;
@@ -59,12 +56,12 @@ function onSave(title: string, editorValue: SFEditor) {
         body: JSON.stringify(editorValue),
     }
     console.debug("postData", postData);
-    // articlePost(postData).then((out)=>{
-    //     console.debug("articlePost", out);
-    //     if(out) {
-    //         window.location.href = ApiUrl.article.read + out.pk;
-    //     }
-    // });
+    articlePost(postData).then((out)=>{
+        console.debug("articlePost", out);
+        if(out) {
+            window.location.href = ApiUrl.article.read + out.pk;
+        }
+    });
 }
 
 const NewPage = (props:{}, state: NewPageState) => {

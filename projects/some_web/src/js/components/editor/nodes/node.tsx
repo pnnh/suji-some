@@ -1,13 +1,5 @@
 import React from "react";
-import {
-    Editor as SlateEditor,
-    Element as SlateElement,
-    Text as SlateText,
-    Node as SlateNode,
-    Path as SlatePath,
-    Descendant as SlateDescendant,
-    Transforms
-} from "slate";
+import {Descendant as SlateDescendant, Element as SlateElement, Text as SlateText} from "slate";
 
 export interface SFEditor {
     children: SFDescendant[];
@@ -26,12 +18,26 @@ export declare type SFDescendant = SFElement | SFText;
 
 export function parseDescendantArray(descendants: SlateDescendant[]): SFDescendant[] {
     return descendants.map(slateDescendant => {
-        const d = slateDescendant as any;
-        if (typeof d.name !== "string") {
-            throw new Error("未知元素: " + d.name);
-        }
-        return d;
+        return parseDescendant(slateDescendant);
     })
+}
+
+export function parseDescendant(descendant: SlateDescendant): SFDescendant {
+    const d = descendant as any;
+    if (typeof d.name !== "string") {
+        throw new Error("未知元素: " + d.name);
+    } else {
+        return d;
+    }
+}
+
+export function parseText(descendant: SlateDescendant): SFText {
+    const d = descendant as any;
+    if (typeof d.text !== "string") {
+        throw new Error("未知Text节点: " + d.name);
+    } else {
+        return d;
+    }
 }
 
 export interface SFPlugin {

@@ -12,28 +12,45 @@ import {
 import {ReactEditor, useSlate} from "slate-react";
 import {Node as SlateNode, Path as SlatePath, Selection, Transforms} from 'slate';
 import {css} from "@emotion/css";
+import {NewParagraphNode} from "@/js/components/editor/nodes/paragraph";
 
 export const CodeBlockName = "code-block";
 export const CodeName = "code";
 
-export interface SFCodeblockNode extends SFElement {
+export interface SFCodeBlockNode extends SFElement {
     language: string;
 }
 
-function NewCodeblockNode(language: string, text: string): SFCodeblockNode {
-    const block: SFCodeblockNode = {
+export interface SFCode extends SFText {
+
+}
+
+export function NewCodeNode(text: string): SFCode {
+    return {name: CodeName, text: text, }
+}
+
+export function NewCodeBlockNode(language: string, text: string): SFCodeBlockNode {
+    const block: SFCodeBlockNode = {
         name: CodeBlockName, children: [], language: language
     }
-    const codeText: SFText = {name: CodeName, text: text, }
-    block.children.push(codeText);
+    const codeNode: SFCode = NewCodeNode(text);
+    block.children.push(codeNode);
     return block;
 }
 
-export function SFCodeblockView(props: {attributes: any, children: any, node: any}) {
-    return <div data-name={CodeBlockName} {...props.attributes}>{props.children}</div>
+const codeBlockStyles = css`
+  background: #f6f6f6;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 8px 0;
+  line-height: 24px;
+`
+
+export function SFCodeBlockView(props: {attributes: any, children: any, node: any}) {
+    return <pre data-name={CodeBlockName} className={codeBlockStyles} {...props.attributes}>{props.children}</pre>
 }
 
-export function SFCodeblockLeafView(props: {attributes: any, children: any, node: any}) {
+export function SFCodeBlockLeafView(props: {attributes: any, children: any, node: any}) {
     return (
         <span data-name={CodeName}
             {...props.attributes}
@@ -85,16 +102,17 @@ export function SFCodeblockLeafView(props: {attributes: any, children: any, node
     )
 }
 
-export function SFCodeblockToolbar() {
+export function SFCodeBlockToolbar() {
     const editor = useSlate() as ReactEditor;
-    const node = NewCodeblockNode("js", "<h1>hello</h1>console.log(\"hello\");");
+    const node = NewCodeBlockNode("js", "console.log(\"hello\");");
+    const paragraphNode = NewParagraphNode("");
     console.debug("SFCodeBlockToolbar", node);
     return <> <IconButton iconProps={{iconName: "CodeEdit"}} title="代码块"
                        onMouseDown={(event) => {
                            event.preventDefault();
                            Transforms.insertNodes(
                                editor,
-                               node
+                               [node, paragraphNode]    // 同时插入一个段落
                            )
                        }}/>
     </>
@@ -111,7 +129,7 @@ const options: IDropdownOption[] = [
     { key: 'java', text: 'Java' }
 ];
 
-function SelectLanguage(props: {element: SFCodeblockNode}) {
+function SelectLanguage(props: {element: SFCodeBlockNode}) {
     const editor = useSlate() as ReactEditor;
     return <Dropdown
         options={options}
@@ -127,7 +145,7 @@ function SelectLanguage(props: {element: SFCodeblockNode}) {
                 const codeblockNode = SlateNode.parent(editor, selection.focus.path);
                 const parentPath = SlatePath.parent(selection.focus.path);
                 console.debug("Select Language2", codeblockNode, parentPath);
-                const newCodeblockNode: SFCodeblockNode = {name: CodeBlockName,
+                const newCodeblockNode: SFCodeBlockNode = {name: CodeBlockName,
                     children: props.element.children, language: value.key,
                 }
                 Transforms.setNodes(editor, newCodeblockNode, {
@@ -141,6 +159,6 @@ function SelectLanguage(props: {element: SFCodeblockNode}) {
 export const CodeblockPlugin: SFPlugin = {
     renderToolbox(element) {
         console.debug("CodeblockPlugin", element);
-       return <SelectLanguage element={element as SFCodeblockNode} />
+       return <SelectLanguage element={element as SFCodeBlockNode} />
     }
 }
