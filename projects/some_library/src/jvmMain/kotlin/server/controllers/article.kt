@@ -42,61 +42,66 @@ fun Application.configureArticleController() {
 
             if (pk != null) {
                 val article = queryArticle(pk)
-                if(article != null) {
+                if (article != null) {
                     editorString = article.body
-                }
-            }
-            if (editorString.isNotEmpty()) {
-                val editor = decodeEditorFromString(editorString)
+                    val editor = decodeEditorFromString(editorString)
 
-                call.respondHtml() {
-                    head {
-                        meta(charset = "utf-8")
-                        meta("viewport", "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no")
-                        meta("render", "webkit")
-                        meta() {
-                            httpEquiv = "X-UA-Compatible"
-                            content = "IE=edge,chrome=1"
+                    call.respondHtml() {
+                        head {
+                            meta(charset = "utf-8")
+                            meta(
+                                "viewport",
+                                "width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1, user-scalable=no"
+                            )
+                            meta("render", "webkit")
+                            meta() {
+                                httpEquiv = "X-UA-Compatible"
+                                content = "IE=edge,chrome=1"
+                            }
+                            link("https://res.sfx.xyz/favicon.ico", "icon", "image/x-icon")
+                            link("https://res.sfx.xyz/favicon.ico", "shortcut icon", "image/x-icon")
+                            title("泛函")
+                            link(cssLink("/src/main.scss", "/main.css"), "stylesheet", "text/css")
                         }
-                        link("https://res.sfx.xyz/favicon.ico", "icon", "image/x-icon")
-                        link("https://res.sfx.xyz/favicon.ico", "shortcut icon", "image/x-icon")
-                        title("泛函")
-                        link(cssLink("/src/main.scss", "/main.css"), "stylesheet", "text/css")
-                    }
-                    body {
-                        div("ms-Grid") {
-                            dir = Dir.ltr
-                            div("ms-Grid-row") {
-                                div("ms-Grid-col ms-sm0 ms-xl2")
-                                div("ms-Grid-col ms-sm12 ms-xl8") {
-                                    header {
-                                        nav {
-                                            div() {
-                                                a("/", "", "logo") {
-                                                    title = "首页"
-                                                    +"sfx.xyz"
-                                                }
-                                                a("/",  "") {
-                                                    title = "文章"
-                                                    +"文章"
-                                                }
-                                                a("/",  "") {
-                                                    title = "工具"
-                                                    +"工具"
+                        body {
+                            div("ms-Grid") {
+                                dir = Dir.ltr
+                                div("ms-Grid-row") {
+                                    div("ms-Grid-col ms-sm0 ms-xl2")
+                                    div("ms-Grid-col ms-sm12 ms-xl8") {
+                                        header {
+                                            nav {
+                                                div() {
+                                                    a("/", "", "logo") {
+                                                        title = "首页"
+                                                        +"sfx.xyz"
+                                                    }
+                                                    a("/", "") {
+                                                        title = "文章"
+                                                        +"文章"
+                                                    }
+                                                    a("/", "") {
+                                                        title = "工具"
+                                                        +"工具"
+                                                    }
+                                                    a("/article/edit/${article.pk}", "") {
+                                                        title = "修改文章"
+                                                        +"修改文章"
+                                                    }
                                                 }
                                             }
                                         }
                                     }
+                                    div("ms-Grid-col ms-sm0 ms-xl2")
                                 }
-                                div("ms-Grid-col ms-sm0 ms-xl2")
                             }
-                        }
-                        div() {
-                            editor.children.forEach { it ->
-                                buildNode(it)()
+                            div() {
+                                editor.children.forEach { it ->
+                                    buildNode(it)()
+                                }
                             }
+                            script("module", jsLink("/src/main.tsx", "/main.js")) {}
                         }
-                        script("module", jsLink("/src/main.tsx", "/main.js")) {}
                     }
                 }
             } else {
