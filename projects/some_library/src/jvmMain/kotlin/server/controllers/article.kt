@@ -162,7 +162,7 @@ fun buildCodeBlock(node: SFCodeBlock): DIV.() -> Unit {
             node.children.forEach { it ->
                 when (it.name) {
                     "code" -> buildCode(it as SFCode)()
-                    else -> throw IllegalArgumentException()
+                    else -> throw IllegalArgumentException("未知类型: ${it.name}")
                 }
             }
         }

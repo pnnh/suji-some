@@ -31,6 +31,15 @@ export function parseDescendant(descendant: SlateDescendant): SFDescendant {
     }
 }
 
+export function parseElement(descendant: SlateDescendant): SFElement {
+    const d = descendant as any;
+    if (!Array.isArray(d.children)) {
+        throw new Error("未知元素: " + d.name);
+    } else {
+        return d;
+    }
+}
+
 export function parseText(descendant: SlateDescendant): SFText {
     const d = descendant as any;
     if (typeof d.text !== "string") {

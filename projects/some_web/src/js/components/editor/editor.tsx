@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useState } from 'react';
+import React, {ClipboardEvent, useCallback, useMemo, useState} from 'react';
 import {Editable, withReact, useSlate, Slate, ReactEditor, } from 'slate-react'
 import {
     Editor,
@@ -11,7 +11,6 @@ import {
     Element as SlateElement, BaseElement, ExtendedType, BaseEditor, Descendant, Text, NodeEntry,
 } from 'slate'
 import { withHistory } from 'slate-history'
-import isHotkey from 'is-hotkey'
 import {IconButton, IContextualMenuProps,Stack} from "@fluentui/react";
 import {
     HeaderName,
@@ -19,7 +18,7 @@ import {
     SFHeaderToolbar,
     SFHeaderView,
 } from "@/js/components/editor/nodes/header";
-import { SFTextView} from "@/js/components/editor/nodes/text";
+import {NewTextNode, SFTextView} from "@/js/components/editor/nodes/text";
 import {
     NewParagraphNode,
     SFParagraphNode,
@@ -41,10 +40,10 @@ import 'prismjs/components/prism-java'
 import {SFToolbox} from "@/js/components/editor/toolbox";
 import {
     parseDescendant,
-    parseDescendantArray,
+    parseDescendantArray, parseElement,
     parseText,
     SFDescendant,
-    SFEditor
+    SFEditor, SFText
 } from "@/js/components/editor/nodes/node";
 
 const HOTKEYS = {
@@ -146,6 +145,7 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                                             Transforms.insertNodes(editorObject, NewCodeNode("\n"));
                                         }
                                     }}
+                                    onPaste={onEditorPaste}
                                 />
                             </Stack.Item>
                             <Stack.Item styles={{root: {width: 200}}}>
@@ -156,6 +156,49 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                 </Stack>
             </Slate>
     )
+}
+
+function onEditorPaste(event: ClipboardEvent<HTMLDivElement>) {
+    console.debug("onEditorPaste", event.clipboardData.getData('text'));
+    const clipText = event.clipboardData.getData('text');
+
+    console.debug("onEditorPaste2", clipText);
+    console.debug("selection", editorObject.selection);
+    const selection = editorObject.selection;
+    if (!selection || !clipText || clipText.length < 1) {
+        return;
+    }
+    console.debug("anchor", selection.anchor);
+    const selectedElement = SlateNode.descendant(editorObject, selection.anchor.path.slice(0, -1));
+    console.debug("selectedElement", selectedElement);
+    const selectedLeaf = SlateNode.descendant(editorObject, selection.anchor.path);
+    console.debug("selectedLeaf", selectedLeaf);
+    const element = parseElement(selectedElement);
+    const leaf = parseText(selectedLeaf);
+    if (element.name === HeaderName) {
+        event.preventDefault();
+        if (leaf.text.length > 128) {
+            console.debug("标题过长");
+            return;     // 标题过长
+        }
+        let text = clipText.replaceAll("\n", "");
+
+        console.debug("onEditorPaste selectedLeaf2", text == leaf.text, text, "|", leaf.text, "|");
+        const textNode: SFText = NewTextNode(text);
+        console.debug("onEditorPaste selectedLeaf3", textNode);
+        Transforms.insertNodes(editorObject, textNode);
+        // else {
+        //     Transforms.splitNodes(editor);
+        //     Transforms.setNodes(editor, {type: 'paragraph'});
+        // }
+    } else if(element.name == CodeBlockName) {
+        event.preventDefault();
+        let text = clipText;
+        console.debug("onEditorPaste selectedLeaf3", text == leaf.text, text, "|", leaf.text, "|");
+        const codeNode: SFText = NewCodeNode(text);
+        console.debug("onEditorPaste selectedLeaf4", codeNode);
+        Transforms.insertNodes(editorObject, codeNode);
+    }
 }
 
 const getLength = (token: string | Prism.Token): number => {

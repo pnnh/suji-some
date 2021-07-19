@@ -17,17 +17,17 @@ import {
 } from "slate";
 import React, {CSSProperties, KeyboardEventHandler} from "react";
 import {isBlockActive} from "@/js/components/editor/nodes/paragraph";
-import {TextName} from "@/js/components/editor/nodes/text";
+import {NewTextNode, TextName} from "@/js/components/editor/nodes/text";
 
 export interface SFHeaderNode extends SFElement {
     header: number;
 }
 export const HeaderName = "header";
 
-export function NewHeaderNode(header: number): SFHeaderNode {
+export function NewHeaderNode(header: number, text: string): SFHeaderNode {
     return {
         name: HeaderName,
-        children: [],
+        children: [NewTextNode(text)],
         header: header
     }
 }
@@ -65,15 +65,14 @@ export function SFHeaderView(props: {attributes: any, children: any, node: SFHea
 
 function ToolbarIcon(props: {iconName: string, header: number}) {
     const editor = useSlate() as ReactEditor;
-    const node: SFHeaderNode = {name: HeaderName, children: [], header: 1};
-    node.children.push({name: TextName, text: ""});
-    console.debug("SFHeaderToolbar", node);
+    const headerNode: SFHeaderNode = NewHeaderNode(1, "");
+    console.debug("SFHeaderToolbar", headerNode);
     return <> <IconButton iconProps={{iconName: "Header1"}} title="标题"
                           onMouseDown={(event) => {
                               event.preventDefault();
                               Transforms.insertNodes(
                                   editor,
-                                  node
+                                  headerNode
                               );
                           }}/>
     </>
@@ -81,7 +80,7 @@ function ToolbarIcon(props: {iconName: string, header: number}) {
 
 function ToolboxIcon(props: {iconName: string, header: number}) {
     const editor = useSlate() as ReactEditor;
-    const headerNode = NewHeaderNode(props.header);
+    const headerNode = NewHeaderNode(props.header, "");
     const isHeaderActive = (element: any): boolean => {
         if (!element) {
             return false
@@ -95,7 +94,7 @@ function ToolboxIcon(props: {iconName: string, header: number}) {
                            // toggleBlock(editor, headerNode, isHeaderActive);
                            // 在设置样式之前其实已经不需要检测header是否激活了，直接设置即可
                            // 所以也没必要再经过toggleBlock方法
-                           Transforms.setNodes(editor, headerNode);
+                           Transforms.setNodes(editor, headerNode);     // setNodes似乎只能改变元素属性而不能改变内容
                        }}/>
 }
 
