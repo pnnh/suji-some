@@ -3,15 +3,13 @@
 <head>
     {{ template "headmeta.html" }}
     <title>{{.title}} - 泛函</title>
-    {{ cssLink "/src/main.scss" "/main.css" }}
+    {{ cssLink "/src/pages/main.scss" "/main.css" }}
+    {{ cssLink "/src/pages/index.scss" "/index.css" }}
 </head>
 <body>
     <noscript id="noscript" data-s="{{.status}}">{{.noscript}}</noscript>
     <script id="data" type="application/json">{{.data}}</script>
 
-    <fast-design-system-provider use-defaults>
-        <sfx-header></sfx-header>
-    </fast-design-system-provider>
     <div class="ms-Grid" dir="ltr">
         <div class="ms-Grid-row">
             <div class="ms-Grid-col ms-sm0 ms-xl2">
@@ -40,14 +38,14 @@
             </div>
             <div class="ms-Grid-col ms-sm12 ms-xl8">
                 <main>
-                    <div data-name="data" data-type="object">
-                        <div data-name="rows" data-type="array">
+                    <div>
+                        <div class="article-list">
                             {{range .list}}
-                                <div>
+                                <div class="article-item">
                                     <div data-name="{{.Pk}}" data-type="object">
                                         <input type="hidden" data-name="pk" data-value="{{.Pk}}" />
                                         <div>
-                                            <a href="/blog/article/{{.Pk}}">
+                                            <a href="/blog/article/{{.Pk}}" class="article-link">
                                                 <h3 data-name="title">{{.Title}}</h3>
                                             </a>
                                         </div>
@@ -74,7 +72,7 @@
             </div>
         </div>
     </div>
-    {{ jsLink "/src/main.tsx" "/main.js" }}
+    {{ jsLink "/src/pages/main.tsx" "/main.js" }}
 
 </body>
 </html>
