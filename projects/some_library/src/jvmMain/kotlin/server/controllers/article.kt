@@ -61,46 +61,58 @@ fun Application.configureArticleController() {
                             link("https://res.sfx.xyz/favicon.ico", "icon", "image/x-icon")
                             link("https://res.sfx.xyz/favicon.ico", "shortcut icon", "image/x-icon")
                             title("泛函")
-                            link(cssLink("/src/main.scss", "/main.css"), "stylesheet", "text/css")
+                            link(cssLink("/src/pages/article.scss", "/article.css"), "stylesheet", "text/css")
                         }
                         body {
                             div("ms-Grid") {
                                 dir = Dir.ltr
-                                div("ms-Grid-row") {
+                                div("ms-Grid-row header") {
                                     div("ms-Grid-col ms-sm0 ms-xl2")
                                     div("ms-Grid-col ms-sm12 ms-xl8") {
-                                        header {
-                                            nav {
-                                                div() {
-                                                    a("/", "", "logo") {
+                                        div("ms-Grid-row header-row") {
+                                            div("ms-Grid-col ms-x18 header-left") {
+                                                div("logo") {
+                                                    a("/", "") {
                                                         title = "首页"
                                                         +"sfx.xyz"
                                                     }
-                                                    a("/", "") {
+                                                }
+                                                div("menu") {
+                                                    a("/", "", "link") {
                                                         title = "文章"
                                                         +"文章"
                                                     }
-                                                    a("/", "") {
+                                                    a("/", "", "link") {
                                                         title = "工具"
                                                         +"工具"
                                                     }
-                                                    a("/article/edit/${article.pk}", "") {
+                                                    a("/article/edit/${article.pk}", "", "link") {
                                                         title = "修改文章"
                                                         +"修改文章"
                                                     }
                                                 }
+                                            }
+                                            div("ms-Grid-col ms-xl4 header-right") {
+                                                div { id = "actions" }
                                             }
                                         }
                                     }
                                     div("ms-Grid-col ms-sm0 ms-xl2")
                                 }
                             }
-                            div() {
-                                editor.children.forEach { it ->
-                                    buildNode(it)()
+                            div("ms-Grid-row") {
+                                dir = Dir.ltr
+                                div("ms-Grid-col ms-xl2")
+                                div("ms-Grid-col ms-xl8") {
+                                    div() {
+                                        editor.children.forEach { it ->
+                                            buildNode(it)()
+                                        }
+                                    }
                                 }
+                                div("ms-Grid-col ms-xl2")
                             }
-                            script("module", jsLink("/src/main.tsx", "/main.js")) {}
+                            script("module", jsLink("/src/pages/article.tsx", "/article.js")) {}
                         }
                     }
                 }
