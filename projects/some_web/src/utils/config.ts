@@ -13,16 +13,16 @@ if(importMeta.DEV) {
     jsEnv = "release"
 }
 
-export function IsDev(): boolean {
+export function isDev(): boolean {
     return jsEnv == "dev";
 }
 
-export function IsRelease(): boolean {
+export function isRelease(): boolean {
     return jsEnv == "release";
 }
 
 export function getApiUrl(): string {
-    if (IsDev()) {
+    if (isDev()) {
         return "http://127.0.0.1:8080"
     }
     return "https://qst.sfx.xyz"

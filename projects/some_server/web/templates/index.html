@@ -3,7 +3,6 @@
 <head>
     {{ template "headmeta.html" }}
     <title>{{.title}} - 泛函</title>
-    {{ cssLink "/src/pages/main.scss" "/main.css" }}
     {{ cssLink "/src/pages/index.scss" "/index.css" }}
 </head>
 <body>
@@ -27,7 +26,7 @@
                             </div>
                         </div>
                         <div class="ms-Grid-col ms-xl4 header-right">
-                            <sfx-user></sfx-user>
+                            <div id="user-menu"></div>
                         </div>
                     </div>
                 </div>
@@ -74,6 +73,6 @@
             </div>
         </div>
     </fast-design-system-provider>
-    {{ jsLink "/src/pages/main.tsx" "/main.js" }}
+    {{ jsLink "/src/pages/index.tsx" "/index.js" }}
 </body>
 </html>
