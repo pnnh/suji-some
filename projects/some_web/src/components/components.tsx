@@ -1,1 +1,1 @@
-import "@/js/components/header/header";
+import "@/components/header/header";

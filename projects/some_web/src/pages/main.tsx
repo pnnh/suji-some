@@ -16,6 +16,8 @@ import AccountPage from "@/pages/account/account-page";
 import RandomPasswordPage from "@/views/random-password";
 import QuestPage from "@/pages/quest/quest";
 import {getPageStatus} from "@/utils/helpers";
+import "@/components/components";
+import "@/views/views";
 
 DesignSystem.getOrCreate().register(
     Object.values(allComponents).map(definition => definition())

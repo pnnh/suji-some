@@ -3,7 +3,7 @@ import {PrimaryButton, Stack, TextField} from "@fluentui/react";
 import {css} from "@emotion/css";
 import NavMenu from "@/views/layout/partial/NavMenu";
 import SFXHeader from "@/views/layout/Header";
-import UserMenu from "@/views/layout/partial/UserMenu";
+import UserMenu from "@/views/user/menu";
 import {questPost, questQuery} from "@/services/quest";
 import SFXLayout from "@/views/layout/Layout";
 
