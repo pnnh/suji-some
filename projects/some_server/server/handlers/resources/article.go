@@ -1,7 +1,6 @@
 package resources
 
 import (
-	"encoding/json"
 	"fmt"
 	"html"
 	"html/template"
@@ -18,6 +17,8 @@ import (
 	"github.com/sirupsen/logrus"
 
 	"github.com/gin-gonic/gin"
+	jsoniter "github.com/json-iterator/go"
+
 )
 
 type articleHandler struct {
@@ -109,6 +110,8 @@ func json2html(value interface{}) (string, string) {
 	}
 }
 
+var json = jsoniter.ConfigCompatibleWithStandardLibrary
+
 // 查看文章
 func (s *articleHandler) Read(gctx *gin.Context) {
 	pk := gctx.Param("pk")
@@ -133,22 +136,20 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
 	}
-	outType, output := json2html(value)
-	logrus.Debug("Article output", outType, output)
+	content, err := buildBody(value)
+	if err != nil {
+		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+		return
+	}
+	logrus.Debugln("jjjj", content)
 
-	data, err := s.middleware.Templs.Execute("post.html", gin.H{
-		"post": template.HTML(output), "title": article.Title,
-	})
-	logrus.Debug("Article ", pk, data, err)
 	auth := s.middleware.Auth.GetAuth(gctx)
-	gctx.HTML(http.StatusOK, "client.html", gin.H{
+	gctx.HTML(http.StatusOK, "article.html", gin.H{
 		"title": article.Title,
-		"noscript":  template.HTML(data),
+		"body":  template.HTML(content),
 		"data": map[string]interface{}{
 			"creator": auth.UName == article.Creator,
 			"login": auth != nil && len(auth.UName) > 0,
-			"title": article.Title,
-			"body": article.Body,
 		},
 	})
 }

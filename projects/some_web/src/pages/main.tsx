@@ -10,6 +10,7 @@ import RandomPasswordPage from "@/views/random-password";
 import QuestPage from "@/pages/quest/quest";
 import {getPageStatus} from "@/utils/helpers";
 import {renderExceptionPage} from "@/views/exception/render";
+import "@/utils/fluentui";
 
 const App = () =>{
     const status = getPageStatus();

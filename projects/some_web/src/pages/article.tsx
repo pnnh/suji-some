@@ -6,6 +6,8 @@ import {
 } from '@fluentui/react';
 import { getJsonData} from "@/utils/helpers";
 import {ApiUrl} from "@/utils/config";
+import "@/utils/fluentui";
+import Prism from "prismjs";
 
 const useActionButton = () => {
     const auth = getJsonData<any>();
@@ -35,3 +37,19 @@ const rootElement = document.getElementById('actions');
 if (rootElement) {
     ReactDOM.render(<ArticleMenu />, rootElement);
 }
+
+const codes = document.getElementsByClassName("code")
+Array.from(codes).forEach(e => {
+    console.debug("jjjj", e);
+    if (!(e instanceof HTMLElement)) {
+        return;
+    }
+    console.debug("jjjj222", e.dataset.lang);
+    if (e.dataset.lang) {
+        const html = Prism.highlight(e.innerText, Prism.languages.javascript, e.dataset.lang);
+
+        console.debug("jjjj333", html);
+        e.innerHTML = html;
+    }
+});
+

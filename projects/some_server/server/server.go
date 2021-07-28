@@ -6,10 +6,8 @@ import (
 	"net/http"
 	"os"
 	"regexp"
-	"strings"
 	"time"
 
-	"sujiserv/config"
 	"sujiserv/server/handlers"
 	"sujiserv/server/handlers/resources"
 	"sujiserv/server/middleware"
@@ -114,9 +112,9 @@ func (s *WebServer) Start() error {
 }
 
 func (s *WebServer) ServeHTTP(w http.ResponseWriter, r *http.Request) {
-	if config.Debug() && strings.HasPrefix(r.URL.Path, "/blog/") {
-		devBlogHandler(w, r)
-		return
-	}
+	//if config.Debug() && strings.HasPrefix(r.URL.Path, "/blog/") {
+	//	devBlogHandler(w, r)
+	//	return
+	//}
 	s.router.ServeHTTP(w, r)
 }

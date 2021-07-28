@@ -25,14 +25,14 @@ export function getApiUrl(): string {
     if (isDev()) {
         return "http://127.0.0.1:8080"
     }
-    return "https://qst.sfx.xyz"
+    return "https://sfx.xyz"
 }
 
 const ApiUrl = {
     article: {
         new: "/article/new",
         edit: "/article/edit/",
-        read: "/blog/article/",
+        read: "/article/read/",
     }
 }
 
