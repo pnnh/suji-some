@@ -133,7 +133,7 @@ func (s *accountHandler) LoadImage(gctx *gin.Context) {
 	startTime := time.Unix(timeUnix, 0)
 	now := time.Now()
 	if startTime.After(now) || now.Sub(startTime) > time.Minute * 5 {
-		utils.ResponseError(gctx, http.StatusInternalServerError, errors.New("已超时失效"))
+		utils.ResponseMessage(gctx, http.StatusInternalServerError, "已超时失效")
 		return
 	}
 	account := &dbmodels.AccountTable{}
