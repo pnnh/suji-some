@@ -49,7 +49,7 @@ func AesEncryptBytes(bytes []byte, key []byte) ([]byte, error) {
 	//origData:=bytes
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		return nil, fmt.Errorf("创建Cipher出错: %w", err)
+		return nil, fmt.Errorf("Encrypt创建Cipher出错: %w", err)
 	}
 	blockSize := block.BlockSize()
 	bytes = pkcs5Padding(bytes, blockSize)
@@ -64,7 +64,7 @@ func AesEncryptBytes(bytes []byte, key []byte) ([]byte, error) {
 func AesDecryptBytes(bytes []byte, key []byte) ([]byte, error) {
 	block, err := aes.NewCipher(key)
 	if err != nil {
-		return nil, fmt.Errorf("创建Cipher出错: %w", err)
+		return nil, fmt.Errorf("Decrypt创建Cipher出错: %w", err)
 	}
 	blockSize := block.BlockSize()
 	iv := make([]byte, blockSize)

@@ -17,7 +17,7 @@ var ISSUER = "sfx.xyz" // TOTP发行机构
 var JWTRealm = "sfx.xyz"
 var JWTKey = ""
 var CSRFToken = ""
-var QuestApiUrl = "https://qst.sfx.xyz"
+var ServerUrl = "https://sfx.xyz"
 var QuestKey = ""
 
 var (
@@ -62,7 +62,7 @@ func init() {
 		CSRFToken = uuid.New().String()[:32]
 	}
 	if Debug() {
-		QuestApiUrl = "http://localhost:8080"
+		ServerUrl = "http://localhost:5000"
 	}
 	QuestKey = os.Getenv("QUEST_KEY")
 	if len(QuestKey) < 1 {
