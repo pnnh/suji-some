@@ -27,11 +27,11 @@ func (s *indexHandler) Handle(gctx *gin.Context) {
 		list[k] = models.ParseArticleView(v)
 	}
 	auth := s.md.Auth.GetAuth(gctx)
-	gctx.HTML(http.StatusOK, "index.html", gin.H{
+	gctx.HTML(http.StatusOK, "index/index.html", gin.H{
 		"title": "首页",
 		"list":  list,
 		"count": result.RowsAffected,
-		"data": gin.H{
+		"data": gin.H {
 			"login": auth != nil && len(auth.UName) > 0,
 		},
 	})
@@ -44,8 +44,5 @@ func NewIndexHandler(md *middleware.ServerMiddleware) *indexHandler {
 }
 
 func HandleNotFound(gctx *gin.Context) {
-	gctx.HTML(http.StatusOK, "client.html", gin.H{
-		"title":  "页面",
-		//"status": http.StatusNotFound,
-	})
+	utils.ClientPage(gctx, http.StatusNotFound, "页面未找到", nil)
 }

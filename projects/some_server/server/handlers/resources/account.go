@@ -27,11 +27,15 @@ type accountHandler struct {
 
 // Index 登录或注册页面
 func (s *accountHandler) Index(gctx *gin.Context) {
-	gctx.HTML(http.StatusOK, "client.html", gin.H{
-		"title": "用户登录",
-		"data": gin.H{
-			"csrf": csrf.Token(gctx.Request),
-		},
+	//gctx.HTML(http.StatusOK, "index/client.html", gin.H{
+	//	"title": "用户登录",
+	//	"data": gin.H{
+	//		"csrf": csrf.Token(gctx.Request),
+	//	},
+	//})
+
+	utils.ClientPage(gctx, http.StatusOK,"页面未找到", gin.H{
+		"csrf": csrf.Token(gctx.Request),
 	})
 }
 

@@ -1,9 +1,10 @@
+{{ define "article/article.html" }}
 <!DOCTYPE html>
 <html lang="zh">
 <head>
     {{ template "headmeta.html" }}
     <title>{{.title}} - 泛函</title>
-    {{ cssLink "/src/pages/index.scss" "/index.css" }}
+    {{ cssLink "/src/pages/article.scss" "/article.css" }}
 </head>
 <body>
     <noscript id="noscript" data-s="{{.status}}">{{.noscript}}</noscript>
@@ -38,24 +39,8 @@
                 </div>
                 <div class="ms-Grid-col ms-sm12 ms-xl8">
                     <main>
-                        <div>
-                            <div class="article-list">
-                                {{range .list}}
-                                    <div class="article-item">
-                                        <div data-name="{{.Pk}}" data-type="object">
-                                            <input type="hidden" data-name="pk" data-value="{{.Pk}}" />
-                                            <div>
-                                                <a href="/article/read/{{.Pk}}" class="article-link">
-                                                    <h3 data-name="title">{{.Title}}</h3>
-                                                </a>
-                                            </div>
-                                            <span data-name="update_time" data-value="{{.UpdateTime}}">{{.UpdateTimeFormatted}}</span>
-                                        </div>
-                                    </div>
-                                {{end}}
-                            </div>
-                            <div data-name="count">{{.count}}</div>
-                        </div>
+                        {{.body}}
+    {{/*                    <pre class="code" ><code class="language-css">p { color: red }</code></pre>*/}}
                     </main>
                 </div>
                 <div class="ms-Grid-col ms-sm0 ms-xl2">
@@ -73,6 +58,7 @@
             </div>
         </div>
     </fast-design-system-provider>
-    {{ jsLink "/src/pages/index.tsx" "/index.js" }}
+    {{ jsLink "/src/pages/article.tsx" "/article.js" }}
 </body>
 </html>
+{{ end }}

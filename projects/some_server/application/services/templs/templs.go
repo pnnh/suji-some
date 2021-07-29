@@ -3,9 +3,11 @@ package templs
 import (
 	"html/template"
 	"strings"
+
+	"sujiserv/server/utils"
 )
 
-const templatesDir string = "web/templates/partial"
+const templatesDir string = "web/templates"
 
 type Service struct {
 	bootstrap *template.Template
@@ -18,7 +20,8 @@ func NewService() *Service {
 }
 
 func (s *Service) Init() error {
-	bootstrap, err := template.ParseGlob(templatesDir + "/*.html")
+	funcMap := utils.FuncMap()
+	bootstrap, err := template.New("templates").Funcs(funcMap).ParseGlob(templatesDir + "/**/*.html")
 	if err != nil {
 		return err
 	}

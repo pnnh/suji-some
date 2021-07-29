@@ -2,15 +2,10 @@ package server
 
 import (
 	"fmt"
-	"html/template"
 	"net/http"
 	"os"
 	"regexp"
 	"time"
-
-	"sujiserv/server/handlers"
-	"sujiserv/server/handlers/resources"
-	"sujiserv/server/middleware"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tdewolff/minify/v2"
@@ -20,6 +15,10 @@ import (
 	"github.com/tdewolff/minify/v2/json"
 	"github.com/tdewolff/minify/v2/svg"
 	"github.com/tdewolff/minify/v2/xml"
+	"sujiserv/server/handlers"
+	"sujiserv/server/handlers/resources"
+	"sujiserv/server/middleware"
+	"sujiserv/server/utils"
 )
 
 func newMinify() *minify.M {
@@ -49,12 +48,8 @@ func NewWebServer(smw *middleware.ServerMiddleware) (*WebServer, error) {
 		router:     router,
 		middleware: smw,
 		resources:  make(map[string]resources.IResource)}
-	router.SetFuncMap(template.FuncMap{
-		"jsLink":   jsLink,
-		"cssLink":  cssLink,
-		"eqString": eqString,
-	})
-	router.LoadHTMLGlob("web/templates/*.html")
+	router.SetFuncMap(utils.FuncMap())
+	router.LoadHTMLGlob("web/templates/**/*.html")
 
 	router.NoRoute(handlers.HandleNotFound)
 

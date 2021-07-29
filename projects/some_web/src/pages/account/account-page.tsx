@@ -6,10 +6,6 @@ import {Icon, Link, MessageBar, MessageBarType, PrimaryButton, Stack, TextField}
 import {accountPost} from "@/services/account";
 import {sessionPost} from "@/services/session";
 
-const useHeader = () => {
-    return <SFXHeader start={<NavMenu/>}/>
-}
-
 function sendCodeToMail(mail: string, callback: (msg: any)=>void) {
     const postData = {
         email: mail,
@@ -59,8 +55,7 @@ export default function AccountPage() {
         }
         return <span></span>
     }
-    return <SFXLayout header={useHeader()} footer={<span></span>}>
-        <div className="ms-Grid" dir="ltr">
+    return <div className="ms-Grid" dir="ltr">
             <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-xl8">
                     <Stack tokens={{childrenGap: 8}}>
@@ -107,5 +102,4 @@ export default function AccountPage() {
                 </div>
             </div>
         </div>
-    </SFXLayout>
 }

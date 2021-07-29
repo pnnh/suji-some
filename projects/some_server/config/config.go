@@ -9,7 +9,10 @@ import (
 	"github.com/sirupsen/logrus"
 )
 
-const DBKey = "pg"
+const (
+	envDBKey = "pg"
+	envResPath = "RES_PATH"
+)
 
 var DBDSN = "host=localhost user=postgres password=example dbname=sfxdb port=5432 sslmode=disable TimeZone=Asia/Shanghai"
 var GINMODE = "release"
@@ -18,6 +21,7 @@ var JWTRealm = "sfx.xyz"
 var JWTKey = ""
 var CSRFToken = ""
 var ServerUrl = "https://sfx.xyz"
+var ResourceUrl = "https://res.sfx.xyz"
 var QuestKey = ""
 
 var (
@@ -27,7 +31,12 @@ var (
 	MailPassword = ""
 )
 
+
 func init() {
+	resPath := os.Getenv(envResPath)
+	if len(resPath) > 0 {
+		ResourceUrl = resPath
+	}
 	dsn := os.Getenv("DSN")
 	if len(dsn) > 0 {
 		DBDSN = dsn
@@ -62,7 +71,8 @@ func init() {
 		CSRFToken = uuid.New().String()[:32]
 	}
 	if Debug() {
-		ServerUrl = "http://localhost:5000"
+		ServerUrl = "http://127.0.0.1:5000"
+		ResourceUrl = "http://127.0.0.1:3000"
 	}
 	QuestKey = os.Getenv("QUEST_KEY")
 	if len(QuestKey) < 1 {

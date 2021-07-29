@@ -22,16 +22,6 @@ const useTitle = () => {
     `
     return <span className={titleStyles}>修改文章</span>
 }
-const useHeader = (onSave: () => void) => {
-    const useSave = () => {
-        return <PrimaryButton onClick={()=>{
-            onSave()
-        }}>
-            发布
-        </PrimaryButton>
-    }
-    return <SFXHeader center={useTitle()} end={useSave()}/>
-}
 
 const editorStyles = css`
   border: 1px solid #605e5c;margin-bottom: 16px;
@@ -69,12 +59,7 @@ const NewPage = (props:{}, state: NewPageState) => {
     let [errMsg, setErrMsg] = useState('');
     let [editorValue, setEditorValue] = useState<SFEditor>(initialValue);
 
-    return <SFXLayout header={useHeader(()=>{
-        console.debug("onSave", editorValue);
-        console.debug("onSave2", JSON.stringify(editorValue));
-        onSave(title, editorValue);
-    })} footer={<span></span>}>
-        <Stack horizontal horizontalAlign={'space-between'} tokens={{childrenGap:16}}>
+    return <Stack horizontal horizontalAlign={'space-between'} tokens={{childrenGap:16}}>
             <Stack.Item grow={1}>
                 <Stack tokens={{childrenGap: 8}}>
                     <Stack.Item>
@@ -96,10 +81,16 @@ const NewPage = (props:{}, state: NewPageState) => {
                             </div>
                         </div>
                     </Stack.Item>
+                    <Stack.Item>
+                        <PrimaryButton onClick={()=>{
+                            onSave(title, editorValue);
+                        }}>
+                            发布
+                        </PrimaryButton>
+                    </Stack.Item>
                 </Stack>
             </Stack.Item>
         </Stack>
-    </SFXLayout>
 }
 
 export default NewPage

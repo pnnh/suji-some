@@ -27,11 +27,14 @@ type articleHandler struct {
 
 // 新建文章页面
 func (s *articleHandler) New(gctx *gin.Context) {
-	gctx.HTML(http.StatusOK, "client.html", gin.H{
-		"title": "写文章",
-		"data": gin.H{
-			"csrf": csrf.Token(gctx.Request),
-		},
+	//gctx.HTML(http.StatusOK, "index/client.html", gin.H{
+	//	"title": "写文章",
+	//	"data": gin.H{
+	//		"csrf": csrf.Token(gctx.Request),
+	//	},
+	//})
+	utils.ClientPage(gctx, http.StatusOK,"写文章", gin.H{
+		"csrf": csrf.Token(gctx.Request),
 	})
 }
 
@@ -44,9 +47,12 @@ func (s *articleHandler) Edit(gctx *gin.Context) {
 	}
 	if err := s.middleware.DB.First(article).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			gctx.HTML(http.StatusOK, "client.html", gin.H{
-				"title": "修改文章",
-				"status": http.StatusNotFound,
+			//gctx.HTML(http.StatusOK, "index/client.html", gin.H{
+			//	"title": "修改文章",
+			//	"status": http.StatusNotFound,
+			//})
+			utils.ClientPage(gctx, http.StatusOK,"修改文章", gin.H{
+				"csrf": csrf.Token(gctx.Request),
 			})
 			return
 		}
@@ -56,10 +62,11 @@ func (s *articleHandler) Edit(gctx *gin.Context) {
 
 	auth := s.middleware.Auth.GetAuth(gctx)
 	if article.Creator != auth.UName {
-		gctx.HTML(http.StatusOK, "client.html", gin.H{
-			"title": "无修改权限",
-			"status": http.StatusUnauthorized,
-		})
+		//gctx.HTML(http.StatusOK, "index/client.html", gin.H{
+		//	"title": "无修改权限",
+		//	"status": http.StatusUnauthorized,
+		//})
+		utils.ClientPage(gctx, http.StatusUnauthorized,"吴修改权限", nil)
 		return
 	}
 	value := make(map[string]interface{})
@@ -75,7 +82,16 @@ func (s *articleHandler) Edit(gctx *gin.Context) {
 	})
 	logrus.Debug("Article ", pk, data, err)
 
-	gctx.HTML(http.StatusOK, "client.html", gin.H{
+	//gctx.HTML(http.StatusOK, "index/client.html", gin.H{
+	//	"title": "修改文章",
+	//	"noscript": template.HTML(data),
+	//	"data": gin.H{
+	//		"csrf": csrf.Token(gctx.Request),
+	//		"title": article.Title,
+	//		"body": article.Body,
+	//	},
+	//})
+	utils.ClientPage(gctx, http.StatusOK,"修改文章", gin.H{
 		"title": "修改文章",
 		"noscript": template.HTML(data),
 		"data": gin.H{
@@ -122,10 +138,11 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 	}
 	if err := s.middleware.DB.First(article).Error; err != nil {
 		if err == gorm.ErrRecordNotFound {
-			gctx.HTML(http.StatusOK, "client.html", gin.H{
-				"title": "阅读文章",
-				"status": http.StatusNotFound,
-			})
+			//gctx.HTML(http.StatusOK, "index/client.html", gin.H{
+			//	"title": "阅读文章",
+			//	"status": http.StatusNotFound,
+			//})
+			utils.ClientPage(gctx, http.StatusUnauthorized,"阅读文章", nil)
 			return
 		}
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
@@ -141,10 +158,9 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
 	}
-	logrus.Debugln("jjjj", content)
 
 	auth := s.middleware.Auth.GetAuth(gctx)
-	gctx.HTML(http.StatusOK, "article.html", gin.H{
+	gctx.HTML(http.StatusOK, "article/article.html", gin.H{
 		"title": article.Title,
 		"body":  template.HTML(content),
 		"data": map[string]interface{}{
