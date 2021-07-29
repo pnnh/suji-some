@@ -85,8 +85,7 @@ export default function RandomPasswordPage() {
             {historyList}
         </>
     }
-    return <SFXLayout header={<ShowHeader />} footer={<span></span>}>
-        <Stack tokens={{childrenGap: 16}}>
+    return <Stack tokens={{childrenGap: 16}}>
             <Stack.Item>
                 <h2 className={classNames.titleStyle}>随机密码生成器</h2>
             </Stack.Item>
@@ -140,5 +139,4 @@ export default function RandomPasswordPage() {
                 {renderHistory()}
             </Stack.Item>
         </Stack>
-    </SFXLayout>
 }

@@ -3,9 +3,11 @@ package utils
 import (
 	"fmt"
 	"html/template"
+	"net/http"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/gorilla/csrf"
 	"sujiserv/config"
 )
 
@@ -43,13 +45,16 @@ func EqString(a interface{}, b string) bool {
 	return false
 }
 
-func ClientPage(gctx *gin.Context, status int, title string, data gin.H) {
-	h := gin.H{
-		"status":  status,
-		"title":   title,
+func ClientPage(gctx *gin.Context, status int, data gin.H) {
+	if data == nil {
+		data = gin.H{}
 	}
-	if data != nil {
-		h["data"] = data
+	data["csrf"] = csrf.Token(gctx.Request)
+	if status != http.StatusOK {
+		data["status"] = data
+	}
+	h := gin.H{
+		"data": data,
 	}
 	gctx.HTML(status, "index/client.html", h)
 }

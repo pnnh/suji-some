@@ -9,7 +9,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/gorilla/csrf"
 	dbmodels "sujiserv/application/services/db/models"
 	"sujiserv/config"
 	"sujiserv/server/handlers/otp"
@@ -23,20 +22,6 @@ import (
 
 type accountHandler struct {
 	middleware *middleware.ServerMiddleware
-}
-
-// Index 登录或注册页面
-func (s *accountHandler) Index(gctx *gin.Context) {
-	//gctx.HTML(http.StatusOK, "index/client.html", gin.H{
-	//	"title": "用户登录",
-	//	"data": gin.H{
-	//		"csrf": csrf.Token(gctx.Request),
-	//	},
-	//})
-
-	utils.ClientPage(gctx, http.StatusOK,"页面未找到", gin.H{
-		"csrf": csrf.Token(gctx.Request),
-	})
 }
 
 // 向指定邮箱发送OTP验证码
@@ -187,7 +172,6 @@ func (s *accountHandler) LoginByOTPCode(gctx *gin.Context) {
 }
 
 func (s *accountHandler) RegisterRouter(router *gin.Engine, name string) {
-	router.GET("/account/login", s.Index)
 	router.POST("/account/login", s.LoginByOTPCode)
 	router.POST("/account/verify", s.SendOTPCode)
 	router.GET("/account/image", s.LoadImage)

@@ -57,7 +57,7 @@ func (s *authMiddleware) NeedLogin(gctx *gin.Context) {
 		//	"title":  "未授权",
 		//	"status": http.StatusUnauthorized,
 		//})
-		utils.ClientPage(gctx, http.StatusUnauthorized,"没有权限", nil)
+		utils.ClientPage(gctx, http.StatusUnauthorized,nil)
 		gctx.Abort()
 	}
 }

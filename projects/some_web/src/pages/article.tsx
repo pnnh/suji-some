@@ -5,51 +5,63 @@ import {
     Stack
 } from '@fluentui/react';
 import { getJsonData} from "@/utils/helpers";
-import {ApiUrl} from "@/utils/config";
 import "@/utils/fluentui";
 import Prism from "prismjs";
 
-const useActionButton = () => {
-    const auth = getJsonData<any>();
-    if (auth && auth.login) {
-        return <PrimaryButton onClick={()=>{
-            window.location.href = ApiUrl.article.new;
-        }}>
-            创作
-        </PrimaryButton>
-    } else {
-        return <PrimaryButton onClick={()=>{
+const ArticleMenu = () => {
+    const data = getJsonData<any>();
+    console.debug("useActionButton", data);
+    let userMenu = <Stack.Item align={'center'}>
+        <PrimaryButton onClick={()=>{
             window.location.href = "/account/login"
         }}>
             登录
         </PrimaryButton>
-    }
-}
-
-function ArticleMenu() {
-    return <Stack.Item align={'center'}>
-        {useActionButton()}
     </Stack.Item>
+
+    if (data && data.login) {
+        let editBtn = <></>
+        if (data.creator) {
+            editBtn = <Stack.Item align={'center'}>
+                <PrimaryButton onClick={()=>{
+                    window.location.href = "/article/edit/" + data.pk;
+                }}>
+                    编辑
+                </PrimaryButton>
+            </Stack.Item>
+        }
+        userMenu = <>
+            {editBtn}
+            <Stack.Item align={'center'}>
+                <PrimaryButton onClick={()=>{
+                    window.location.href = "/article/new"
+                }}>
+                    创作
+                </PrimaryButton>
+            </Stack.Item>
+        </>
+    }
+    return <Stack horizontal tokens={{childrenGap:8}}>
+        {userMenu}
+    </Stack>
 }
 
-
-const rootElement = document.getElementById('actions');
+// 右上角操作菜单
+const rootElement = document.getElementById('user-menu');
 if (rootElement) {
     ReactDOM.render(<ArticleMenu />, rootElement);
 }
 
+// 代码块语法高亮
 const codes = document.getElementsByClassName("code")
 Array.from(codes).forEach(e => {
-    console.debug("jjjj", e);
     if (!(e instanceof HTMLElement)) {
         return;
     }
-    console.debug("jjjj222", e.dataset.lang);
     if (e.dataset.lang) {
         const html = Prism.highlight(e.innerText, Prism.languages.javascript, e.dataset.lang);
 
-        console.debug("jjjj333", html);
-        e.innerHTML = html;
+        e.innerHTML = `<code>${html}</code>`;
     }
 });
 

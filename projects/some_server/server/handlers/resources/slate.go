@@ -81,7 +81,7 @@ func buildCodeBlock(node interface{}) (string, error) {
 		return "", errors.New("缺少字段language")
 	}
 	builder := strings.Builder{}
-	builder.WriteString(fmt.Sprintf("<pre class='code' data-lang='%s'>", language))
+	builder.WriteString(fmt.Sprintf("<pre class='code' data-lang='%s'><code>", language))
 
 	for k, v := range children {
 		text, err := buildCode(v)
@@ -91,7 +91,7 @@ func buildCodeBlock(node interface{}) (string, error) {
 		builder.WriteString(text)
 	}
 
-	builder.WriteString("</pre>")
+	builder.WriteString("</code></pre>")
 
 	return  builder.String(), nil
 }

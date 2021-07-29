@@ -8,7 +8,7 @@ import SFXEditor from "@/components/editor/editor";
 import {articlePost, articlePut} from "@/services/article";
 import {SFDescendant, SFEditor} from "@/components/editor/nodes/node";
 import {ApiUrl} from "@/utils/config";
-import {getJsonData} from "@/utils/helpers";
+import {getJsonData, updateTitle} from "@/utils/helpers";
 
 type NewPageState = {
     title: string;
@@ -21,16 +21,6 @@ const useTitle = () => {
       font-weight: 500; font-size: 20px;
     `
     return <span className={titleStyles}>修改文章</span>
-}
-const useHeader = (onSave: () => void) => {
-    const useSave = () => {
-        return <PrimaryButton onClick={()=>{
-            onSave()
-        }}>
-            发布
-        </PrimaryButton>
-    }
-    return <SFXHeader center={useTitle()} end={useSave()}/>
 }
 
 const editorStyles = css`
@@ -73,14 +63,10 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
         console.debug("NewPage useEffect", serverData);
         setTitle(serverData.title);
         setEditorValue(serverData.body);
+        updateTitle(serverData.title);
     }, [])
 
-    return <SFXLayout header={useHeader(()=>{
-        console.debug("onSave", editorValue);
-        console.debug("onSave2", JSON.stringify(editorValue));
-        onSave(props.match.params.pk, title, editorValue);
-    })} footer={<span></span>}>
-        <Stack horizontal horizontalAlign={'space-between'} tokens={{childrenGap:16}}>
+    return <Stack horizontal horizontalAlign={'space-between'} tokens={{childrenGap:16}}>
             <Stack.Item grow={1}>
                 <Stack tokens={{childrenGap: 8}}>
                     <Stack.Item>
@@ -102,10 +88,18 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
                             </div>
                         </div>
                     </Stack.Item>
+                    <Stack.Item>
+                        <PrimaryButton onClick={()=>{
+                            console.debug("onSave", editorValue);
+                            console.debug("onSave2", JSON.stringify(editorValue));
+                            onSave(props.match.params.pk, title, editorValue);
+                        }}>
+                            发布
+                        </PrimaryButton>
+                    </Stack.Item>
                 </Stack>
             </Stack.Item>
         </Stack>
-    </SFXLayout>
 }
 
 export default EditPage

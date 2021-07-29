@@ -1,17 +1,3 @@
-import {StatusInternalServerError, StatusOK} from "@/services/models/status";
-
-export function getPageStatus(): number {
-    const dataEl = document.getElementById("noscript");
-    if (!dataEl) {
-        return StatusOK;
-    }
-    const prop = dataEl.getAttribute('data-s');
-    if (prop) {
-        const status = parseInt(String(prop));
-        return Number.isInteger(status) ? status : StatusInternalServerError;
-    }
-    return StatusOK;
-}
 
 // 获取服务端以json格式传输的状态数据
 export function getJsonData<T>(name: string = "data"): T {
@@ -28,4 +14,13 @@ export function getCSRF(): string | null {
         return data.csrf;
     }
     return null;
+}
+
+export function updateTitle(title: string) {
+    const elements = document.getElementsByTagName("title");
+    if (!elements || elements.length < 1) {
+        return;
+    }
+    const titleEl = elements[0];
+    titleEl.innerText = title + " - 泛函";
 }

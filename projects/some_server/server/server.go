@@ -51,7 +51,7 @@ func NewWebServer(smw *middleware.ServerMiddleware) (*WebServer, error) {
 	router.SetFuncMap(utils.FuncMap())
 	router.LoadHTMLGlob("web/templates/**/*.html")
 
-	router.NoRoute(handlers.HandleNotFound)
+	router.NoRoute(handlers.ClientPage)
 
 	//	router.GET("/", handlers.HandleIndex2)
 	//router.StaticFile("/favicon.ico", "./web/favicon.ico")

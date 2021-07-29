@@ -8,15 +8,16 @@ import ExamplePage from "@/pages/example/example";
 import AccountPage from "@/pages/account/account-page";
 import RandomPasswordPage from "@/views/random-password";
 import QuestPage from "@/pages/quest/quest";
-import {getPageStatus} from "@/utils/helpers";
 import {renderExceptionPage} from "@/views/exception/render";
 import "@/utils/fluentui";
+import {getJsonData} from "@/utils/helpers";
+import NotFoundPage from "@/views/exception/not-found";
 
 const App = () =>{
-    const status = getPageStatus();
+    const data = getJsonData<any>();
     // 正常情况下该属性为空，有值时代表页面无权访问
-    if (status != StatusOK) {
-        return renderExceptionPage(status);
+    if (data && data.status) {
+        return renderExceptionPage(data.status);
     }
     return <Router>
         <Switch>
@@ -25,7 +26,7 @@ const App = () =>{
             <Route path="/quest" component={QuestPage} />
             <Route path="/utils/random/password" component={RandomPasswordPage} />
             <Route path="/account/login" component={AccountPage} />
-            <Route path="/example" component={ExamplePage} />
+            <Route path="*" component={NotFoundPage} />
         </Switch>
     </Router>
 }

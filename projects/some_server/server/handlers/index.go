@@ -43,6 +43,6 @@ func NewIndexHandler(md *middleware.ServerMiddleware) *indexHandler {
 	}
 }
 
-func HandleNotFound(gctx *gin.Context) {
-	utils.ClientPage(gctx, http.StatusNotFound, "页面未找到", nil)
+func ClientPage(gctx *gin.Context) {
+	utils.ClientPage(gctx, http.StatusOK, nil)
 }
