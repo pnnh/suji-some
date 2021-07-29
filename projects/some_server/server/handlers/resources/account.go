@@ -123,7 +123,7 @@ func (s *accountHandler) LoadImage(gctx *gin.Context) {
 	startTime := time.Unix(timeUnix, 0)
 	now := time.Now()
 	if startTime.After(now) || now.Sub(startTime) > time.Minute * 5 {
-		utils.ResponseMessage(gctx, http.StatusInternalServerError, "已超时失效")
+		gctx.File("web/images/expired.jpeg")
 		return
 	}
 	account := &dbmodels.AccountTable{}
