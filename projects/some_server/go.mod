@@ -3,21 +3,17 @@ module sujiserv
 go 1.13
 
 require (
-	github.com/appleboy/gin-jwt/v2 v2.6.4
 	github.com/aws/aws-sdk-go-v2/config v1.1.1
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/attributevalue v1.0.2
 	github.com/aws/aws-sdk-go-v2/feature/dynamodb/expression v1.0.2
 	github.com/aws/aws-sdk-go-v2/service/dynamodb v1.1.1
 	github.com/bwmarrin/snowflake v0.3.0
 	github.com/gin-gonic/gin v1.6.3
-	github.com/golang/snappy v0.0.4 // indirect
+	github.com/golang-jwt/jwt v3.2.1+incompatible
 	github.com/google/uuid v1.2.0
 	github.com/gorilla/csrf v1.7.0
 	github.com/jackc/pgproto3/v2 v2.0.7 // indirect
-	github.com/json-iterator/go v1.1.9 // indirect
-	github.com/klauspost/compress v1.13.1 // indirect
-	github.com/klauspost/cpuid/v2 v2.0.8 // indirect
-	github.com/minio/simdjson-go v0.2.2 // indirect
+	github.com/json-iterator/go v1.1.9
 	github.com/pquerna/otp v1.3.0
 	github.com/sirupsen/logrus v1.8.1
 	github.com/tdewolff/minify/v2 v2.9.17

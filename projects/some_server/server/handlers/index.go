@@ -26,13 +26,17 @@ func (s *indexHandler) Handle(gctx *gin.Context) {
 	for k, v := range tables {
 		list[k] = models.ParseArticleView(v)
 	}
-	auth := s.md.Auth.GetAuth(gctx)
+	auth, err := middleware.GetAuth(gctx)
+	if err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错", err)
+		return
+	}
 	gctx.HTML(http.StatusOK, "index/index.html", gin.H{
 		"title": "首页",
 		"list":  list,
 		"count": result.RowsAffected,
 		"data": gin.H {
-			"login": auth != nil && len(auth.UName) > 0,
+			"login": len(auth) > 0,
 		},
 	})
 }

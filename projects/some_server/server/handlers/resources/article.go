@@ -32,11 +32,21 @@ func (s *articleHandler) New(gctx *gin.Context) {
 	//		"csrf": csrf.Token(gctx.Request),
 	//	},
 	//})
+	user, err := middleware.GetAuth(gctx)
+	if err != nil || len(user) < 1 {
+		utils.ClientPage(gctx, http.StatusUnauthorized,nil)
+		return
+	}
 	utils.ClientPage(gctx, http.StatusOK,nil)
 }
 
 // 编辑文章页面
 func (s *articleHandler) Edit(gctx *gin.Context) {
+	user, err := middleware.GetAuth(gctx)
+	if err != nil || len(user) < 1 {
+		utils.ClientPage(gctx, http.StatusUnauthorized,nil)
+		return
+	}
 	pk := gctx.Param("pk")
 
 	article := &dbmodels.ArticleTable{
@@ -51,8 +61,12 @@ func (s *articleHandler) Edit(gctx *gin.Context) {
 		return
 	}
 
-	auth := s.middleware.Auth.GetAuth(gctx)
-	if article.Creator != auth.UName {
+	auth, err := middleware.GetAuth(gctx)
+	if err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错: %w", err)
+		return
+	}
+	if article.Creator != auth {
 		utils.ClientPage(gctx, http.StatusUnauthorized,nil)
 		return
 	}
@@ -121,14 +135,18 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 		return
 	}
 
-	auth := s.middleware.Auth.GetAuth(gctx)
+	auth, err := middleware.GetAuth(gctx)
+	if err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错: %w", err)
+		return
+	}
 	gctx.HTML(http.StatusOK, "article/article.html", gin.H{
 		"title": article.Title,
 		"body":  template.HTML(content),
 		"data": map[string]interface{} {
 			"pk": article.Pk,
-			"creator": auth.UName == article.Creator,
-			"login": auth != nil && len(auth.UName) > 0,
+			"creator": auth == article.Creator,
+			"login": len(auth) > 0,
 		},
 	})
 }
@@ -136,19 +154,28 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 // 创建文章
 func (s *articleHandler) Post(gctx *gin.Context) {
 	log.Println("创建文章")
+	user, err := middleware.GetAuth(gctx)
+	if err != nil || len(user) < 1 {
+		utils.ClientPage(gctx, http.StatusUnauthorized,nil)
+		return
+	}
 	in, err := parseArticlePutIn(gctx)
 	if err != nil {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
 	}
-	auth := s.middleware.Auth.GetAuth(gctx)
+	auth, err := middleware.GetAuth(gctx)
+	if err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错: %w", err)
+		return
+	}
 	article := &dbmodels.ArticleTable{
 		Pk:         utils.NewPostId(),
 		Title:      in.Title,
 		Body:       in.Body,
 		CreateTime: time.Now(),
 		UpdateTime: time.Now(),
-		Creator:    auth.UName,
+		Creator:    auth,
 	}
 	if err := s.middleware.DB.Create(article).Error; err != nil {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
@@ -180,6 +207,11 @@ func parseArticlePutIn(gctx *gin.Context) (*articlePutIn, error) {
 
 // 修改文章
 func (s *articleHandler) Put(gctx *gin.Context) {
+	user, err := middleware.GetAuth(gctx)
+	if err != nil || len(user) < 1 {
+		utils.ClientPage(gctx, http.StatusUnauthorized,nil)
+		return
+	}
 	log.Println("修改文章")
 	pk := gctx.Param("pk")
 	logrus.Debug("Article Put", pk)
@@ -206,8 +238,12 @@ func (s *articleHandler) Put(gctx *gin.Context) {
 		return
 	}
 
-	auth := s.middleware.Auth.GetAuth(gctx)
-	if article.Creator != auth.UName {
+	auth, err := middleware.GetAuth(gctx)
+	if err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错: %w", err)
+		return
+	}
+	if article.Creator != auth {
 		utils.ResponseError(gctx, http.StatusUnauthorized, fmt.Errorf("无权限修改"))
 		return
 	}
@@ -228,20 +264,21 @@ func (s *articleHandler) Put(gctx *gin.Context) {
 
 // 删除文章
 func (s *articleHandler) Delete(gctx *gin.Context) {
+	user, err := middleware.GetAuth(gctx)
+	if err != nil || len(user) < 1 {
+		utils.ClientPage(gctx, http.StatusUnauthorized,nil)
+		return
+	}
 
 }
 
 func (s *articleHandler) RegisterRouter(router *gin.Engine, _ string) {
-	router.GET("/article/read/:pk", s.Read) // 查看不需要授权
-	group := router.Group("article")
-	group.Use(s.middleware.Auth.NeedLogin)
-	{
-		group.GET("/new", s.New)
-		group.POST("/new", s.Post)
-		group.GET("/edit/:pk", s.Edit)
-		group.PUT("/edit/:pk", s.Put)
-		group.DELETE("/delete/:pk", s.Delete)
-	}
+	router.GET("/article/read/:pk", s.Read)
+	router.GET("/article/new", s.New)
+	router.POST("/article/new", s.Post)
+	router.GET("/article/edit/:pk", s.Edit)
+	router.PUT("/article/edit/:pk", s.Put)
+	router.DELETE("/article/delete/:pk", s.Delete)
 }
 
 func NewArticleResource(middleware *middleware.ServerMiddleware) IResource {

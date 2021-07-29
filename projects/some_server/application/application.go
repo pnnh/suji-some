@@ -33,10 +33,6 @@ func (app *Application) Use(key string, serv IService) {
 func (app *Application) initMiddleware() (*middleware.ServerMiddleware, error) {
 	dbsvc := db.NewDBService(config.DBDSN)
 	app.Use("db", dbsvc)
-	authMiddleware, err := middleware.NetAuthMiddleware(dbsvc)
-	if err != nil {
-		return nil, fmt.Errorf("创建授权中间件出错: %w", err)
-	}
 	app.Use("auth", dbsvc)
 	mailSvc := email.NewService()
 	app.Use("mail", mailSvc)
@@ -46,7 +42,6 @@ func (app *Application) initMiddleware() (*middleware.ServerMiddleware, error) {
 
 	serverMiddleware := &middleware.ServerMiddleware{
 		DB:   dbsvc,
-		Auth: authMiddleware,
 		Mail: mailSvc,
 		Templs: tmpls,
 	}

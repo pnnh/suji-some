@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/sirupsen/logrus"
 	dbmodels "sujiserv/application/services/db/models"
 	"sujiserv/config"
 	"sujiserv/server/handlers/otp"
@@ -144,31 +145,60 @@ func (s *accountHandler) LoadImage(gctx *gin.Context) {
 	gctx.Data(http.StatusOK, "image/png", imgData)
 }
 
-//func makeSign(query url.Values) string {
-//	keys := make([]string, len(query))
-//	for k := range query {
-//		if k == "sign" {
-//			continue
-//		}
-//		keys = append(keys, k)
-//	}
-//	sort.Strings(keys)
-//	vals := make([]string, 0)
-//	for _, k := range keys {
-//		vals = append(vals, strings.Join(query[k], ":"))
-//	}
-//	joinValues := strings.Join(vals, ",")
-//	return fmt.Sprintf("%x", md5.Sum([]byte(joinValues)))
-//}
-
 type accountPostIn struct {
 	Email string `json:"email"`
 }
 
 // 通过OTP验证码登录
 func (s *accountHandler) LoginByOTPCode(gctx *gin.Context) {
-	s.middleware.Auth.Login(gctx)
+	in := &sessionPostIn{}
+	if err := gctx.ShouldBindJSON(in); err != nil {
+		utils.ResponseServerError(gctx, "参数有误", err)
+		return
+	}
+	if len(in.Email) < 1 {
+		utils.ResponseServerError(gctx, "邮箱不可为空", nil)
+		return
+	}
+	if len(in.Code) < 1 {
+		utils.ResponseServerError(gctx, "验证码不可为空", nil)
+		return
+	}
 
+	query := &dbmodels.AccountTable{UName: in.Email}
+	account := &dbmodels.AccountTable{}
+	if err := s.middleware.DB.Where(query).First(account).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			utils.ResponseServerError(gctx, "用户不存在，请发送验证码到邮箱", nil)
+			return
+		}
+		utils.ResponseServerError(gctx, "查询用户信息出错", err)
+		return
+	}
+	err := otp.Validate(account.UPass, in.Code)
+	if err != nil {
+		utils.ResponseServerError(gctx, "验证码有误", nil)
+		return
+	}
+	auth := account.Pk
+	token, err := middleware.GenerateToken(auth)
+	if err != nil {
+		utils.ResponseServerError(gctx, "生成token出错: %w", err)
+		return
+	}
+
+	logrus.Debugln("LoginResponse",  token)
+	expire := time.Now().Add(time.Hour * 24)
+	cookieExpire := int(expire.Sub(time.Now()).Seconds())
+	gctx.SetSameSite(http.SameSiteStrictMode)
+	gctx.SetCookie("c", token, cookieExpire, "/", "127.0.0.1", true, true)
+
+	utils.ResponseData(gctx, http.StatusOK, nil)
+}
+
+type sessionPostIn struct {
+	Email string `json:"email"`
+	Code  string `json:"code"`
 }
 
 func (s *accountHandler) RegisterRouter(router *gin.Engine, name string) {

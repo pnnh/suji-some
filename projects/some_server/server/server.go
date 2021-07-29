@@ -43,7 +43,6 @@ func NewWebServer(smw *middleware.ServerMiddleware) (*WebServer, error) {
 
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
-	router.Use(smw.Auth.MiddlewareFunc())
 	server := &WebServer{
 		router:     router,
 		middleware: smw,
