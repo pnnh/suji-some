@@ -43,11 +43,15 @@ const config = defineConfig({
       input: listFile(path.resolve(__dirname, 'src/pages')),
       output: {
         entryFileNames: (chunkInfo: PreRenderedChunk) => {
-          console.debug("entryFileNames", chunkInfo);
-          return '[name].js';
+          if (!chunkInfo.facadeModuleId) {
+            throw new Error("facadeModuleId为空");
+          }
+          console.debug("entryFileNames", chunkInfo.facadeModuleId);
+          const extName = path.extname(chunkInfo.facadeModuleId);
+          return `[name]${extName}.js`;
         },
         assetFileNames: (chunkInfo: PreRenderedAsset) => {
-          console.debug("assetFileNames", chunkInfo);
+          console.debug("assetFileNames", chunkInfo.name);
           return '[name].css';
         },
         dir: path.resolve(__dirname, 'dist'),

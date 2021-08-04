@@ -7,6 +7,7 @@ import {
 import { getJsonData} from "@/utils/helpers";
 import "@/utils/fluentui";
 import Prism from "prismjs";
+import "prismjs/components/prism-markup-templating";
 
 const ArticleMenu = () => {
     const data = getJsonData<any>();
@@ -58,9 +59,13 @@ Array.from(codes).forEach(e => {
     if (!(e instanceof HTMLElement)) {
         return;
     }
-    if (e.dataset.lang) {
-        const html = Prism.highlight(e.innerText, Prism.languages.javascript, e.dataset.lang);
-
+    const code = e.innerText;
+    const language = e.dataset.lang;
+    if (language) {
+        let html = code;
+        if (Prism.languages[language]) {
+            html = Prism.highlight(code, Prism.languages[language], language);
+        }
         e.innerHTML = `<code>${html}</code>`;
     }
 });
