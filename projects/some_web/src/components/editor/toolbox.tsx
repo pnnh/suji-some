@@ -3,6 +3,11 @@ import {SFDescendant} from "@/components/editor/nodes/node";
 import {Editor, Element as SlateElement, Node as SlateNode} from "slate";
 import {ReactEditor, useSlate} from "slate-react";
 import {getPlugin} from "@/components/editor/plugins";
+import {css} from "@emotion/css";
+
+const toolboxStyles = css`
+  height: 32px;
+`
 
 export function SFToolbox(props: {descendant: SFDescendant}) {
     console.debug("SFToolbox");
@@ -34,7 +39,7 @@ export function SFToolbox(props: {descendant: SFDescendant}) {
             }
         }
     }
-    return <div>
+    return <div className={toolboxStyles}>
         {child}
     </div>
 }

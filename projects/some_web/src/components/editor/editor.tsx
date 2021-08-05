@@ -90,68 +90,64 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                             </Stack.Item>
                         </Stack>
                     </Stack.Item>
+                    <Stack.Item styles={{root: {width: 200}}}>
+                        <SFToolbox descendant={{name:"header",children:[]}} />
+                    </Stack.Item>
                     <Stack.Item>
-                        <Stack horizontal >
-                            <Stack.Item grow={1}>
-                                <Editable
-                                    decorate={decorate}
-                                    renderElement={renElement}
-                                    renderLeaf={renLeaf}
-                                    placeholder="请输入段落"
-                                    className={'editable'}
-                                    autoFocus={true}
-                                    readOnly={false}
-                                    onKeyDown={event => {
-                                        // for (const hotkey in HOTKEYS) {
-                                        //     if (isHotkey(hotkey, event as any)) {
-                                        //         event.preventDefault()
-                                        //         // const mark = HOTKEYS[hotkey]
-                                        //         // toggleMark(editor, mark)
-                                        //     }
-                                        // }
-                                        console.debug("event", event);
-                                        if (event.key !== 'Enter') {
-                                            return;
-                                        }
-                                        console.debug("selection", editorObject.selection);
-                                        const selection = editorObject.selection;
-                                        if (!selection) {
-                                            return;
-                                        }
-                                        console.debug("anchor", selection.anchor);
-                                        const selectedElement = SlateNode.descendant(editorObject, selection.anchor.path.slice(0, -1));
-                                        console.debug("selectedElement", selectedElement);
-                                        const selectedLeaf = SlateNode.descendant(editorObject, selection.anchor.path);
-                                        console.debug("selectedLeaf", selectedLeaf);
-                                        const element = parseDescendant(selectedElement);
-                                        const leaf = parseText(selectedLeaf);
-                                        if (element.name === HeaderName) {
-                                            event.preventDefault();
-                                            if (leaf.text.length === selection.anchor.offset) {
-                                                // Transforms.insertNodes(editor, {
-                                                //     type: 'paragraph',
-                                                //     children: [{text: '', marks: []}],
-                                                // });
-                                                console.debug("selectedLeaf2");
-                                                Transforms.insertNodes(editorObject, NewParagraphNode(""));
-                                            }
-                                            // else {
-                                            //     Transforms.splitNodes(editor);
-                                            //     Transforms.setNodes(editor, {type: 'paragraph'});
-                                            // }
-                                        } else if(element.name == CodeBlockName) {
-                                            event.preventDefault();
-                                            console.debug("selectedLeaf3");
-                                            Transforms.insertNodes(editorObject, NewCodeNode("\n"));
-                                        }
-                                    }}
-                                    onPaste={onEditorPaste}
-                                />
-                            </Stack.Item>
-                            <Stack.Item styles={{root: {width: 200}}}>
-                                <SFToolbox descendant={{name:"header",children:[]}} />
-                            </Stack.Item>
-                        </Stack>
+                        <Editable
+                            decorate={decorate}
+                            renderElement={renElement}
+                            renderLeaf={renLeaf}
+                            placeholder="请输入段落"
+                            className={'editable'}
+                            autoFocus={true}
+                            readOnly={false}
+                            onKeyDown={event => {
+                                // for (const hotkey in HOTKEYS) {
+                                //     if (isHotkey(hotkey, event as any)) {
+                                //         event.preventDefault()
+                                //         // const mark = HOTKEYS[hotkey]
+                                //         // toggleMark(editor, mark)
+                                //     }
+                                // }
+                                console.debug("event", event);
+                                if (event.key !== 'Enter') {
+                                    return;
+                                }
+                                console.debug("selection", editorObject.selection);
+                                const selection = editorObject.selection;
+                                if (!selection) {
+                                    return;
+                                }
+                                console.debug("anchor", selection.anchor);
+                                const selectedElement = SlateNode.descendant(editorObject, selection.anchor.path.slice(0, -1));
+                                console.debug("selectedElement", selectedElement);
+                                const selectedLeaf = SlateNode.descendant(editorObject, selection.anchor.path);
+                                console.debug("selectedLeaf", selectedLeaf);
+                                const element = parseDescendant(selectedElement);
+                                const leaf = parseText(selectedLeaf);
+                                if (element.name === HeaderName) {
+                                    event.preventDefault();
+                                    if (leaf.text.length === selection.anchor.offset) {
+                                        // Transforms.insertNodes(editor, {
+                                        //     type: 'paragraph',
+                                        //     children: [{text: '', marks: []}],
+                                        // });
+                                        console.debug("selectedLeaf2");
+                                        Transforms.insertNodes(editorObject, NewParagraphNode(""));
+                                    }
+                                    // else {
+                                    //     Transforms.splitNodes(editor);
+                                    //     Transforms.setNodes(editor, {type: 'paragraph'});
+                                    // }
+                                } else if(element.name == CodeBlockName) {
+                                    event.preventDefault();
+                                    console.debug("selectedLeaf3");
+                                    Transforms.insertNodes(editorObject, NewCodeNode("\n"));
+                                }
+                            }}
+                            onPaste={onEditorPaste}
+                        />
                     </Stack.Item>
                 </Stack>
             </Slate>

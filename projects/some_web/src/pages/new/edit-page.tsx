@@ -25,7 +25,7 @@ const useTitle = () => {
 
 const editorStyles = css`
   border: 1px solid #605e5c;margin-bottom: 16px;
-  min-height: 300px;  
+  min-height: 350px;max-height:700px;overflow-y:auto;overflow-x:hidden;  
 `
 
 const editorBodyStyles = css`
@@ -64,7 +64,7 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
         setTitle(serverData.title);
         setEditorValue(serverData.body);
         updateTitle(serverData.title);
-    }, [])
+    }, []);
 
     return <Stack horizontal horizontalAlign={'space-between'} tokens={{childrenGap:16}}>
             <Stack.Item grow={1}>

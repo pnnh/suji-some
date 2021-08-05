@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useState} from 'react'
 import {ITextFieldStyles, TextField} from "@fluentui/react/lib/TextField";
 import {IStackItemStyles, IStackTokens, PrimaryButton, Stack} from '@fluentui/react';
 import SFXHeader from "@/views/layout/Header";
@@ -9,6 +9,7 @@ import SFXEditor from "@/components/editor/editor";
 import {articlePost, articlePut} from "@/services/article";
 import {SFDescendant, SFEditor} from "@/components/editor/nodes/node";
 import {ApiUrl} from "@/utils/config";
+import {updateTitle} from "@/utils/helpers";
 
 type NewPageState = {
     title: string;
@@ -25,7 +26,7 @@ const useTitle = () => {
 
 const editorStyles = css`
   border: 1px solid #605e5c;margin-bottom: 16px;
-  min-height: 300px;  
+  min-height: 350px;max-height:700px;overflow-y:auto;overflow-x:hidden;
 `
 
 const editorBodyStyles = css`
@@ -59,38 +60,38 @@ const NewPage = (props:{}, state: NewPageState) => {
     let [errMsg, setErrMsg] = useState('');
     let [editorValue, setEditorValue] = useState<SFEditor>(initialValue);
 
-    return <Stack horizontal horizontalAlign={'space-between'} tokens={{childrenGap:16}}>
-            <Stack.Item grow={1}>
-                <Stack tokens={{childrenGap: 8}}>
-                    <Stack.Item>
-                        <TextField placeholder={'标题'} value={title}
-                                   onChange={(event, value)=>{
-                                       if(!value) {
-                                           return;
-                                       }
-                                       setTitle(value);
-                                   }}/>
-                    </Stack.Item>
-                    <Stack.Item>
-                        <div className={editorStyles}>
-                            <div className={editorBodyStyles}>
-                                <SFXEditor value={editorValue} onChange={(value) => {
-                                    console.debug("onChange222",  );
-                                    setEditorValue(value);
-                                }} />
-                            </div>
-                        </div>
-                    </Stack.Item>
-                    <Stack.Item>
-                        <PrimaryButton onClick={()=>{
-                            onSave(title, editorValue);
-                        }}>
-                            发布
-                        </PrimaryButton>
-                    </Stack.Item>
-                </Stack>
-            </Stack.Item>
-        </Stack>
+    useEffect(()=>{
+        updateTitle("创作");
+    }, []);
+
+    return <Stack tokens={{childrenGap: 8}}>
+        <Stack.Item>
+            <TextField placeholder={'标题'} value={title}
+                       onChange={(event, value)=>{
+                           if(!value) {
+                               return;
+                           }
+                           setTitle(value);
+                       }}/>
+        </Stack.Item>
+        <Stack.Item>
+            <div className={editorStyles}>
+                <div className={editorBodyStyles}>
+                    <SFXEditor value={editorValue} onChange={(value) => {
+                        console.debug("onChange222",  );
+                        setEditorValue(value);
+                    }} />
+                </div>
+            </div>
+        </Stack.Item>
+        <Stack.Item>
+            <PrimaryButton onClick={()=>{
+                onSave(title, editorValue);
+            }}>
+                发布
+            </PrimaryButton>
+        </Stack.Item>
+    </Stack>
 }
 
 export default NewPage

@@ -5,6 +5,7 @@ import NavMenu from "@/views/layout/partial/NavMenu";
 import {Icon, Link, MessageBar, MessageBarType, PrimaryButton, Stack, TextField} from "@fluentui/react";
 import {accountPost} from "@/services/account";
 import {sessionPost} from "@/services/session";
+import {updateTitle} from "@/utils/helpers";
 
 function sendCodeToMail(mail: string, callback: (msg: any)=>void) {
     const postData = {
@@ -55,6 +56,9 @@ export default function AccountPage() {
         }
         return <span></span>
     }
+    useEffect(()=>{
+        updateTitle("登录");
+    }, []);
     return <div className="ms-Grid" dir="ltr">
             <div className="ms-Grid-row">
                 <div className="ms-Grid-col ms-sm12 ms-xl8">
