@@ -24,15 +24,6 @@ const useTitle = () => {
     return <span className={titleStyles}>修改文章</span>
 }
 
-const editorStyles = css`
-  border: 1px solid #605e5c;margin-bottom: 16px;
-  min-height: 350px;max-height:700px;overflow-y:auto;overflow-x:hidden;
-`
-
-const editorBodyStyles = css`
-  margin-bottom: 32px;  
-`
-
 const initialValue = {
     children: [{
         name: 'paragraph',
@@ -75,14 +66,10 @@ const NewPage = (props:{}, state: NewPageState) => {
                        }}/>
         </Stack.Item>
         <Stack.Item>
-            <div className={editorStyles}>
-                <div className={editorBodyStyles}>
-                    <SFXEditor value={editorValue} onChange={(value) => {
-                        console.debug("onChange222",  );
-                        setEditorValue(value);
-                    }} />
-                </div>
-            </div>
+            <SFXEditor value={editorValue} onChange={(value) => {
+                console.debug("onChange222",  );
+                setEditorValue(value);
+            }} />
         </Stack.Item>
         <Stack.Item>
             <PrimaryButton onClick={()=>{

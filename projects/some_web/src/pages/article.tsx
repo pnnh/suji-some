@@ -7,11 +7,10 @@ import {
 import { getJsonData} from "@/utils/helpers";
 import "@/utils/fluentui";
 import Prism from "prismjs";
-import "prismjs/components/prism-markup-templating";
+import "@/utils/highlight";
 
 const ArticleMenu = () => {
     const data = getJsonData<any>();
-    console.debug("useActionButton", data);
     let userMenu = <Stack.Item align={'center'}>
         <PrimaryButton onClick={()=>{
             window.location.href = "/account/login"

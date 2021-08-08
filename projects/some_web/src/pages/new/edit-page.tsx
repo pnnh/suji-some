@@ -25,7 +25,7 @@ const useTitle = () => {
 
 const editorStyles = css`
   border: 1px solid #605e5c;margin-bottom: 16px;
-  min-height: 350px;max-height:700px;overflow-y:auto;overflow-x:hidden;  
+  min-height: 400px;max-height:600px;
 `
 
 const editorBodyStyles = css`

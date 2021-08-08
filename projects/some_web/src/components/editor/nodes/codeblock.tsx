@@ -105,14 +105,15 @@ export function SFCodeBlockLeafView(props: {attributes: any, children: any, node
 export function SFCodeBlockToolbar() {
     const editor = useSlate() as ReactEditor;
     const node = NewCodeBlockNode("js", "console.log(\"hello\");");
-    const paragraphNode = NewParagraphNode("");
+    //const paragraphNode = NewParagraphNode("");
     console.debug("SFCodeBlockToolbar", node);
     return <> <IconButton iconProps={{iconName: "CodeEdit"}} title="代码块"
                        onMouseDown={(event) => {
                            event.preventDefault();
                            Transforms.insertNodes(
                                editor,
-                               [node, paragraphNode]    // 同时插入一个段落
+                               //[node, paragraphNode]    // 同时插入一个段落
+                               [node]
                            )
                        }}/>
     </>
@@ -126,7 +127,19 @@ const options: IDropdownOption[] = [
     { key: 'html', text: 'HTML' },
     { key: 'js', text: 'JavaScript' },
     { key: 'css', text: 'CSS' },
-    { key: 'java', text: 'Java' }
+    { key: 'java', text: 'Java' },
+    { key: 'bash', text: 'Bash' },
+    { key: 'go', text: 'Go' },
+    { key: 'c', text: 'C' },
+    { key: 'cpp', text: 'C++' },
+    { key: 'csharp', text: 'C#' },
+    { key: 'markdown', text: 'Markdown' },
+    { key: 'kotlin', text: 'Kotlin' },
+    { key: 'json', text: 'JSON' },
+    { key: 'rust', text: 'Rust' },
+    { key: 'python', text: 'Python' },
+    { key: 'php', text: 'PHP' },
+    { key: 'sql', text: 'SQL' }
 ];
 
 function SelectLanguage(props: {element: SFCodeBlockNode}) {
@@ -159,6 +172,8 @@ function SelectLanguage(props: {element: SFCodeBlockNode}) {
 export const CodeblockPlugin: SFPlugin = {
     renderToolbox(element) {
         console.debug("CodeblockPlugin", element);
-       return <SelectLanguage element={element as SFCodeBlockNode} />
+        return  <Stack horizontal horizontalAlign="start" tokens={{childrenGap: 8}}>
+            <SelectLanguage element={element as SFCodeBlockNode} />
+            </Stack>
     }
 }

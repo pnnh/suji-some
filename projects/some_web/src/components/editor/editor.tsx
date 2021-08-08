@@ -20,7 +20,7 @@ import {
 } from "@/components/editor/nodes/header";
 import {NewTextNode, SFTextView} from "@/components/editor/nodes/text";
 import {
-    NewParagraphNode,
+    NewParagraphNode, ParagraphName,
     SFParagraphNode,
     SFParagraphToolbar,
     SFParagraphView
@@ -33,10 +33,8 @@ import {
     SFCodeBlockView
 } from "@/components/editor/nodes/codeblock";
 import Prism from "prismjs";
-import 'prismjs/components/prism-python'
-import 'prismjs/components/prism-php'
-import 'prismjs/components/prism-sql'
-import 'prismjs/components/prism-java'
+import "@/utils/highlight"
+
 import {SFToolbox} from "@/components/editor/toolbox";
 import {
     parseDescendant,
@@ -45,6 +43,7 @@ import {
     SFDescendant,
     SFEditor, SFText
 } from "@/components/editor/nodes/node";
+import {css} from "@emotion/css";
 
 const HOTKEYS = {
     'mod+b': 'bold',
@@ -52,6 +51,20 @@ const HOTKEYS = {
     'mod+u': 'underline',
     'mod+`': 'code',
 }
+
+const editorStyles = css`
+  border: 1px solid #605e5c;margin-bottom: 16px;
+  min-height: 400px;max-height:600px;
+`
+const toolbarStyles = css`
+  padding: 16px 16px 8px 16px;
+`
+const secondToolbarStyles = css`
+  padding: 0 16px 16px 16px;
+`
+const editorBodyStyles = css`
+  margin-bottom: 16px; overflow-y: auto; overflow-x: hidden;padding: 0 8px;
+`
 
 // 这里是单例的，一个页面只能有一个Editor
 let editorObject: ReactEditor;
@@ -76,9 +89,9 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                        //rootNode = {children: descendants};
                    }}>
 
-                <Stack tokens={{padding: 16, childrenGap: 8}}>
-                    <Stack.Item>
-                        <Stack horizontal >
+                <Stack className={editorStyles} tokens={{childrenGap: 8}}>
+                    <Stack.Item className={toolbarStyles}>
+                        <Stack horizontal tokens={{childrenGap: 8}}>
                             <Stack.Item>
                                 <SFParagraphToolbar/>
                             </Stack.Item>
@@ -90,10 +103,10 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                             </Stack.Item>
                         </Stack>
                     </Stack.Item>
-                    <Stack.Item styles={{root: {width: 200}}}>
+                    <Stack.Item className={secondToolbarStyles}>
                         <SFToolbox descendant={{name:"header",children:[]}} />
                     </Stack.Item>
-                    <Stack.Item>
+                    <Stack.Item grow={1} className={editorBodyStyles}>
                         <Editable
                             decorate={decorate}
                             renderElement={renElement}
@@ -102,56 +115,59 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                             className={'editable'}
                             autoFocus={true}
                             readOnly={false}
-                            onKeyDown={event => {
-                                // for (const hotkey in HOTKEYS) {
-                                //     if (isHotkey(hotkey, event as any)) {
-                                //         event.preventDefault()
-                                //         // const mark = HOTKEYS[hotkey]
-                                //         // toggleMark(editor, mark)
-                                //     }
-                                // }
-                                console.debug("event", event);
-                                if (event.key !== 'Enter') {
-                                    return;
-                                }
-                                console.debug("selection", editorObject.selection);
-                                const selection = editorObject.selection;
-                                if (!selection) {
-                                    return;
-                                }
-                                console.debug("anchor", selection.anchor);
-                                const selectedElement = SlateNode.descendant(editorObject, selection.anchor.path.slice(0, -1));
-                                console.debug("selectedElement", selectedElement);
-                                const selectedLeaf = SlateNode.descendant(editorObject, selection.anchor.path);
-                                console.debug("selectedLeaf", selectedLeaf);
-                                const element = parseDescendant(selectedElement);
-                                const leaf = parseText(selectedLeaf);
-                                if (element.name === HeaderName) {
-                                    event.preventDefault();
-                                    if (leaf.text.length === selection.anchor.offset) {
-                                        // Transforms.insertNodes(editor, {
-                                        //     type: 'paragraph',
-                                        //     children: [{text: '', marks: []}],
-                                        // });
-                                        console.debug("selectedLeaf2");
-                                        Transforms.insertNodes(editorObject, NewParagraphNode(""));
-                                    }
-                                    // else {
-                                    //     Transforms.splitNodes(editor);
-                                    //     Transforms.setNodes(editor, {type: 'paragraph'});
-                                    // }
-                                } else if(element.name == CodeBlockName) {
-                                    event.preventDefault();
-                                    console.debug("selectedLeaf3");
-                                    Transforms.insertNodes(editorObject, NewCodeNode("\n"));
-                                }
-                            }}
+                            onKeyDown={onKeyDown}
                             onPaste={onEditorPaste}
                         />
                     </Stack.Item>
                 </Stack>
             </Slate>
     )
+}
+
+function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
+
+    // for (const hotkey in HOTKEYS) {
+    //     if (isHotkey(hotkey, event as any)) {
+    //         event.preventDefault()
+    //         // const mark = HOTKEYS[hotkey]
+    //         // toggleMark(editor, mark)
+    //     }
+    // }
+    console.debug("event", event);
+    if (event.key !== 'Enter') {
+        return;
+    }
+    console.debug("selection", editorObject.selection);
+    const selection = editorObject.selection;
+    if (!selection) {
+        return;
+    }
+    console.debug("anchor", selection.anchor);
+    const selectedElement = SlateNode.descendant(editorObject, selection.anchor.path.slice(0, -1));
+    console.debug("selectedElement", selectedElement);
+    const selectedLeaf = SlateNode.descendant(editorObject, selection.anchor.path);
+    console.debug("selectedLeaf", selectedLeaf);
+    const element = parseDescendant(selectedElement);
+    const leaf = parseText(selectedLeaf);
+    if (element.name === HeaderName) {
+        event.preventDefault();
+        if (leaf.text.length === selection.anchor.offset) {
+            // Transforms.insertNodes(editor, {
+            //     type: 'paragraph',
+            //     children: [{text: '', marks: []}],
+            // });
+            console.debug("selectedLeaf2");
+            Transforms.insertNodes(editorObject, NewParagraphNode(""));
+        }
+        // else {
+        //     Transforms.splitNodes(editor);
+        //     Transforms.setNodes(editor, {type: 'paragraph'});
+        // }
+    } else if(element.name == CodeBlockName) {
+        event.preventDefault();
+        console.debug("selectedLeaf3");
+        Transforms.insertNodes(editorObject, NewCodeNode("\n"));
+    }
 }
 
 function onEditorPaste(event: ClipboardEvent<HTMLDivElement>) {
@@ -249,14 +265,47 @@ function decorateElement([node, path]: NodeEntry): SlateRange[] {
     return ranges
 }
 
+const menuProps: IContextualMenuProps = {
+    items: [
+        {
+            key: 'emailMessage',
+            text: 'Email message',
+            iconProps: { iconName: 'Mail' },
+        },
+        {
+            key: 'calendarEvent',
+            text: 'Calendar event',
+            iconProps: { iconName: 'Calendar' },
+        },
+    ],
+    directionalHintFixed: true,
+};
+
 function Element({ attributes, children, element }:{attributes: any, children: any, element: any}) {
     console.debug("renderElement", element, attributes, children);
+    let view: JSX.Element;
     if (element.name === "header") {
-        return <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
+        view = <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
     } else if (element.name === "code-block") {
-        return <SFCodeBlockView attributes={attributes} children={children} node={element}/>
+        view = <SFCodeBlockView attributes={attributes} children={children} node={element}/>
+    } else {
+        view = <SFParagraphView attributes={attributes} children={children} node={element as SFParagraphNode}/>
     }
-    return <SFParagraphView attributes={attributes} children={children} node={element as SFParagraphNode}/>
+    return <Stack horizontal tokens={{childrenGap:8}} verticalAlign={"center"}>
+        <Stack.Item contentEditable={false}>
+            <IconButton
+                menuProps={menuProps}
+                iconProps={{iconName:"Add"}}
+                title={"添加"}
+            />
+        </Stack.Item>
+        <Stack.Item grow={1}>
+            {view}
+        </Stack.Item>
+        <Stack.Item contentEditable={false}>
+            <IconButton iconProps={{iconName:"Remove"}} title="移除" />
+        </Stack.Item>
+    </Stack>
 }
 
 function Leaf({ attributes, children, leaf }:{attributes: any, children: any, leaf: any}) {

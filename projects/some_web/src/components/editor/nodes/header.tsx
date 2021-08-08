@@ -18,6 +18,7 @@ import {
 import React, {CSSProperties, KeyboardEventHandler} from "react";
 import {isBlockActive} from "@/components/editor/nodes/paragraph";
 import {NewTextNode, TextName} from "@/components/editor/nodes/text";
+import {css} from "@emotion/css";
 
 export interface SFHeaderNode extends SFElement {
     header: number;
@@ -48,7 +49,7 @@ export function SFHeaderToolbar() {
 export function SFHeaderView(props: {attributes: any, children: any, node: SFHeaderNode}) {
     switch (props.node.header) {
         case 1:
-            return <h1 data-name={HeaderName} {...props.attributes} >{props.children}</h1>
+            return <h1 data-name={HeaderName} {...props.attributes}>{props.children}</h1>
         case 2:
             return <h2 data-name={HeaderName} {...props.attributes}>{props.children}</h2>
         case 3:
@@ -63,11 +64,16 @@ export function SFHeaderView(props: {attributes: any, children: any, node: SFHea
     throw new Error(`未知标题: ${props.node.header}`);
 }
 
+const iconStyles = css`
+  background-color:rgb(237 235 233 / 40%)
+`
+
 function ToolbarIcon(props: {iconName: string, header: number}) {
     const editor = useSlate() as ReactEditor;
     const headerNode: SFHeaderNode = NewHeaderNode(1, "");
     console.debug("SFHeaderToolbar", headerNode);
     return <> <IconButton iconProps={{iconName: "Header1"}} title="标题"
+                          className={iconStyles}
                           onMouseDown={(event) => {
                               event.preventDefault();
                               Transforms.insertNodes(
@@ -88,6 +94,7 @@ function ToolboxIcon(props: {iconName: string, header: number}) {
         return element.name === HeaderName && element.header == props.header;
     }
     return <IconButton iconProps={{iconName: props.iconName}}
+                       className={iconStyles}
                        checked={isBlockActive(editor, isHeaderActive)}
                        onMouseDown={(event) => {
                            event.preventDefault();
@@ -101,7 +108,7 @@ function ToolboxIcon(props: {iconName: string, header: number}) {
 export const HeaderPlugin: SFPlugin = {
     renderToolbox() {
         return <div>
-            <Stack horizontal  horizontalAlign="start">
+            <Stack horizontal  horizontalAlign="start" tokens={{childrenGap: 8}}>
                 <ToolboxIcon iconName={'Header1'} header={1} />
                 <ToolboxIcon iconName={'Header2'} header={2} />
                 <ToolboxIcon iconName={'Header3'} header={3} />

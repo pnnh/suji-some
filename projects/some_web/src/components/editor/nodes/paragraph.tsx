@@ -1,6 +1,6 @@
 import {SFElement, SFPlugin,} from "@/components/editor/nodes/node";
 import {ReactEditor, useSlate} from "slate-react";
-import {IconButton} from "@fluentui/react";
+import {IconButton, IContextualMenuProps, IIconProps, Stack} from "@fluentui/react";
 import React from "react";
 import {
     Editor,
@@ -10,6 +10,7 @@ import {
     Transforms
 } from "slate";
 import {NewTextNode, TextName} from "@/components/editor/nodes/text";
+import {css} from "@emotion/css";
 
 export const ParagraphName = "paragraph";
 
@@ -19,6 +20,7 @@ export function SFParagraphToolbar() {
     console.debug("SFParagraphToolbar", paragraph);
     return <IconButton iconProps={{iconName: "HalfAlpha"}} title="加粗"
                        checked={isBlockActive(editor, isActive)}
+                       className={iconStyles}
                        onMouseDown={(event) => {
                            event.preventDefault();
                            Transforms.insertNodes(
@@ -40,6 +42,7 @@ function isActive(props: any): boolean {
     const node = props as SFParagraphNode;
     return node.name === "paragraph";
 }
+
 export function SFParagraphView(props: {attributes: any, children: any, node: SFParagraphNode}) {
     return <p data-name={ParagraphName} {...props.attributes}>{props.children}</p>
 }
@@ -94,7 +97,7 @@ function SFIcon(props: {iconName: string, format: string}) {
         }
         return false;
     }
-    return <IconButton iconProps={{iconName: props.iconName}}
+    return <IconButton iconProps={{iconName: props.iconName}} className={iconStyles}
                        checked={isMarkActive(editor, isActive)}
                        onMouseDown={(event) => {
                            event.preventDefault();
@@ -102,13 +105,16 @@ function SFIcon(props: {iconName: string, format: string}) {
                        }}/>
 }
 
+const iconStyles = css`
+  background-color:rgb(237 235 233 / 40%)
+`
 export const ParagraphPlugin: SFPlugin = {
     renderToolbox() {
-        return <div>
+        return <Stack horizontal horizontalAlign="start" tokens={{childrenGap: 8}}>
             <SFIcon iconName={"Bold"} format={"bold"} />
             <SFIcon iconName={"Italic"} format={"italic"} />
             <SFIcon iconName={"Underline"} format={"underline"} />
             <SFIcon iconName={"Strikethrough"} format={"strike"} />
-        </div>
+        </Stack>
     }
 }
