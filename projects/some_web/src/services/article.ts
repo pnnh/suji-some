@@ -4,6 +4,8 @@ import {ApiUrl} from "@/utils/config";
 export interface IArticleIn {
     title: string
     body: string
+    description: string
+    keywords: string
 }
 
 export interface IArticleOut {

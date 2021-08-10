@@ -1,27 +1,17 @@
 import React, {useEffect, useState} from 'react'
 import {ITextFieldStyles, TextField} from "@fluentui/react/lib/TextField";
 import {IStackItemStyles, IStackTokens, PrimaryButton, Stack} from '@fluentui/react';
-import SFXHeader from "@/views/layout/Header";
-import SFXLayout from "@/views/layout/Layout";
 import {css} from "@emotion/css";
 import SFXEditor from "@/components/editor/editor";
-import {articlePost, articlePut} from "@/services/article";
 import {SFDescendant, SFEditor} from "@/components/editor/nodes/node";
-import {ApiUrl} from "@/utils/config";
 import {getJsonData, updateTitle} from "@/utils/helpers";
+import {onEdit} from "@/pages/article/partial/save";
 
 type NewPageState = {
     title: string;
     email: string;
     saveErrorMsg?: string;
 };
-
-const useTitle = () => {
-    const titleStyles = css`
-      font-weight: 500; font-size: 20px;
-    `
-    return <span className={titleStyles}>修改文章</span>
-}
 
 const editorStyles = css`
   border: 1px solid #605e5c;margin-bottom: 16px;
@@ -39,23 +29,15 @@ const initialValue = {
     }]
 };
 
-function onSave(pk: string, title: string, editorValue: SFEditor) {
-    const postData = {
-        title: title,
-        body: JSON.stringify(editorValue),
-    }
-    articlePut(pk, postData).then((out)=>{
-        console.debug("articlePost", out);
-        if(out) {
-            window.location.href = ApiUrl.article.read + out.pk;
-        }
-    })
-}
-
+const descriptionStyles = css`
+  margin-bottom: 16px;
+`
 const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState) => {
     console.debug("EditPage");
     let [title, setTitle] = useState('');
     let [errMsg, setErrMsg] = useState('');
+    let [keywords, setKeywords] = useState('');
+    let [description, setDescription] = useState('');
     let [editorValue, setEditorValue] = useState<SFEditor>(initialValue);
 
     useEffect(() => {
@@ -78,6 +60,15 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
                                        setTitle(value);
                                    }}/>
                     </Stack.Item>
+                    <Stack.Item className={descriptionStyles}>
+                        <TextField placeholder={'描述'} multiline={true} value={description}
+                                   onChange={(event, value)=>{
+                                       if(!value) {
+                                           return;
+                                       }
+                                       setDescription(value);
+                                   }}/>
+                    </Stack.Item>
                     <Stack.Item>
                         <div className={editorStyles}>
                             <div className={editorBodyStyles}>
@@ -88,11 +79,20 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
                             </div>
                         </div>
                     </Stack.Item>
+                    <Stack.Item className={descriptionStyles}>
+                        <TextField placeholder={'关键字（逗号分隔）'} value={keywords}
+                                   onChange={(event, value)=>{
+                                       if(!value) {
+                                           return;
+                                       }
+                                       setKeywords(value);
+                                   }}/>
+                    </Stack.Item>
                     <Stack.Item>
                         <PrimaryButton onClick={()=>{
                             console.debug("onSave", editorValue);
                             console.debug("onSave2", JSON.stringify(editorValue));
-                            onSave(props.match.params.pk, title, editorValue);
+                            onEdit(props.match.params.pk, editorValue, title, description, keywords);
                         }}>
                             发布
                         </PrimaryButton>

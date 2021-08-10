@@ -2,8 +2,6 @@ import ReactDOM from "react-dom";
 import React from "react";
 import {StatusNotFound, StatusOK, StatusUnauthorized} from "@/services/models/status";
 import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
-import NewPage from "@/pages/new/new-page";
-import EditPage from "@/pages/new/edit-page";
 import ExamplePage from "@/pages/example/example";
 import AccountPage from "@/pages/account/account-page";
 import RandomPasswordPage from "@/views/random-password";
@@ -12,6 +10,8 @@ import {renderExceptionPage} from "@/views/exception/render";
 import "@/utils/fluentui";
 import {getJsonData} from "@/utils/helpers";
 import NotFoundPage from "@/views/exception/not-found";
+import NewPage from "@/pages/article/new-page";
+import EditPage from "@/pages/article/edit-page";
 
 const App = () =>{
     const data = getJsonData<any>();

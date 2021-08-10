@@ -27,7 +27,7 @@ export function SFToolbox(props: {descendant: SFDescendant}) {
     });
     console.debug("plugins", plugins, entry);
 
-    let child = <div>toolbox</div>
+    let child = <div></div>
     if(Array.isArray(entry)) {
         const [match] = entry;
         console.debug("plugins2", match);

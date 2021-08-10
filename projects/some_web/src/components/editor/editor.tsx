@@ -60,7 +60,7 @@ const toolbarStyles = css`
   padding: 16px 16px 8px 16px;
 `
 const secondToolbarStyles = css`
-  padding: 0 16px 16px 16px;
+  padding: 0 16px 8px 16px;
 `
 const editorBodyStyles = css`
   margin-bottom: 16px; overflow-y: auto; overflow-x: hidden;padding: 0 8px;
@@ -268,14 +268,19 @@ function decorateElement([node, path]: NodeEntry): SlateRange[] {
 const menuProps: IContextualMenuProps = {
     items: [
         {
-            key: 'emailMessage',
-            text: 'Email message',
-            iconProps: { iconName: 'Mail' },
+            key: 'paragraph',
+            text: '段落',
+            iconProps: { iconName: 'HalfAlpha' },
         },
         {
-            key: 'calendarEvent',
-            text: 'Calendar event',
-            iconProps: { iconName: 'Calendar' },
+            key: 'header',
+            text: '标题',
+            iconProps: { iconName: 'Header1' },
+        },
+        {
+            key: 'code-block',
+            text: '代码段',
+            iconProps: { iconName: 'CodeEdit' },
         },
     ],
     directionalHintFixed: true,
