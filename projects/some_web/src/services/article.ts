@@ -21,3 +21,8 @@ export function articlePost(params: IArticleIn) {
 export function articlePut(pk: string, params: IArticleIn) {
     return sendRequest<IArticleOut>('PUT', ApiUrl.article.edit + pk, params)
 }
+
+// 删除文章
+export function articleDelete(pk: string) {
+    return sendRequest<IArticleOut>('DELETE', ApiUrl.article.delete + pk, {})
+}

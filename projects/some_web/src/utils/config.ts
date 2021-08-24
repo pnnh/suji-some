@@ -29,9 +29,11 @@ export function getApiUrl(): string {
 }
 
 const ApiUrl = {
+    home: "/",
     article: {
         new: "/article/new",
         edit: "/article/edit/",
+        delete: "/article/delete/",
         read: "/article/read/",
     }
 }
