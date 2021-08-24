@@ -2,9 +2,7 @@ import React, {useEffect, useState} from 'react'
 import {ITextFieldStyles, TextField} from "@fluentui/react/lib/TextField";
 import {IStackItemStyles, IStackTokens, PrimaryButton, Stack} from '@fluentui/react';
 import SFXEditor from "@/components/editor/editor";
-import {articlePost, articlePut} from "@/services/article";
 import {SFDescendant, SFEditor} from "@/components/editor/nodes/node";
-import {ApiUrl} from "@/utils/config";
 import {updateTitle} from "@/utils/helpers";
 import {css} from "@emotion/css";
 import {onCreate} from "@/pages/article/partial/save";
@@ -64,7 +62,7 @@ const NewPage = (props:{}, state: NewPageState) => {
             }} />
         </Stack.Item>
         <Stack.Item className={descriptionStyles}>
-            <TextField placeholder={'关键字（逗号分隔）'} value={keywords}
+            <TextField placeholder={'关键字'} title={"逗号分隔"} value={keywords}
                        onChange={(event, value)=>{
                            if(!value) {
                                return;

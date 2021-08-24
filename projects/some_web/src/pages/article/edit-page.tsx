@@ -13,15 +13,6 @@ type NewPageState = {
     saveErrorMsg?: string;
 };
 
-const editorStyles = css`
-  border: 1px solid #605e5c;margin-bottom: 16px;
-  min-height: 400px;max-height:600px;
-`
-
-const editorBodyStyles = css`
-  margin-bottom: 32px;  
-`
-
 const initialValue = {
     children: [{
         name: 'paragraph',
@@ -45,6 +36,8 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
         console.debug("NewPage useEffect", serverData);
         setTitle(serverData.title);
         setEditorValue(serverData.body);
+        setKeywords(serverData.keywords);
+        setDescription(serverData.description);
         updateTitle(serverData.title);
     }, []);
 
@@ -70,17 +63,13 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
                                    }}/>
                     </Stack.Item>
                     <Stack.Item>
-                        <div className={editorStyles}>
-                            <div className={editorBodyStyles}>
-                                <SFXEditor value={editorValue} onChange={(value) => {
-                                    console.debug("onChange222",  );
-                                    setEditorValue(value);
-                                }} />
-                            </div>
-                        </div>
+                        <SFXEditor value={editorValue} onChange={(value) => {
+                            console.debug("onChange222",  );
+                            setEditorValue(value);
+                        }} />
                     </Stack.Item>
                     <Stack.Item className={descriptionStyles}>
-                        <TextField placeholder={'关键字（逗号分隔）'} value={keywords}
+                        <TextField placeholder={'关键字'} title={"逗号分隔"} value={keywords}
                                    onChange={(event, value)=>{
                                        if(!value) {
                                            return;
