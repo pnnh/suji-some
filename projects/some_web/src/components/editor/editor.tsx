@@ -91,21 +91,42 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
 
                 <Stack className={editorStyles} tokens={{childrenGap: 8}}>
                     <Stack.Item className={toolbarStyles}>
-                        <Stack horizontal tokens={{childrenGap: 8}}>
+                        <Stack horizontal horizontalAlign={"space-between"}>
                             <Stack.Item>
-                                <SFParagraphToolbar/>
+                                <Stack horizontal tokens={{childrenGap: 8}}>
+                                    <Stack.Item>
+                                        <SFParagraphToolbar/>
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <SFHeaderToolbar />
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <SFCodeBlockToolbar/>
+                                    </Stack.Item>
+                                </Stack>
                             </Stack.Item>
                             <Stack.Item>
-                                <SFHeaderToolbar />
-                            </Stack.Item>
-                            <Stack.Item>
-                                <SFCodeBlockToolbar/>
+                                <Stack horizontal tokens={{childrenGap: 8}}>
+                                    <Stack.Item>
+                                        <IconButton iconProps={{iconName:"Undo"}} title="撤销" />
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <IconButton iconProps={{iconName:"Redo"}} title="重做" />
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <IconButton iconProps={{iconName:"ClearFormatting"}} title="清除格式" />
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <IconButton iconProps={{iconName:"Remove"}} title="移除块" />
+                                    </Stack.Item>
+                                </Stack>
                             </Stack.Item>
                         </Stack>
+
                     </Stack.Item>
-                    <Stack.Item className={secondToolbarStyles}>
-                        <SFToolbox descendant={{name:"header",children:[]}} />
-                    </Stack.Item>
+                    {/*<Stack.Item className={secondToolbarStyles}>*/}
+                    {/*    <SFToolbox descendant={{name:"header",children:[]}} />*/}
+                    {/*</Stack.Item>*/}
                     <Stack.Item grow={1} className={editorBodyStyles}>
                         <Editable
                             decorate={decorate}
@@ -296,21 +317,7 @@ function Element({ attributes, children, element }:{attributes: any, children: a
     } else {
         view = <SFParagraphView attributes={attributes} children={children} node={element as SFParagraphNode}/>
     }
-    return <Stack horizontal tokens={{childrenGap:8}} verticalAlign={"center"}>
-        <Stack.Item contentEditable={false}>
-            <IconButton
-                menuProps={menuProps}
-                iconProps={{iconName:"Add"}}
-                title={"添加"}
-            />
-        </Stack.Item>
-        <Stack.Item grow={1}>
-            {view}
-        </Stack.Item>
-        <Stack.Item contentEditable={false}>
-            <IconButton iconProps={{iconName:"Remove"}} title="移除" />
-        </Stack.Item>
-    </Stack>
+    return view;
 }
 
 function Leaf({ attributes, children, leaf }:{attributes: any, children: any, leaf: any}) {
