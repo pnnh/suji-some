@@ -1,6 +1,7 @@
 import {SFElement, SFPlugin} from "@/components/editor/nodes/node";
 import {ReactEditor, useSlate} from "slate-react";
 import {
+    Callout, DirectionalHint,
     Dropdown,
     DropdownMenuItemType,
     IconButton,
@@ -19,6 +20,7 @@ import React, {CSSProperties, KeyboardEventHandler} from "react";
 import {isBlockActive} from "@/components/editor/nodes/paragraph";
 import {NewTextNode, TextName} from "@/components/editor/nodes/text";
 import {css} from "@emotion/css";
+import {useBoolean, useId} from "@fluentui/react-hooks";
 
 export interface SFHeaderNode extends SFElement {
     header: number;
@@ -46,22 +48,45 @@ export function SFHeaderToolbar() {
     </Stack>
 }
 
+
 export function SFHeaderView(props: {attributes: any, children: any, node: SFHeaderNode}) {
+    const [isCalloutVisible, { setTrue: setTrue, setFalse: setFalse }] = useBoolean(false);
+    let view: JSX.Element
     switch (props.node.header) {
         case 1:
-            return <h1 data-name={HeaderName} {...props.attributes}>{props.children}</h1>
+            view = <h1 data-name={HeaderName} {...props.attributes}>{props.children}</h1>
+            break;
         case 2:
-            return <h2 data-name={HeaderName} {...props.attributes}>{props.children}</h2>
+            view = <h2 data-name={HeaderName} {...props.attributes}>{props.children}</h2>
+            break;
         case 3:
-            return <h3 data-name={HeaderName} {...props.attributes}>{props.children}</h3>
+            view = <h3 data-name={HeaderName} {...props.attributes}>{props.children}</h3>
+            break;
         case 4:
-            return <h4 data-name={HeaderName} {...props.attributes}>{props.children}</h4>
+            view = <h4 data-name={HeaderName} {...props.attributes}>{props.children}</h4>
+            break;
         case 5:
-            return <h5 data-name={HeaderName} {...props.attributes}>{props.children}</h5>
+            view = <h5 data-name={HeaderName} {...props.attributes}>{props.children}</h5>
+            break;
         case 6:
-            return <h6 data-name={HeaderName} {...props.attributes}>{props.children}</h6>
+            view = <h6 data-name={HeaderName} {...props.attributes}>{props.children}</h6>
+            break;
+        default:
+            throw new Error(`未知标题: ${props.node.header}`);
     }
-    throw new Error(`未知标题: ${props.node.header}`);
+
+    return <div onMouseEnter={setTrue}
+                onMouseLeave={setFalse}>
+        {isCalloutVisible && (
+        <Stack horizontal horizontalAlign="start" tokens={{childrenGap: 8}}
+               styles={{root:{overflow: "hidden",float:"right"}}}>
+            <ToolboxIcon iconName={'Header1'} header={1} />
+            <ToolboxIcon iconName={'Header2'} header={2} />
+            <ToolboxIcon iconName={'Header3'} header={3} />
+            <ToolboxIcon iconName={'Header4'} header={4} />
+        </Stack>)}
+        {view}
+    </div>
 }
 
 const iconStyles = css`

@@ -1,6 +1,7 @@
 import React, {CSSProperties} from "react";
 import {SFDescendant, SFElement, SFPlugin, SFText,} from "@/components/editor/nodes/node";
 import {
+    Callout, DirectionalHint,
     Dropdown,
     DropdownMenuItemType,
     IconButton,
@@ -12,7 +13,8 @@ import {
 import {ReactEditor, useSlate} from "slate-react";
 import {Node as SlateNode, Path as SlatePath, Selection, Transforms} from 'slate';
 import {css} from "@emotion/css";
-import {NewParagraphNode} from "@/components/editor/nodes/paragraph";
+import {NewParagraphNode, ParagraphName} from "@/components/editor/nodes/paragraph";
+import {useBoolean, useId} from "@fluentui/react-hooks";
 
 export const CodeBlockName = "code-block";
 export const CodeName = "code";
@@ -46,8 +48,23 @@ const codeBlockStyles = css`
   line-height: 24px;
 `
 
-export function SFCodeBlockView(props: {attributes: any, children: any, node: any}) {
-    return <pre data-name={CodeBlockName} className={codeBlockStyles} {...props.attributes}>{props.children}</pre>
+const calloutStyles = css`
+  width: 400px;
+  padding: 8px;
+  overflow-y: hidden;
+`;
+export function SFCodeBlockView(props: {attributes: any, children: any, node: SFCodeBlockNode}) {
+
+    console.debug("SFCodeBlockView", props);
+
+    return  <>
+        <pre data-name={CodeBlockName} className={codeBlockStyles} {...props.attributes}>
+
+            <SelectLanguage element={props.node}/>
+            {props.children}
+        </pre>
+
+    </>
 }
 
 export function SFCodeBlockLeafView(props: {attributes: any, children: any, node: any}) {
@@ -119,54 +136,48 @@ export function SFCodeBlockToolbar() {
     </>
 }
 
-const dropdownStyles: Partial<IDropdownStyles> = {
-    dropdown: { width: 150 },
-};
-
-const options: IDropdownOption[] = [
-    { key: 'html', text: 'HTML' },
-    { key: 'js', text: 'JavaScript' },
-    { key: 'css', text: 'CSS' },
-    { key: 'java', text: 'Java' },
-    { key: 'bash', text: 'Bash' },
-    { key: 'go', text: 'Go' },
-    { key: 'c', text: 'C' },
-    { key: 'cpp', text: 'C++' },
-    { key: 'csharp', text: 'C#' },
-    { key: 'markdown', text: 'Markdown' },
-    { key: 'kotlin', text: 'Kotlin' },
-    { key: 'json', text: 'JSON' },
-    { key: 'rust', text: 'Rust' },
-    { key: 'python', text: 'Python' },
-    { key: 'php', text: 'PHP' },
-    { key: 'sql', text: 'SQL' }
-];
+const selectStyles = css`
+  float: right;position: relative;top: 4px;
+`
 
 function SelectLanguage(props: {element: SFCodeBlockNode}) {
     const editor = useSlate() as ReactEditor;
-    return <Dropdown
-        options={options}
-        styles={dropdownStyles}
-        defaultSelectedKey={props.element.language}
-        onChange={(event, value) => {
-            console.debug("Select Language", editor);
-            if (value && typeof value.key == "string") {
-                const selection = editor.selection;
-                if (!selection) {
-                    return;
-                }
-                const codeblockNode = SlateNode.parent(editor, selection.focus.path);
-                const parentPath = SlatePath.parent(selection.focus.path);
-                console.debug("Select Language2", codeblockNode, parentPath);
-                const newCodeblockNode: SFCodeBlockNode = {name: CodeBlockName,
-                    children: props.element.children, language: value.key,
-                }
-                Transforms.setNodes(editor, newCodeblockNode, {
-                    at: parentPath
-                });
-            }
-        }}
-    />
+    return <select name="select" defaultValue={props.element.language} className={selectStyles}
+                   onChange={(event) => {
+                       console.debug("Select Language", editor, event);
+                       if (event.target.value ) {
+                           const selection = editor.selection;
+                           if (!selection) {
+                               return;
+                           }
+                           const codeblockNode = SlateNode.parent(editor, selection.focus.path);
+                           const parentPath = SlatePath.parent(selection.focus.path);
+                           console.debug("Select Language2", codeblockNode, parentPath);
+                           const newCodeblockNode: SFCodeBlockNode = {name: CodeBlockName,
+                               children: props.element.children, language: event.target.value,
+                           }
+                           Transforms.setNodes(editor, newCodeblockNode, {
+                               at: parentPath
+                           });
+                       }
+                   }}>
+        <option value="html">HTML</option>
+        <option value="js" >JavaScript</option>
+        <option value="css">CSS</option>
+        <option value="java">Java</option>
+        <option value="bash">Bash</option>
+        <option value="go">Go</option>
+        <option value="c">C</option>
+        <option value="cpp">C++</option>
+        <option value="csharp">C#</option>
+        <option value="markdown">Markdown</option>
+        <option value="kotlin">Kotlin</option>
+        <option value="json">JSON</option>
+        <option value="rust">Rust</option>
+        <option value="python">Python</option>
+        <option value="php">PHP</option>
+        <option value="sql">SQL</option>
+    </select>
 }
 
 export const CodeblockPlugin: SFPlugin = {

@@ -69,59 +69,16 @@ const styles = mergeStyleSets({
     },
 });
 
-const dropdownStyles: Partial<IDropdownStyles> = {
-    dropdown: { width: 160 },
-};
 
-const options: IDropdownOption[] = [
-    { key: 'fruitsHeader', text: 'Fruits', itemType: DropdownMenuItemType.Header },
-    { key: 'apple', text: 'Apple' },
-    { key: 'banana', text: 'Banana' },
-    { key: 'orange', text: 'Orange', disabled: true },
-    { key: 'grape', text: 'Grape' },
-    { key: 'divider_1', text: '-', itemType: DropdownMenuItemType.Divider },
-    { key: 'vegetablesHeader', text: 'Vegetables', itemType: DropdownMenuItemType.Header },
-    { key: 'broccoli', text: 'Broccoli' },
-    { key: 'carrot', text: 'Carrot' },
-    { key: 'lettuce', text: 'Lettuce' },
-];
-
-const stackTokens: IStackTokens = { childrenGap: 20 };
 export function SFParagraphView(props: {attributes: any, children: any, node: SFParagraphNode}) {
     const editor = useSlate() as ReactEditor;
-    const [isCalloutVisible, { toggle: toggleIsCalloutVisible }] = useBoolean(false);
-    const buttonId = useId('callout-button');
-    const onMouseUp = (event: React.SyntheticEvent<HTMLParagraphElement>) => {
-        console.debug("onMouseUp", event);
-        const selection = editor.selection;
-        if (!selection) {
-            return;
-        }
-        console.debug("onMouseUp2", selection);
-        if (selection.anchor.offset != selection.focus.offset) {
-            console.debug("onMouseUp2 显示浮动工具栏");
-            toggleIsCalloutVisible();
-        }
-    }
-    return  <>
-        <p
-        id={buttonId}
-        onFocus={()=>{
-            console.debug("focused")
-        }}
-        data-name={ParagraphName} {...props.attributes} onMouseUp={onMouseUp}>{props.children}</p>
+    const [isCalloutVisible, { setTrue: setTrue, setFalse: setFalse  }] = useBoolean(false);
 
-    {isCalloutVisible && (
-        <Callout
-            className={styles.callout}
-            gapSpace={0}
-            target={`#${buttonId}`}
-            onDismiss={toggleIsCalloutVisible}
-            setInitialFocus
-            beakWidth={10}
-            directionalHint={DirectionalHint.topCenter}
-        >
-            <Stack horizontal horizontalAlign="start" tokens={{childrenGap: 8}} styles={{root:{overflow: "hidden"}}}>
+    return  <div onMouseEnter={setTrue}
+                 onMouseLeave={setFalse}>
+        {isCalloutVisible && (
+            <Stack horizontal horizontalAlign="start" contentEditable={false} tokens={{childrenGap: 8}}
+                   styles={{root:{overflow: "hidden", float:"right"}}}>
                 <Stack.Item>
                     <SFIcon iconName={"Bold"} format={"bold"} />
                 </Stack.Item>
@@ -134,21 +91,11 @@ export function SFParagraphView(props: {attributes: any, children: any, node: SF
                 <Stack.Item>
                     <SFIcon iconName={"Strikethrough"} format={"strike"} />
                 </Stack.Item>
-                {/*<Stack.Item>*/}
-                {/*    <Dropdown*/}
-                {/*        placeholder="Select an option"*/}
-                {/*        options={options}*/}
-                {/*        styles={dropdownStyles}*/}
-                {/*    />*/}
-                {/*</Stack.Item>*/}
-
             </Stack>
-        </Callout>
-    )}
-    </>
+        )}
+        <p data-name={ParagraphName} {...props.attributes} >{props.children}</p>
+    </div>
 }
-
-
 
 // export function toggleBlock(editor: ReactEditor, node: SFElement, isActive: (node: any) => boolean) {
 //     const paragraph = NewParagraphNode("");
