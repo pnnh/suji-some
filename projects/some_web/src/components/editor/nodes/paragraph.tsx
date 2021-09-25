@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { KeyboardEvent } from 'react'
 import { SFElement } from '@/components/editor/nodes/node'
 import { ReactEditor, useSlate } from 'slate-react'
 import { IconButton, Stack } from '@fluentui/react'
@@ -11,6 +11,7 @@ import {
 import { NewTextNode, TextName } from '@/components/editor/nodes/text'
 import { css } from '@emotion/css'
 import { useBoolean } from '@fluentui/react-hooks'
+import isHotkey from 'is-hotkey'
 
 export const ParagraphName = 'paragraph'
 
@@ -80,8 +81,22 @@ export function SFParagraphView (props: {attributes: any, children: any, node: S
                     onClick={useClearFormats(editor, props.node)}/>
             </Stack.Item>
         </Stack>
-        <p data-name={ParagraphName} {...props.attributes} >{props.children}</p>
+        <p data-name={ParagraphName} {...props.attributes}>{props.children}</p>
     </div>
+}
+
+export function ParagraphOnKeyDown (editor: ReactEditor, event: KeyboardEvent<HTMLParagraphElement>) {
+  console.debug('ParagraphOnKeyDown')
+  if (isHotkey('mod+b', event)) {
+    console.debug('加粗')
+    Editor.addMark(editor, 'bold', true)
+  } else if (isHotkey('mod+i', event)) {
+    console.debug('斜体')
+    Editor.addMark(editor, 'italic', true)
+  } else if (isHotkey('mod+u', event)) {
+    console.debug('下划线')
+    Editor.addMark(editor, 'underline', true)
+  }
 }
 
 function useClearFormats (editor: ReactEditor, node: SFParagraphNode) {
