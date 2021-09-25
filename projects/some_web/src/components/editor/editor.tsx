@@ -38,6 +38,7 @@ import {
   SFEditor, SFText
 } from '@/components/editor/nodes/node'
 import { css } from '@emotion/css'
+import { useBoolean } from '@fluentui/react-hooks'
 
 const editorStyles = css`
   border: 1px solid #605e5c;margin-bottom: 16px;
@@ -56,7 +57,7 @@ let editorObject: ReactEditor & HistoryEditor
 
 function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => void }) {
   console.debug('SFXEditor create')
-  // const [value, setValue] = useState<SlateDescendant[]>(initialValue)
+  const [sourceMode, { toggle: toggleSourceMode }] = useBoolean(false)
   const renElement = useCallback(props => <Element {...props}/>, [])
   const renLeaf = useCallback(props => <Leaf {...props}/>, [])
   const editorNode = withHistory(withReact(createEditor() as ReactEditor))
@@ -79,13 +80,13 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
                             <Stack.Item>
                                 <Stack horizontal tokens={{ childrenGap: 8 }}>
                                     <Stack.Item>
-                                        <SFParagraphToolbar/>
+                                        <SFParagraphToolbar disabled={sourceMode}/>
                                     </Stack.Item>
                                     <Stack.Item>
-                                        <SFHeaderToolbar />
+                                        <SFHeaderToolbar disabled={sourceMode} />
                                     </Stack.Item>
                                     <Stack.Item>
-                                        <SFCodeBlockToolbar/>
+                                        <SFCodeBlockToolbar disabled={sourceMode}/>
                                     </Stack.Item>
                                 </Stack>
                             </Stack.Item>
@@ -93,18 +94,24 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
                                 <Stack horizontal tokens={{ childrenGap: 8 }}>
                                     <Stack.Item>
                                         <IconButton iconProps={{ iconName: 'Undo' }}
+                                                    disabled={sourceMode}
                                                     onClick={undoOperation} title="撤销" />
                                     </Stack.Item>
                                     <Stack.Item>
                                         <IconButton iconProps={{ iconName: 'Redo' }}
+                                                    disabled={sourceMode}
                                                     onClick={redoOperation} title="重做" />
                                     </Stack.Item>
                                     <Stack.Item>
                                         <IconButton iconProps={{ iconName: 'Clear' }}
+                                                    disabled={sourceMode}
                                                     onClick={removeNodes} title="移除块" />
                                     </Stack.Item>
                                     <Stack.Item>
-                                        <IconButton iconProps={{ iconName: 'FileCode' }} title="页面源码" />
+                                        <IconButton onClick={() => {
+                                          toggleSourceMode()
+                                          showSource()
+                                        }} iconProps={{ iconName: 'FileCode' }} title="页面源码" />
                                     </Stack.Item>
                                 </Stack>
                             </Stack.Item>
@@ -125,11 +132,29 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
                             readOnly={false}
                             onKeyDown={onKeyDown}
                             onPaste={onEditorPaste}
+                            spellCheck={false}
                         />
                     </Stack.Item>
                 </Stack>
             </Slate>
   )
+}
+
+function showSource () {
+  console.debug('aaaaa', editorObject.children)
+  const range: SlateRange = {
+    anchor: {
+      path: [0], offset: 0
+    },
+    focus: {
+      path: [editorObject.children.length - 1], offset: 1
+    }
+  }
+  Transforms.removeNodes(editorObject, {
+    at: range
+  })
+  const paragraph = NewParagraphNode('新节点')
+  Transforms.insertNodes(editorObject, paragraph)
 }
 
 function undoOperation () {
@@ -291,11 +316,13 @@ function Element ({ attributes, children, element }:{attributes: any, children: 
   console.debug('renderElement', element, attributes, children)
   let view: JSX.Element
   if (element.name === 'header') {
-    view = <SFHeaderView attributes={attributes} children={children} node={element as SFHeaderNode} />
+    view = <SFHeaderView attributes={attributes} node={element as SFHeaderNode}>
+      {children}
+    </SFHeaderView>
   } else if (element.name === 'code-block') {
-    view = <SFCodeBlockView attributes={attributes} children={children} node={element}/>
+    view = <SFCodeBlockView attributes={attributes} node={element}>{children}</SFCodeBlockView>
   } else {
-    view = <SFParagraphView attributes={attributes} children={children} node={element as SFParagraphNode}/>
+    view = <SFParagraphView attributes={attributes} node={element as SFParagraphNode}>{children}</SFParagraphView>
   }
   return view
 }
@@ -303,9 +330,9 @@ function Element ({ attributes, children, element }:{attributes: any, children: 
 function Leaf ({ attributes, children, leaf }:{attributes: any, children: any, leaf: any}) {
   console.debug('renderLeaf', leaf, attributes, children)
   if (leaf.name === 'text') {
-    return <SFTextView attributes={attributes} children={children} node={leaf}/>
+    return <SFTextView attributes={attributes} node={leaf}>{children}</SFTextView>
   } else if (leaf.name === 'code') {
-    return <SFCodeBlockLeafView attributes={attributes} children={children} node={leaf}/>
+    return <SFCodeBlockLeafView attributes={attributes} node={leaf}>{children}</SFCodeBlockLeafView>
   }
   return <span {...attributes}>{children}</span>
 }

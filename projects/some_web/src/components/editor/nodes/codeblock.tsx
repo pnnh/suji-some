@@ -1,20 +1,11 @@
-import React, { CSSProperties } from 'react'
-import { SFDescendant, SFElement, SFPlugin, SFText } from '@/components/editor/nodes/node'
+import React from 'react'
+import { SFElement, SFText } from '@/components/editor/nodes/node'
 import {
-  Callout, DirectionalHint,
-  Dropdown,
-  DropdownMenuItemType,
-  IconButton,
-  IDropdownOption,
-  IDropdownStyles,
-  IStackTokens,
-  Stack
+  IconButton
 } from '@fluentui/react'
 import { ReactEditor, useSlate } from 'slate-react'
-import { Node as SlateNode, Path as SlatePath, Selection, Transforms } from 'slate'
+import { Node as SlateNode, Path as SlatePath, Transforms } from 'slate'
 import { css } from '@emotion/css'
-import { NewParagraphNode, ParagraphName } from '@/components/editor/nodes/paragraph'
-import { useBoolean, useId } from '@fluentui/react-hooks'
 
 export const CodeBlockName = 'code-block'
 export const CodeName = 'code'
@@ -48,14 +39,8 @@ const codeBlockStyles = css`
   line-height: 24px;
 `
 
-const calloutStyles = css`
-  width: 400px;
-  padding: 8px;
-  overflow-y: hidden;
-`
 export function SFCodeBlockView (props: {attributes: any, children: any, node: SFCodeBlockNode}) {
   console.debug('SFCodeBlockView', props)
-
   return <>
         <pre data-name={CodeBlockName} className={codeBlockStyles} {...props.attributes}>
 
@@ -118,12 +103,13 @@ export function SFCodeBlockLeafView (props: {attributes: any, children: any, nod
   )
 }
 
-export function SFCodeBlockToolbar () {
+export function SFCodeBlockToolbar (props: {disabled: boolean}) {
   const editor = useSlate() as ReactEditor
-  const node = NewCodeBlockNode('js', 'console.log("hello");')
+  const node = NewCodeBlockNode('js', '')
   // const paragraphNode = NewParagraphNode("");
   console.debug('SFCodeBlockToolbar', node)
   return <> <IconButton iconProps={{ iconName: 'CodeEdit' }} title="代码块"
+                        disabled={props.disabled}
                        onMouseDown={(event) => {
                          event.preventDefault()
                          Transforms.insertNodes(
@@ -179,13 +165,4 @@ function SelectLanguage (props: {element: SFCodeBlockNode}) {
         <option value="php">PHP</option>
         <option value="sql">SQL</option>
     </select>
-}
-
-export const CodeblockPlugin: SFPlugin = {
-  renderToolbox (element) {
-    console.debug('CodeblockPlugin', element)
-    return <Stack horizontal horizontalAlign="start" tokens={{ childrenGap: 8 }}>
-            <SelectLanguage element={element as SFCodeBlockNode} />
-            </Stack>
-  }
 }

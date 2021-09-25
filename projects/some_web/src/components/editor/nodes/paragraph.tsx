@@ -15,13 +15,14 @@ import isHotkey from 'is-hotkey'
 
 export const ParagraphName = 'paragraph'
 
-export function SFParagraphToolbar () {
+export function SFParagraphToolbar (props: {disabled: boolean}) {
   const editor = useSlate() as ReactEditor
   const paragraph = NewParagraphNode('')
   console.debug('SFParagraphToolbar', paragraph)
   return <IconButton iconProps={{ iconName: 'HalfAlpha' }} title="段落"
                        checked={isBlockActive(editor, isActive)}
                        className={iconStyles}
+                     disabled={props.disabled}
                        onMouseDown={(event) => {
                          event.preventDefault()
                          Transforms.insertNodes(

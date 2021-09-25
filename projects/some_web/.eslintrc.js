@@ -8,8 +8,10 @@ module.exports = {
     'standard'
   ],
   globals: {
+    React: 'readonly',
     Atomics: 'readonly',
-    SharedArrayBuffer: 'readonly'
+    SharedArrayBuffer: 'readonly',
+    JSX: 'readonly'
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
