@@ -35,7 +35,6 @@ import {
 import Prism from "prismjs";
 import "@/utils/highlight"
 
-import {SFToolbox} from "@/components/editor/toolbox";
 import {
     parseDescendant,
     parseDescendantArray, parseElement,
@@ -59,11 +58,9 @@ const editorStyles = css`
 const toolbarStyles = css`
   padding: 16px 16px 8px 16px;
 `
-const secondToolbarStyles = css`
-  padding: 0 16px 8px 16px;
-`
+
 const editorBodyStyles = css`
-  margin-bottom: 16px; overflow-y: auto; overflow-x: hidden;padding: 0 8px;
+  margin-bottom: 16px; overflow-y: auto; overflow-x: hidden;margin-top:0;padding:16px;
 `
 
 // 这里是单例的，一个页面只能有一个Editor
