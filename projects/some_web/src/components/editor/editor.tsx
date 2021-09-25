@@ -56,7 +56,7 @@ const editorStyles = css`
   min-height: 400px;max-height:600px;
 `
 const toolbarStyles = css`
-  padding: 16px 16px 8px 16px;
+  padding: 8px 16px 8px 16px;border-bottom: solid 1px #000000;
 `
 
 const editorBodyStyles = css`
@@ -114,7 +114,10 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                                         <IconButton iconProps={{iconName:"ClearFormatting"}} title="清除格式" />
                                     </Stack.Item>
                                     <Stack.Item>
-                                        <IconButton iconProps={{iconName:"Remove"}} title="移除块" />
+                                        <IconButton iconProps={{iconName:"Clear"}} title="移除块" />
+                                    </Stack.Item>
+                                    <Stack.Item>
+                                        <IconButton iconProps={{iconName:"FileCode"}} title="页面源码" />
                                     </Stack.Item>
                                 </Stack>
                             </Stack.Item>

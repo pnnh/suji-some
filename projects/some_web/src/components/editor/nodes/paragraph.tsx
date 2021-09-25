@@ -72,7 +72,7 @@ const showStyles = css`
   position: absolute;
   top: -32px;
   left: 40%;
-  overflow: hidden;
+  overflow: hidden;background-color:#fff;
 `
 const hideStyles = css`
   display: none;
@@ -80,14 +80,10 @@ const hideStyles = css`
 const paraBoxStyles = css`position: relative;`
 
 export function SFParagraphView(props: {attributes: any, children: any, node: SFParagraphNode}) {
-    const editor = useSlate() as ReactEditor;
     const [isCalloutVisible, { setTrue: setTrue, setFalse: setFalse  }] = useBoolean(false);
 
     return  <div onMouseEnter={setTrue}
                  onMouseLeave={setFalse} className={paraBoxStyles}>
-        {/*{isCalloutVisible && (*/}
-
-        {/*)}*/}
         <Stack horizontal horizontalAlign="start" contentEditable={false} tokens={{childrenGap: 8}}
                // styles={{root:{overflow: "hidden", float:"right"}}}
             className={isCalloutVisible ? showStyles : hideStyles}>
@@ -107,15 +103,6 @@ export function SFParagraphView(props: {attributes: any, children: any, node: SF
         <p data-name={ParagraphName} {...props.attributes} >{props.children}</p>
     </div>
 }
-
-// export function toggleBlock(editor: ReactEditor, node: SFElement, isActive: (node: any) => boolean) {
-//     const paragraph = NewParagraphNode("");
-//     if (isBlockActive(editor, isActive)) {
-//         Transforms.setNodes(editor, paragraph);
-//     } else {
-//         Transforms.setNodes(editor, node);
-//     }
-// }
 
 export function isBlockActive(editor: ReactEditor, isActive: (node: any) => boolean): boolean {
     const [match] = Editor.nodes(editor, {
@@ -169,13 +156,3 @@ function SFIcon(props: {iconName: string, format: string}) {
 const iconStyles = css`
   background-color:rgb(237 235 233 / 40%)
 `
-export const ParagraphPlugin: SFPlugin = {
-    renderToolbox() {
-        return <Stack horizontal horizontalAlign="start" tokens={{childrenGap: 8}}>
-            <SFIcon iconName={"Bold"} format={"bold"} />
-            <SFIcon iconName={"Italic"} format={"italic"} />
-            <SFIcon iconName={"Underline"} format={"underline"} />
-            <SFIcon iconName={"Strikethrough"} format={"strike"} />
-        </Stack>
-    }
-}
