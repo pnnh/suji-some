@@ -10,7 +10,7 @@ import {
     Descendant as SlateDescendant,
     Element as SlateElement, BaseElement, ExtendedType, BaseEditor, Descendant, Text, NodeEntry,
 } from 'slate'
-import { withHistory } from 'slate-history'
+import {HistoryEditor, withHistory} from 'slate-history'
 import {IconButton, IContextualMenuProps,Stack} from "@fluentui/react";
 import {
     HeaderName,
@@ -64,8 +64,7 @@ const editorBodyStyles = css`
 `
 
 // 这里是单例的，一个页面只能有一个Editor
-let editorObject: ReactEditor;
-//let rootNode: {children: SFDescendant[]} = {children: []}
+let editorObject: ReactEditor & HistoryEditor;
 
 function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void }) {
     console.debug("SFXEditor create");
@@ -105,16 +104,16 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                             <Stack.Item>
                                 <Stack horizontal tokens={{childrenGap: 8}}>
                                     <Stack.Item>
-                                        <IconButton iconProps={{iconName:"Undo"}} title="撤销" />
+                                        <IconButton iconProps={{iconName:"Undo"}}
+                                                    onClick={undoOperation} title="撤销" />
                                     </Stack.Item>
                                     <Stack.Item>
-                                        <IconButton iconProps={{iconName:"Redo"}} title="重做" />
+                                        <IconButton iconProps={{iconName:"Redo"}}
+                                                    onClick={redoOperation} title="重做" />
                                     </Stack.Item>
                                     <Stack.Item>
-                                        <IconButton iconProps={{iconName:"ClearFormatting"}} title="清除格式" />
-                                    </Stack.Item>
-                                    <Stack.Item>
-                                        <IconButton iconProps={{iconName:"Clear"}} title="移除块" />
+                                        <IconButton iconProps={{iconName:"Clear"}}
+                                                    onClick={removeNodes} title="移除块" />
                                     </Stack.Item>
                                     <Stack.Item>
                                         <IconButton iconProps={{iconName:"FileCode"}} title="页面源码" />
@@ -143,6 +142,18 @@ function SFXEditor(props: { value: SFEditor, onChange: (value: SFEditor) => void
                 </Stack>
             </Slate>
     )
+}
+
+function undoOperation() {
+    editorObject.undo();
+}
+
+function redoOperation() {
+    editorObject.redo();
+}
+
+function removeNodes() {
+    Transforms.removeNodes(editorObject);
 }
 
 function onKeyDown(event: React.KeyboardEvent<HTMLDivElement>) {
@@ -285,27 +296,6 @@ function decorateElement([node, path]: NodeEntry): SlateRange[] {
 
     return ranges
 }
-
-const menuProps: IContextualMenuProps = {
-    items: [
-        {
-            key: 'paragraph',
-            text: '段落',
-            iconProps: { iconName: 'HalfAlpha' },
-        },
-        {
-            key: 'header',
-            text: '标题',
-            iconProps: { iconName: 'Header1' },
-        },
-        {
-            key: 'code-block',
-            text: '代码段',
-            iconProps: { iconName: 'CodeEdit' },
-        },
-    ],
-    directionalHintFixed: true,
-};
 
 function Element({ attributes, children, element }:{attributes: any, children: any, element: any}) {
     console.debug("renderElement", element, attributes, children);
