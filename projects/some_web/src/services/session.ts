@@ -1,4 +1,4 @@
-import {sendRequest} from "@/utils/request";
+import { sendRequest } from '@/utils/request'
 
 const sessionUrl = '/account/login'
 
@@ -10,6 +10,6 @@ export interface ISessionIn {
 export interface ISessionOut {
 }
 
-export function sessionPost(params: ISessionIn) {
-    return sendRequest<ISessionOut>('POST', sessionUrl, params);
+export function sessionPost (params: ISessionIn) {
+  return sendRequest<ISessionOut>('POST', sessionUrl, params)
 }

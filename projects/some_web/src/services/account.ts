@@ -1,4 +1,4 @@
-import {sendRequest} from "@/utils/request";
+import { sendRequest } from '@/utils/request'
 
 const accountUrl = '/account/verify'
 
@@ -9,6 +9,6 @@ export interface IAccountIn {
 export interface IAccountOut {
 }
 
-export function accountPost(params: IAccountIn) {
-    return sendRequest<IAccountOut>('POST', accountUrl, params);
+export function accountPost (params: IAccountIn) {
+  return sendRequest<IAccountOut>('POST', accountUrl, params)
 }

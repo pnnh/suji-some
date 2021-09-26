@@ -11,36 +11,36 @@ export class Exception {
   param: any = {}
 }
 
-export function NewExceptionFail(msg: string, param?: string): Exception {
-  let ex = new Exception()
+export function NewExceptionFail (msg: string, param?: string): Exception {
+  const ex = new Exception()
   ex.code = ECodes.Fail
   ex.msg = msg
   ex.param = param ?? {}
   return ex
 }
 
-export function NewException(code: ECodes): Exception {
-  let ex = new Exception()
+export function NewException (code: ECodes): Exception {
+  const ex = new Exception()
   ex.code = code
   return ex
 }
 
-export function NewExceptionWithParam(code: ECodes, param: any): Exception {
-  let ex = new Exception()
+export function NewExceptionWithParam (code: ECodes, param: any): Exception {
+  const ex = new Exception()
   ex.code = code
   ex.param = param
   return ex
 }
 
-export function NewExceptionWithMsg(code: ECodes, msg: string): Exception {
-  let ex = new Exception()
+export function NewExceptionWithMsg (code: ECodes, msg: string): Exception {
+  const ex = new Exception()
   ex.code = code
   ex.msg = msg
   return ex
 }
 
-export function NewExceptionWithAll(code: ECodes, msg: string, param: any): Exception {
-  let ex = new Exception()
+export function NewExceptionWithAll (code: ECodes, msg: string, param: any): Exception {
+  const ex = new Exception()
   ex.code = code
   ex.msg = msg
   ex.param = param

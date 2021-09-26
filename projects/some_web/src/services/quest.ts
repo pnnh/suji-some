@@ -1,5 +1,5 @@
-import {sendRequest} from "@/utils/request";
-import {getApiUrl} from "@/utils/config";
+import { sendRequest } from '@/utils/request'
+import { getApiUrl } from '@/utils/config'
 
 export interface IQuestIn {
     title: string
@@ -11,11 +11,11 @@ export interface IQuestOut {
 }
 
 // 新建quest
-export function questPost(params: IQuestIn) {
-    return sendRequest<Quest>('POST', getApiUrl() + "/quest", params)
+export function questPost (params: IQuestIn) {
+  return sendRequest<Quest>('POST', getApiUrl() + '/quest', params)
 }
 
 // 获取quest列表
-export function questQuery(params: {}) {
-    return sendRequest<IQuestOut>('GET', getApiUrl() + "/quest", params)
+export function questQuery (params: {}) {
+  return sendRequest<IQuestOut>('GET', getApiUrl() + '/quest', params)
 }
