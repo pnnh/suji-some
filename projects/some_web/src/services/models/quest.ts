@@ -1,5 +1,5 @@
 
-interface Quest {
+export interface Quest {
     pk: string;
     title: string;
     creator: string;

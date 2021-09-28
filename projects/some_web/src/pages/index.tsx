@@ -1,9 +1,9 @@
-import ReactDOM from "react-dom";
-import React from "react";
-import UserMenu from "@/views/user/menu";
-import "@/utils/fluentui";
+import ReactDOM from 'react-dom'
+import React from 'react'
+import UserMenu from '@/views/user/menu'
+import '@/utils/fluentui'
 
-const rootElement = document.getElementById('user-menu');
+const rootElement = document.getElementById('user-menu')
 if (rootElement) {
-    ReactDOM.render(<UserMenu />, rootElement);
+  ReactDOM.render(<UserMenu />, rootElement)
 }
