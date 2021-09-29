@@ -9,6 +9,7 @@ import {
 import { HistoryEditor, withHistory } from 'slate-history'
 import { IconButton, Stack } from '@fluentui/react'
 import {
+  header2Markdown,
   HeaderName,
   SFHeaderNode,
   SFHeaderToolbar,
@@ -16,7 +17,7 @@ import {
 } from '@/components/editor/nodes/header'
 import { NewTextNode, SFTextView } from '@/components/editor/nodes/text'
 import {
-  NewParagraphNode, ParagraphName, ParagraphOnKeyDown,
+  NewParagraphNode, paragraph2Markdown, ParagraphName, ParagraphOnKeyDown,
   SFParagraphNode,
   SFParagraphToolbar,
   SFParagraphView
@@ -70,6 +71,7 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
                      const editorValue = {
                        children: parseDescendantArray(value)
                      }
+                     // todo 如果是sourceMode，需要先转换为文档格式
                      props.onChange(editorValue)
                      // rootNode = {children: descendants};
                    }}>
@@ -109,18 +111,15 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
                                     </Stack.Item>
                                     <Stack.Item>
                                         <IconButton onClick={() => {
+                                          console.debug('showSource', props.value)
                                           toggleSourceMode()
-                                          showSource()
+                                          showSource(props.value)
                                         }} iconProps={{ iconName: 'FileCode' }} title="页面源码" />
                                     </Stack.Item>
                                 </Stack>
                             </Stack.Item>
                         </Stack>
-
                     </Stack.Item>
-                    {/* <Stack.Item className={secondToolbarStyles}> */}
-                    {/*    <SFToolbox descendant={{name:"header",children:[]}} /> */}
-                    {/* </Stack.Item> */}
                     <Stack.Item grow={1} className={editorBodyStyles}>
                         <Editable
                             decorate={decorate}
@@ -140,7 +139,7 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
   )
 }
 
-function showSource () {
+function showSource (editorValue: SFEditor) {
   console.debug('aaaaa', editorObject.children)
   const range: SlateRange = {
     anchor: {
@@ -153,8 +152,26 @@ function showSource () {
   Transforms.removeNodes(editorObject, {
     at: range
   })
-  const paragraph = NewParagraphNode('新节点')
-  Transforms.insertNodes(editorObject, paragraph)
+  let markdownString = ''
+  // 将editorValue转换为Markdown
+  for (let i = 0; i < editorValue.children.length; ++i) {
+    const child = editorValue.children[i]
+    switch (child.name) {
+      case HeaderName:
+        markdownString += header2Markdown(child as SFHeaderNode)
+        break
+      case ParagraphName:
+        markdownString += paragraph2Markdown(child as SFParagraphNode)
+        break
+    }
+  }
+  console.debug('markdownString', markdownString)
+
+  const splinted = markdownString.split('\n')
+  for (let i = 0; i < splinted.length; ++i) {
+    const paragraph = NewParagraphNode(splinted[i])
+    Transforms.insertNodes(editorObject, paragraph)
+  }
 }
 
 function undoOperation () {

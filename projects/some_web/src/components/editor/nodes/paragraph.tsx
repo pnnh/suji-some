@@ -1,5 +1,5 @@
 import React, { KeyboardEvent } from 'react'
-import { SFElement } from '@/components/editor/nodes/node'
+import { SFElement, SFText } from '@/components/editor/nodes/node'
 import { ReactEditor, useSlate } from 'slate-react'
 import { IconButton, Stack } from '@fluentui/react'
 import {
@@ -38,6 +38,15 @@ export function NewParagraphNode (text: string): SFParagraphNode {
     name: ParagraphName,
     children: [NewTextNode(text)]
   }
+}
+
+export function paragraph2Markdown (node: SFParagraphNode): string {
+  let mdStr = ''
+  for (let i = 0; i < node.children.length; i++) {
+    const child = node.children[i]
+    mdStr += (child as SFText).text
+  }
+  return mdStr + '\n\n'
 }
 
 function isActive (props: any): boolean {

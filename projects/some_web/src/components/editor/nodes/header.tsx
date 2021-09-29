@@ -1,5 +1,5 @@
 import React from 'react'
-import { SFElement, SFPlugin } from '@/components/editor/nodes/node'
+import { SFElement, SFPlugin, SFText } from '@/components/editor/nodes/node'
 import { ReactEditor, useSlate } from 'slate-react'
 import {
   IconButton,
@@ -26,11 +26,13 @@ export function NewHeaderNode (header: number, text: string): SFHeaderNode {
   }
 }
 
-export function isHeaderElement (element: any): boolean {
-  if (element && element.name === HeaderName) {
-    return true
+export function header2Markdown (node: SFHeaderNode): string {
+  let mdStr = ''
+  for (let i = 0; i < node.header; i++) {
+    mdStr += '#'
   }
-  return false
+  mdStr = mdStr + ' ' + (node.children[0] as SFText).text
+  return mdStr + '\n\n'
 }
 
 export function SFHeaderToolbar (props: {disabled: boolean}) {
