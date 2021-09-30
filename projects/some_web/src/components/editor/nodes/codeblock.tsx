@@ -18,6 +18,12 @@ export interface SFCode extends SFText {
 
 }
 
+export function codeBlock2Markdown (node: SFCodeBlockNode): string {
+  let mdStr = '```' + node.language + '\n'
+  mdStr = mdStr + (node.children[0] as SFText).text
+  return mdStr + '\n```\n\n'
+}
+
 export function NewCodeNode (text: string): SFCode {
   return { name: CodeName, text: text }
 }
@@ -41,17 +47,14 @@ const codeBlockStyles = css`
 
 export function SFCodeBlockView (props: {attributes: any, children: any, node: SFCodeBlockNode}) {
   console.debug('SFCodeBlockView', props)
-  return <>
-        <pre data-name={CodeBlockName} className={codeBlockStyles} {...props.attributes}>
-
+  return <pre data-name={CodeBlockName} className={codeBlockStyles} {...props.attributes}>
             <SelectLanguage element={props.node}/>
             {props.children}
         </pre>
-
-    </>
 }
 
 export function SFCodeBlockLeafView (props: {attributes: any, children: any, node: any}) {
+  console.debug('SFCodeBlockLeafView=========', props.node)
   return (
         <span data-name={CodeName}
             {...props.attributes}

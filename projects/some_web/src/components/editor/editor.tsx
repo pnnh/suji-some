@@ -23,6 +23,7 @@ import {
   SFParagraphView
 } from '@/components/editor/nodes/paragraph'
 import {
+  codeBlock2Markdown,
   CodeBlockName, NewCodeNode,
   SFCodeBlockLeafView,
   SFCodeBlockNode,
@@ -40,6 +41,13 @@ import {
 } from '@/components/editor/nodes/node'
 import { css } from '@emotion/css'
 import { useBoolean } from '@fluentui/react-hooks'
+import {
+  MarkdownName,
+  NewMarkdownNode,
+  SFMarkdownLeafView,
+  SFMarkdownView
+} from '@/components/editor/nodes/markdown'
+import { getLocalStorage, setLocalStorage } from '@/utils/helpers'
 
 const editorStyles = css`
   border: 1px solid #605e5c;margin-bottom: 16px;
@@ -52,7 +60,7 @@ const toolbarStyles = css`
 const editorBodyStyles = css`
   margin-bottom: 16px; overflow-y: auto; overflow-x: hidden;margin-top:0;padding:16px;
 `
-
+const StorageKey = 'editor-value'
 // 这里是单例的，一个页面只能有一个Editor
 let editorObject: ReactEditor & HistoryEditor
 
@@ -67,11 +75,14 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
   return (
             <Slate editor={editorObject} value={props.value.children}
                    onChange={value => {
-                     console.log('onChange', value)
                      const editorValue = {
                        children: parseDescendantArray(value)
                      }
                      // todo 如果是sourceMode，需要先转换为文档格式
+                     if (!sourceMode) {
+                       console.log('onChange写入存储', editorValue)
+                       setLocalStorage(StorageKey, editorValue)
+                     }
                      props.onChange(editorValue)
                      // rootNode = {children: descendants};
                    }}>
@@ -113,7 +124,7 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
                                         <IconButton onClick={() => {
                                           console.debug('showSource', props.value)
                                           toggleSourceMode()
-                                          showSource(props.value)
+                                          showSource(props.value, sourceMode)
                                         }} iconProps={{ iconName: 'FileCode' }} title="页面源码" />
                                     </Stack.Item>
                                 </Stack>
@@ -139,8 +150,7 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
   )
 }
 
-function showSource (editorValue: SFEditor) {
-  console.debug('aaaaa', editorObject.children)
+function showSource (editorValue: SFEditor, sourceMode: boolean) {
   const range: SlateRange = {
     anchor: {
       path: [0], offset: 0
@@ -152,24 +162,33 @@ function showSource (editorValue: SFEditor) {
   Transforms.removeNodes(editorObject, {
     at: range
   })
-  let markdownString = ''
-  // 将editorValue转换为Markdown
-  for (let i = 0; i < editorValue.children.length; ++i) {
-    const child = editorValue.children[i]
-    switch (child.name) {
-      case HeaderName:
-        markdownString += header2Markdown(child as SFHeaderNode)
-        break
-      case ParagraphName:
-        markdownString += paragraph2Markdown(child as SFParagraphNode)
-        break
+  if (sourceMode) {
+    const editorValue = getLocalStorage(StorageKey)
+    console.debug('editorValue', editorValue)
+    for (let i = 0; i < editorValue.children.length; ++i) {
+      const child = editorValue.children[i]
+      Transforms.insertNodes(editorObject, child)
     }
-  }
-  console.debug('markdownString', markdownString)
+  } else {
+    let markdownString = ''
+    // 将editorValue转换为Markdown
+    for (let i = 0; i < editorValue.children.length; ++i) {
+      const child = editorValue.children[i]
+      switch (child.name) {
+        case HeaderName:
+          markdownString += header2Markdown(child as SFHeaderNode)
+          break
+        case ParagraphName:
+          markdownString += paragraph2Markdown(child as SFParagraphNode)
+          break
+        case CodeBlockName:
+          markdownString += codeBlock2Markdown(child as SFCodeBlockNode)
+          break
+      }
+    }
+    console.debug('markdownString', markdownString)
 
-  const splinted = markdownString.split('\n')
-  for (let i = 0; i < splinted.length; ++i) {
-    const paragraph = NewParagraphNode(splinted[i])
+    const paragraph = NewMarkdownNode(markdownString)
     Transforms.insertNodes(editorObject, paragraph)
   }
 }
@@ -332,12 +351,14 @@ function decorateElement ([node, path]: NodeEntry): SlateRange[] {
 function Element ({ attributes, children, element }:{attributes: any, children: any, element: any}) {
   console.debug('renderElement', element, attributes, children)
   let view: JSX.Element
-  if (element.name === 'header') {
+  if (element.name === HeaderName) {
     view = <SFHeaderView attributes={attributes} node={element as SFHeaderNode}>
       {children}
     </SFHeaderView>
-  } else if (element.name === 'code-block') {
+  } else if (element.name === CodeBlockName) {
     view = <SFCodeBlockView attributes={attributes} node={element}>{children}</SFCodeBlockView>
+  } else if (element.name === MarkdownName) {
+    view = <SFMarkdownView attributes={attributes} node={element}>{children}</SFMarkdownView>
   } else {
     view = <SFParagraphView attributes={attributes} node={element as SFParagraphNode}>{children}</SFParagraphView>
   }
@@ -350,6 +371,8 @@ function Leaf ({ attributes, children, leaf }:{attributes: any, children: any, l
     return <SFTextView attributes={attributes} node={leaf}>{children}</SFTextView>
   } else if (leaf.name === 'code') {
     return <SFCodeBlockLeafView attributes={attributes} node={leaf}>{children}</SFCodeBlockLeafView>
+  } else if (leaf.name === 'mark') {
+    return <SFMarkdownLeafView attributes={attributes} node={leaf}>{children}</SFMarkdownLeafView>
   }
   return <span {...attributes}>{children}</span>
 }

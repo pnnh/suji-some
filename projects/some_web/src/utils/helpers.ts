@@ -24,3 +24,13 @@ export function updateTitle (title: string) {
   const titleEl = elements[0]
   titleEl.innerText = title + ' - 泛函'
 }
+
+export function setLocalStorage (key: string, value: any) {
+  const stringValue = JSON.stringify(value)
+  localStorage.setItem(key, stringValue)
+}
+
+export function getLocalStorage (key: string) :any {
+  const stringValue = localStorage.getItem(key) ?? 'null'
+  return JSON.parse(stringValue)
+}
