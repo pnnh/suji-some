@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react'
-import { TextField } from '@fluentui/react/lib/TextField'
 import { PrimaryButton, Stack } from '@fluentui/react'
 import SFXEditor from '@/components/editor/editor'
 import { SFEditor } from '@/components/editor/nodes/node'
@@ -20,6 +19,11 @@ const initialValue = {
   }]
 }
 
+const inputStyles = css`
+  border: 1px solid #edebe9;
+  padding: 8px;outline: none;
+`
+
 const descriptionStyles = css`
   margin-bottom: 16px;
 `
@@ -37,21 +41,16 @@ const NewPage = (props:{}, state: NewPageState) => {
 
   return <Stack tokens={{ childrenGap: 8 }}>
         <Stack.Item>
-            <TextField placeholder={'标题'} value={title}
-                       onChange={(event, value) => {
-                         if (!value) {
-                           return
-                         }
-                         setTitle(value)
+            <input placeholder={'标题'} value={title} className={inputStyles} size={64}
+                       onChange={(event) => {
+                         setTitle(event.target.value)
                        }}/>
         </Stack.Item>
         <Stack.Item className={descriptionStyles}>
-            <TextField placeholder={'描述'} multiline={true} value={description}
-                       onChange={(event, value) => {
-                         if (!value) {
-                           return
-                         }
-                         setDescription(value)
+            <textarea placeholder={'描述'} value={description} className={inputStyles}
+                      cols={80} rows={4}
+                       onChange={(event) => {
+                         setDescription(event.target.value)
                        }}/>
         </Stack.Item>
         <Stack.Item>
@@ -61,12 +60,10 @@ const NewPage = (props:{}, state: NewPageState) => {
             }} />
         </Stack.Item>
         <Stack.Item className={descriptionStyles}>
-            <TextField placeholder={'关键字'} title={'逗号分隔'} value={keywords}
-                       onChange={(event, value) => {
-                         if (!value) {
-                           return
-                         }
-                         setKeywords(value)
+            <input placeholder={'关键字'} title={'逗号分隔'} size={64}
+                   className={inputStyles} value={keywords}
+                       onChange={(event) => {
+                         setKeywords(event.target.value)
                        }}/>
         </Stack.Item>
         <Stack.Item>

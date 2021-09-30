@@ -50,11 +50,11 @@ import {
 import { getLocalStorage, setLocalStorage } from '@/utils/helpers'
 
 const editorStyles = css`
-  border: 1px solid #605e5c;margin-bottom: 16px;
+  border: 1px solid #edebe9;margin-bottom: 16px;
   min-height: 400px;max-height:600px;
 `
 const toolbarStyles = css`
-  padding: 8px 16px 8px 16px;border-bottom: solid 1px #000000;
+  padding: 8px 16px 8px 16px;border-bottom: solid 1px #edebe9;
 `
 
 const editorBodyStyles = css`

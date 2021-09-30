@@ -1,7 +1,7 @@
 import React from 'react'
 import { SFElement, SFText } from '@/components/editor/nodes/node'
 import { css } from '@emotion/css'
-import { SFCode } from '@/components/editor/nodes/codeblock'
+import { CodeName, SFCode } from '@/components/editor/nodes/codeblock'
 
 export const MarkdownName = 'markdown'
 export const MarkName = 'mark'
@@ -42,54 +42,17 @@ export function SFMarkdownView (props: {attributes: any, children: any, node: SF
 }
 
 export function SFMarkdownLeafView (props: {attributes: any, children: any, node: any}) {
-  console.debug('SFCodeBlockLeafView=========', props.node)
-  return (
-    <span data-name={MarkName}
-          {...props.attributes}
-          className={css`
-            font-family: monospace;
-            background: hsla(0, 0%, 100%, .5);
-        ${props.node.comment &&
-          css`
-            color: slategray;
-          `} 
-        ${(props.node.operator || props.node.url) &&
-          css`
-            color: #9a6e3a;
-          `}
-        ${props.node.keyword &&
-          css`
-            color: #07a;
-          `}
-        ${(props.node.variable || props.node.regex) &&
-          css`
-            color: #e90;
-          `}
-        ${(props.node.number ||
-            props.node.boolean ||
-            props.node.tag ||
-            props.node.constant ||
-            props.node.symbol ||
-            props.node['attr-name'] ||
-            props.node.selector) &&
-          css`
-            color: #905;
-          `}
-        ${props.node.punctuation &&
-          css`
-            color: #999;
-          `}
-        ${(props.node.string || props.node.char) &&
-          css`
-            color: #690;
-          `}
-        ${(props.node.function || props.node['class-name']) &&
-          css`
-            color: #dd4a68;
-          `}
-        `}
-    >
+  console.debug('SFMarkdownLeafView=========', props.node)
+  let className = 'token '
+  for (const k in props.node) {
+    if (k === 'name' || k === 'text') continue
+    className += (k + ' ')
+  }
+  className = className.trim()
+  console.debug('SFMarkdownLeafView=========className', className)
+  return <span data-name={CodeName}
+               {...props.attributes}
+               className={className}>
       {props.children}
     </span>
-  )
 }
