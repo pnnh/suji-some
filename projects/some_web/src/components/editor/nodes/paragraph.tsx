@@ -204,14 +204,13 @@ function SFIcon (props: {iconName: string, format: string, node: SFParagraphNode
                            console.debug('toggleMark-intersection', intersection)
                            if (intersection) {
                              Transforms.select(editor, intersection)
+                             console.debug('toggleMark-toggleMark', isMarkActive(editor, isActive))
+                             if (isMarkActive(editor, isActive)) {
+                               Editor.removeMark(editor, props.format)
+                             } else {
+                               Editor.addMark(editor, props.format, true)
+                             }
                            }
-                         }
-                         // toggleMark(editor, props.format, true, isActive)
-                         console.debug('toggleMark-toggleMark', isMarkActive(editor, isActive))
-                         if (isMarkActive(editor, isActive)) {
-                           Editor.removeMark(editor, props.format)
-                         } else {
-                           Editor.addMark(editor, props.format, true)
                          }
                        }}/>
 }
