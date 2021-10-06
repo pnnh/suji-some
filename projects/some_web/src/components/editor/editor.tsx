@@ -23,9 +23,8 @@ import {
   SFParagraphView
 } from '@/components/editor/nodes/paragraph'
 import {
-  BlockName,
   codeBlock2Markdown,
-  CodeBlockName, NewCodeNode, SFBlockView,
+  CodeBlockName, NewCodeNode,
   SFCodeBlockLeafView,
   SFCodeBlockNode,
   SFCodeBlockToolbar,
@@ -72,7 +71,7 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
   const renLeaf = useCallback(props => <Leaf {...props}/>, [])
   const editorNode = withHistory(withReact(createEditor() as ReactEditor))
   editorObject = useMemo(() => editorNode, [])
-  // const decorate = useCallback(decorateElement, [])
+  const decorate = useCallback(decorateElement, [])
   return (
             <Slate editor={editorObject} value={props.value.children}
                    onChange={value => {
@@ -134,7 +133,7 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
                     </Stack.Item>
                     <Stack.Item grow={1} className={editorBodyStyles}>
                         <Editable
-                            // decorate={decorate}
+                            decorate={decorate}
                             renderElement={renElement}
                             renderLeaf={renLeaf}
                             placeholder="请输入段落"
@@ -245,7 +244,7 @@ function onKeyDown (event: React.KeyboardEvent<HTMLDivElement>) {
     } else if (element.name === CodeBlockName) {
       event.preventDefault()
       console.debug('selectedLeaf3')
-      Transforms.insertNodes(editorObject, NewCodeNode('\n', ''))
+      Transforms.insertNodes(editorObject, NewCodeNode('\n'))
     }
     return
   }
@@ -291,7 +290,7 @@ function onEditorPaste (event: ClipboardEvent<HTMLDivElement>) {
     event.preventDefault()
     const text = clipText
     console.debug('onEditorPaste selectedLeaf3', text === leaf.text, text, '|', leaf.text, '|')
-    const codeNode: SFText = NewCodeNode(text, '')
+    const codeNode: SFText = NewCodeNode(text)
     console.debug('onEditorPaste selectedLeaf4', codeNode)
     Transforms.insertNodes(editorObject, codeNode)
   }
@@ -366,8 +365,6 @@ function Element ({ attributes, children, element }:{attributes: any, children: 
     </SFHeaderView>
   } else if (element.name === CodeBlockName) {
     view = <SFCodeBlockView attributes={attributes} node={element}>{children}</SFCodeBlockView>
-  } else if (element.name === BlockName) {
-    view = <SFBlockView attributes={attributes} node={element}>{children}</SFBlockView>
   } else if (element.name === MarkdownName) {
     view = <SFMarkdownView attributes={attributes} node={element}>{children}</SFMarkdownView>
   } else {
