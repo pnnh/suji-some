@@ -11,9 +11,9 @@ export function SFTextView (props: {attributes: any, children: any, node: any}) 
   const style: CSSProperties = {}
 
   for (const key in props.node) {
-    if (Object.prototype.hasOwnProperty.call(props, key)) {
-      continue
-    }
+    // if (!Object.prototype.hasOwnProperty.call(props, key)) {
+    //   continue
+    // }
     switch (key) {
       case 'bold':
         style.fontWeight = 'bold'

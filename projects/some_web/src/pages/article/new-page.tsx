@@ -14,6 +14,7 @@ type NewPageState = {
 
 const initialValue = {
   children: [{
+    id: 'ae8m01au',
     name: 'paragraph',
     children: [{ name: 'text', text: '' }]
   }]

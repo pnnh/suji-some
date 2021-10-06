@@ -26,7 +26,8 @@
     "slate": "^0.66.2",
     "slate-history": "^0.66.0",
     "slate-react": "^0.66.2",
-    "some_library": "file:packages/some_library"
+    "some_library": "file:packages/some_library",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "@types/estree": "^0.0.50",
@@ -35,6 +36,7 @@
     "@types/react": "^17.0.8",
     "@types/react-dom": "^17.0.4",
     "@types/react-router-dom": "^5.1.8",
+    "@types/uuid": "^8.3.1",
     "@typescript-eslint/eslint-plugin": "^4.31.2",
     "@typescript-eslint/parser": "^4.31.2",
     "esbuild": "^0.13.2",
