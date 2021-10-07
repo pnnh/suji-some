@@ -1,16 +1,17 @@
 import React, { useEffect, useState } from 'react'
 import { PrimaryButton, Stack } from '@fluentui/react'
 // import SFXEditor from 'stele/dist/types/editor/editor'
-import { SFXEditor, App3, App4, App5, App6, App7 } from 'stele'
+// import { SFXEditor, App3, App4, App5, App6, App7 } from 'stele'
+import { SFXEditor, SFEditorModel } from 'stele'
 import { updateTitle } from '@/utils/helpers'
 import { css } from '@emotion/css'
 import { onCreate } from '@/pages/article/partial/save'
 
-const a: string = App3()
-const b: string = App4()
-const c: string = <App5/>
-const d: string = <App6/>
-const d: string = <App7/>
+// const a: string = App3()
+// const b: string = App4()
+// const c: string = <App5/>
+// const d: string = <App6/>
+// const d: string = <App7/>
 
 type NewPageState = {
     title: string;
@@ -20,7 +21,6 @@ type NewPageState = {
 
 const initialValue = {
   children: [{
-    id: 'ae8m01au',
     name: 'paragraph',
     children: [{ name: 'text', text: '' }]
   }]
@@ -40,7 +40,7 @@ const NewPage = (props:{}, state: NewPageState) => {
   const [title, setTitle] = useState('')
   const [keywords, setKeywords] = useState('')
   const [description, setDescription] = useState('')
-  const [editorValue, setEditorValue] = useState<SFEditor>(initialValue)
+  const [editorValue, setEditorValue] = useState<SFEditorModel>(initialValue)
 
   useEffect(() => {
     updateTitle('创作')

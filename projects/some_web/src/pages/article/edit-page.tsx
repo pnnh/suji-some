@@ -2,8 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { TextField } from '@fluentui/react/lib/TextField'
 import { PrimaryButton, Stack } from '@fluentui/react'
 import { css } from '@emotion/css'
-import { SFXEditor } from 'slete/editor'
-import { SFEditor } from '@/components/editor/nodes/node'
+import { SFXEditor, SFEditorModel } from 'stele'
 import { getJsonData, updateTitle } from '@/utils/helpers'
 import { onEdit } from '@/pages/article/partial/save'
 
@@ -28,7 +27,7 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
   const [title, setTitle] = useState('')
   const [keywords, setKeywords] = useState('')
   const [description, setDescription] = useState('')
-  const [editorValue, setEditorValue] = useState<SFEditor>(initialValue)
+  const [editorValue, setEditorValue] = useState<SFEditorModel>(initialValue)
 
   useEffect(() => {
     const serverData = getJsonData<any>()

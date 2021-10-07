@@ -1,7 +1,7 @@
 import React from 'react'
 import { Descendant as SlateDescendant, Element as SlateElement, Text as SlateText } from 'slate'
 
-export interface SFEditor {
+export interface SFEditorModel {
     children: SFDescendant[];
 }
 

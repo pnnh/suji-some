@@ -7,9 +7,10 @@ export default {
   input: 'src/index.tsx',
   output: {
     file: 'dist/index.js',
-    format: 'esm'
+    format: 'esm',
+    sourcemap: true
   },
-  external: [],
+  external: ['react'],
   plugins: rollupPlugins()
 }
 

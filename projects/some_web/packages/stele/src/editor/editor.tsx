@@ -37,7 +37,7 @@ import {
   parseDescendant,
   parseDescendantArray, parseElement,
   parseText,
-  SFEditor, SFText
+  SFEditorModel, SFText
 } from './nodes/node'
 import { css } from '@emotion/css'
 import { useBoolean } from '@fluentui/react-hooks'
@@ -64,7 +64,7 @@ const StorageKey = 'editor-value'
 // 这里是单例的，一个页面只能有一个Editor
 let editorObject: ReactEditor & HistoryEditor
 
-function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => void }) {
+function SFXEditor (props: { value: SFEditorModel, onChange: (value: SFEditorModel) => void }) {
   console.debug('SFXEditor create')
   const [sourceMode, { toggle: toggleSourceMode }] = useBoolean(false)
   const renElement = useCallback(props => <Element {...props}/>, [])
@@ -150,7 +150,7 @@ function SFXEditor (props: { value: SFEditor, onChange: (value: SFEditor) => voi
   )
 }
 
-function showSource (editorValue: SFEditor, sourceMode: boolean) {
+function showSource (editorValue: SFEditorModel, sourceMode: boolean) {
   const range: SlateRange = {
     anchor: {
       path: [0], offset: 0
