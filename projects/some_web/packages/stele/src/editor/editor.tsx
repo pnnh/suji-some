@@ -14,14 +14,14 @@ import {
   SFHeaderNode,
   SFHeaderToolbar,
   SFHeaderView
-} from '@/components/editor/nodes/header'
-import { NewTextNode, SFTextView } from '@/components/editor/nodes/text'
+} from './nodes/header'
+import { NewTextNode, SFTextView } from './nodes/text'
 import {
   NewParagraphNode, paragraph2Markdown, ParagraphName, ParagraphOnKeyDown,
   SFParagraphNode,
   SFParagraphToolbar,
   SFParagraphView
-} from '@/components/editor/nodes/paragraph'
+} from './nodes/paragraph'
 import {
   codeBlock2Markdown,
   CodeBlockName, NewCodeNode,
@@ -29,16 +29,16 @@ import {
   SFCodeBlockNode,
   SFCodeBlockToolbar,
   SFCodeBlockView
-} from '@/components/editor/nodes/codeblock'
+} from './nodes/codeblock'
 import Prism from 'prismjs'
-import '@/utils/highlight'
+import './highlight'
 
 import {
   parseDescendant,
   parseDescendantArray, parseElement,
   parseText,
   SFEditor, SFText
-} from '@/components/editor/nodes/node'
+} from './nodes/node'
 import { css } from '@emotion/css'
 import { useBoolean } from '@fluentui/react-hooks'
 import {
@@ -46,8 +46,8 @@ import {
   NewMarkdownNode,
   SFMarkdownLeafView,
   SFMarkdownView
-} from '@/components/editor/nodes/markdown'
-import { getLocalStorage, setLocalStorage } from '@/utils/helpers'
+} from './nodes/markdown'
+import { getLocalStorage, setLocalStorage } from './helpers'
 
 const editorStyles = css`
   border: 1px solid #edebe9;margin-bottom: 16px;
@@ -385,4 +385,4 @@ function Leaf ({ attributes, children, leaf }:{attributes: any, children: any, l
   return <span {...attributes}>{children}</span>
 }
 
-export default SFXEditor
+export { SFXEditor }

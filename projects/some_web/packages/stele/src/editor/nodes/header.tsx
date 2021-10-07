@@ -1,5 +1,5 @@
 import React from 'react'
-import { SFElement, SFPlugin, SFText } from '@/components/editor/nodes/node'
+import { SFElement, SFText } from './node'
 import { ReactEditor, useSlate } from 'slate-react'
 import {
   IconButton,
@@ -8,8 +8,8 @@ import {
 import {
   Transforms
 } from 'slate'
-import { isBlockActive } from '@/components/editor/nodes/paragraph'
-import { NewTextNode } from '@/components/editor/nodes/text'
+import { isBlockActive } from './paragraph'
+import { NewTextNode } from './text'
 import { css } from '@emotion/css'
 import { useBoolean } from '@fluentui/react-hooks'
 

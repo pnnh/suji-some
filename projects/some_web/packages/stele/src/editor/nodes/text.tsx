@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react'
-import { SFText } from '@/components/editor/nodes/node'
+import { SFText } from './node'
 
 export const TextName = 'text'
 

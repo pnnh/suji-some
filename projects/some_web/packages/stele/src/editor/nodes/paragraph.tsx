@@ -1,5 +1,5 @@
 import React, { KeyboardEvent } from 'react'
-import { SFElement, SFText } from '@/components/editor/nodes/node'
+import { SFElement, SFText } from './node'
 import { ReactEditor, useSlate } from 'slate-react'
 import { IconButton, Stack } from '@fluentui/react'
 import {
@@ -9,7 +9,7 @@ import {
   Range as SlateRange,
   Transforms
 } from 'slate'
-import { NewTextNode, TextName } from '@/components/editor/nodes/text'
+import { NewTextNode, TextName } from './text'
 import { css } from '@emotion/css'
 import { useBoolean } from '@fluentui/react-hooks'
 import isHotkey from 'is-hotkey'

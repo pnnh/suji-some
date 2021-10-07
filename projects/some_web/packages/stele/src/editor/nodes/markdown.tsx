@@ -1,7 +1,7 @@
 import React from 'react'
-import { SFElement, SFText } from '@/components/editor/nodes/node'
+import { SFElement, SFText } from './node'
 import { css } from '@emotion/css'
-import { CodeName, SFCode } from '@/components/editor/nodes/codeblock'
+import { CodeName, SFCode } from './codeblock'
 
 export const MarkdownName = 'markdown'
 export const MarkName = 'mark'

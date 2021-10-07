@@ -1,5 +1,5 @@
 import React from 'react'
-import { SFElement, SFText } from '@/components/editor/nodes/node'
+import { SFElement, SFText } from './node'
 import {
   IconButton
 } from '@fluentui/react'

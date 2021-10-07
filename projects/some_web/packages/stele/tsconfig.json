@@ -1,0 +1,26 @@
+{
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "module": "ESNext",
+    "target": "ESNext",
+    "moduleResolution": "Node",
+    "noImplicitAny": true,
+    "sourceMap": true,
+    "allowJs": true,
+    "jsx": "react-jsx",
+    "esModuleInterop": true,
+    "strict": true,
+    "allowSyntheticDefaultImports": true,
+    "rootDir": "src",
+    "outDir": ".",
+    "baseUrl": ".",
+    //"isolatedModules": true,
+//    "noEmit": false,
+    "declaration": true,
+    //"declarationDir": "types",
+    //"emitDeclarationOnly": true,
+    "plugins": []
+  },
+  "include": ["src/**/*"],
+  "exclude": ["dist"]
+}
