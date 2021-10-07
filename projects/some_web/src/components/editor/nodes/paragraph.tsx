@@ -118,6 +118,8 @@ function useClearFormats (editor: ReactEditor, node: SFParagraphNode) {
     text += (node.children[i] as {text: string}).text
   }
   return () => {
+    const nodePath = ReactEditor.findPath(editor, node)
+    Transforms.select(editor, nodePath)
     console.debug('useClearFormats', text)
     const paragraph = NewParagraphNode(text)
     Transforms.removeNodes(editor)
@@ -134,20 +136,33 @@ export function isBlockActive (editor: ReactEditor, isActive: (node: any) => boo
   return !!match
 }
 
-// export function toggleMark (editor: ReactEditor, key: string, value: any, isActive: (node: any) => boolean) {
-//   if (isMarkActive(editor, isActive)) {
-//     Editor.removeMark(editor, key)
-//   } else {
-//     Editor.addMark(editor, key, value)
-//   }
-// }
-
-export function isMarkActive (editor: ReactEditor, isActive: (node: any) => boolean): boolean {
-  const marks = Editor.marks(editor)
-  if (!marks) {
-    return false
+function calcSelection (editor: ReactEditor, node: SlateNode) {
+  const selection = editor.selection
+  console.debug('toggleMark-selection', selection)
+  const [firstNode, firstPath] = SlateNode.first(node, [])
+  const [lastNode, lastPath] = SlateNode.last(node, [])
+  console.debug('toggleMark-first', firstNode, firstPath, lastNode, lastPath)
+  const nodePath = ReactEditor.findPath(editor, node)
+  console.debug('toggleMark-nodePath', nodePath)
+  if (selection) {
+    const parent1 = SlateNode.parent(editor, selection.anchor.path)
+    const parent2 = SlateNode.parent(editor, selection.focus.path)
+    console.debug('toggleMark-parent', parent1, parent2)
+    const nodeRange: SlateRange = {
+      anchor: {
+        path: nodePath.concat(firstPath), offset: 0
+      },
+      focus: {
+        path: nodePath.concat(lastPath), offset: SlateNode.string(lastNode).length
+      }
+    }
+    const selectRange: SlateRange = {
+      anchor: selection.anchor, focus: selection.focus
+    }
+    const intersection = SlateRange.intersection(selectRange, nodeRange)
+    console.debug('toggleMark-intersection', intersection)
+    return intersection
   }
-  return isActive(marks)
 }
 
 function SFIcon (props: {iconName: string, format: string, node: SFParagraphNode}) {
@@ -178,38 +193,14 @@ function SFIcon (props: {iconName: string, format: string, node: SFParagraphNode
                        onMouseDown={(event) => {
                          event.preventDefault()
 
-                         const selection = editor.selection
-                         console.debug('toggleMark-selection', selection)
-                         const [firstNode, firstPath] = SlateNode.first(props.node, [])
-                         const [lastNode, lastPath] = SlateNode.last(props.node, [])
-                         console.debug('toggleMark-first', firstNode, firstPath, lastNode, lastPath)
-                         const nodePath = ReactEditor.findPath(editor, props.node)
-                         console.debug('toggleMark-nodePath', nodePath)
+                         const selection = calcSelection(editor, props.node)
                          if (selection) {
-                           const parent1 = SlateNode.parent(editor, selection.anchor.path)
-                           const parent2 = SlateNode.parent(editor, selection.focus.path)
-                           console.debug('toggleMark-parent', parent1, parent2)
-                           const nodeRange: SlateRange = {
-                             anchor: {
-                               path: nodePath.concat(firstPath), offset: 0
-                             },
-                             focus: {
-                               path: nodePath.concat(lastPath), offset: SlateNode.string(lastNode).length
-                             }
-                           }
-                           const selectRange: SlateRange = {
-                             anchor: selection.anchor, focus: selection.focus
-                           }
-                           const intersection = SlateRange.intersection(selectRange, nodeRange)
-                           console.debug('toggleMark-intersection', intersection)
-                           if (intersection) {
-                             Transforms.select(editor, intersection)
-                             console.debug('toggleMark-toggleMark', isMarkActive(editor, isActive))
-                             if (isMarkActive(editor, isActive)) {
-                               Editor.removeMark(editor, props.format)
-                             } else {
-                               Editor.addMark(editor, props.format, true)
-                             }
+                           Transforms.select(editor, selection)
+                           console.debug('toggleMark-toggleMark', isMarkActive(editor, isActive))
+                           if (isMarkActive(editor, isActive)) {
+                             Editor.removeMark(editor, props.format)
+                           } else {
+                             Editor.addMark(editor, props.format, true)
                            }
                          }
                        }}/>
