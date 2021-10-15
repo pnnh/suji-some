@@ -1,8 +1,8 @@
-import { SFEditor } from '@/components/editor/nodes/node'
+import { SFEditorModel } from 'stele'
 import { articlePost, articlePut } from '@/services/article'
 import { ApiUrl } from '@/utils/config'
 
-export function onCreate (editorValue: SFEditor, title: string, description: string, keywords: string) {
+export function onCreate (editorValue: SFEditorModel, title: string, description: string, keywords: string) {
   const postData = {
     title: title,
     body: JSON.stringify(editorValue),
@@ -18,7 +18,7 @@ export function onCreate (editorValue: SFEditor, title: string, description: str
   })
 }
 
-export function onEdit (pk: string, editorValue: SFEditor, title: string, description: string, keywords: string) {
+export function onEdit (pk: string, editorValue: SFEditorModel, title: string, description: string, keywords: string) {
   const postData = {
     title: title,
     body: JSON.stringify(editorValue),

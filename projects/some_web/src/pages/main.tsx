@@ -3,7 +3,6 @@ import React from 'react'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import AccountPage from '@/pages/account/account-page'
 import RandomPasswordPage from '@/views/random-password'
-import QuestPage from '@/pages/quest/quest'
 import { renderExceptionPage } from '@/views/exception/render'
 import '@/utils/fluentui'
 import { getJsonData } from '@/utils/helpers'
@@ -21,7 +20,6 @@ const App = () => {
         <Switch>
             <Route path="/article/new" component={NewPage} />
             <Route path="/article/edit/:pk" component={EditPage} />
-            <Route path="/quest" component={QuestPage} />
             <Route path="/utils/random/password" component={RandomPasswordPage} />
             <Route path="/account/login" component={AccountPage} />
             <Route path="*" component={NotFoundPage} />
