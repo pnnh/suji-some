@@ -14,8 +14,10 @@
     "outDir": "dist",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["src/*"],
+      "@/*": ["src/*"]
     },
     "plugins": []
-  }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules","packages"]
 }

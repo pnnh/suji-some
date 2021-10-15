@@ -5,6 +5,16 @@
   .toolbar {
     padding: 8px 16px 8px 16px;border-bottom: solid 1px #edebe9;
   }
+  .icon-button {
+    border: none; background: none;color:#0078d4;
+    padding: 8px; cursor: pointer;
+    i {
+      font-size: 16px;
+    }
+  }
+  .icon-button.active,.icon-button:hover {
+    background: #edebe966;
+  }
   .icon {
     background-color:rgb(237 235 233 / 40%)
   }

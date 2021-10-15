@@ -1,7 +1,7 @@
 import React, { KeyboardEvent } from 'react'
 import { SFElement, SFText } from './node'
 import { ReactEditor, useSlate } from 'slate-react'
-import { IconButton, Stack } from '@fluentui/react'
+import { Stack } from '@fluentui/react'
 import {
   Editor,
   Element as SlateElement,
@@ -16,25 +16,26 @@ import { v4 as uuid4 } from 'uuid'
 
 export const ParagraphName = 'paragraph'
 
-export function SFParagraphToolbar (props: {disabled: boolean}) {
+export function SFParagraphToolbar (props: { disabled: boolean }) {
   const editor = useSlate() as ReactEditor
   const paragraph = NewParagraphNode('')
-  console.debug('SFParagraphToolbar', paragraph)
-  return <IconButton iconProps={{ iconName: 'HalfAlpha' }} title="段落"
-                       checked={isBlockActive(editor, isActive)}
-                       className={'icon'}
-                     disabled={props.disabled}
-                       onMouseDown={(event) => {
+  const className = 'icon-button size-normal' + (isBlockActive(editor, isActive) ? ' active' : '')
+  return <button title='段落' className={className}
+                       disabled={props.disabled}
+                       onMouseDown={(event: React.MouseEvent) => {
+                         console.debug('SFParagraphToolbar onClick')
                          event.preventDefault()
                          Transforms.insertNodes(
                            editor,
                            paragraph
                          )
-                       }}/>
+                       }}><i className="ri-paragraph"></i></button>
 }
+
 export interface SFParagraphNode extends SFElement {
   id: string
 }
+
 export function NewParagraphNode (text: string): SFParagraphNode {
   return {
     id: uuid4().substr(0, 8),
@@ -57,33 +58,33 @@ function isActive (props: any): boolean {
   return node.name === 'paragraph'
 }
 
-export function SFParagraphView (props: {attributes: any, children: any, node: SFParagraphNode}) {
+export function SFParagraphView (props: { attributes: any, children: any, node: SFParagraphNode }) {
   const editor = useSlate() as ReactEditor
   const [isCalloutVisible, { setTrue, setFalse }] = useBoolean(false)
   return <div onMouseEnter={setTrue}
-                 onMouseLeave={setFalse} className={'paragraph'}>
-        <Stack horizontal horizontalAlign="start" contentEditable={false} tokens={{ childrenGap: 8 }}
-               // styles={{root:{overflow: "hidden", float:"right"}}}
-            className={isCalloutVisible ? 'show' : 'hidden'}>
-            <Stack.Item>
-                <SFIcon iconName={'Bold'} format={'bold'} node={props.node}/>
-            </Stack.Item>
-            <Stack.Item>
-                <SFIcon iconName={'Italic'} format={'italic'} node={props.node}/>
-            </Stack.Item>
-            <Stack.Item>
-                <SFIcon iconName={'Underline'} format={'underline'} node={props.node}/>
-            </Stack.Item>
-            <Stack.Item>
-                <SFIcon iconName={'Strikethrough'} format={'strike'} node={props.node}/>
-            </Stack.Item>
-            <Stack.Item>
-                <IconButton iconProps={{ iconName: 'ClearFormatting' }} title="清除格式"
-                    onClick={useClearFormats(editor, props.node)}/>
-            </Stack.Item>
-        </Stack>
-        <p data-name={ParagraphName} {...props.attributes}>{props.children}</p>
-    </div>
+              onMouseLeave={setFalse} className={'paragraph'}>
+    <Stack horizontal horizontalAlign="start" contentEditable={false} tokens={{ childrenGap: 8 }}
+           className={isCalloutVisible ? 'show' : 'hidden'}>
+      <Stack.Item>
+        <SFIcon iconName={'ri-bold'} format={'bold'} node={props.node}/>
+      </Stack.Item>
+      <Stack.Item>
+        <SFIcon iconName={'ri-italic'} format={'italic'} node={props.node}/>
+      </Stack.Item>
+      <Stack.Item>
+        <SFIcon iconName={'ri-underline'} format={'underline'} node={props.node}/>
+      </Stack.Item>
+      <Stack.Item>
+        <SFIcon iconName={'ri-strikethrough'} format={'strike'} node={props.node}/>
+      </Stack.Item>
+      <Stack.Item>
+        <button title='清除格式' className={'icon-button'}
+                onMouseDown={useClearFormats(editor, props.node)}>
+          <i className="ri-format-clear"></i></button>
+      </Stack.Item>
+    </Stack>
+    <p data-name={ParagraphName} {...props.attributes}>{props.children}</p>
+  </div>
 }
 
 export function ParagraphOnKeyDown (editor: ReactEditor, event: KeyboardEvent<HTMLParagraphElement>) {
@@ -103,7 +104,7 @@ export function ParagraphOnKeyDown (editor: ReactEditor, event: KeyboardEvent<HT
 function useClearFormats (editor: ReactEditor, node: SFParagraphNode) {
   let text = ''
   for (const i in node.children) {
-    text += (node.children[i] as {text: string}).text
+    text += (node.children[i] as { text: string }).text
   }
   return () => {
     const nodePath = ReactEditor.findPath(editor, node)
@@ -153,7 +154,7 @@ function calcSelection (editor: ReactEditor, node: SlateNode) {
   }
 }
 
-function SFIcon (props: {iconName: string, format: string, node: SFParagraphNode}) {
+function SFIcon (props: { iconName: string, format: string, node: SFParagraphNode }) {
   const editor = useSlate() as ReactEditor
   const isMarkActive = (editor: ReactEditor, isActive: (node: any) => boolean): boolean => {
     const marks = Editor.marks(editor) as any
@@ -165,31 +166,26 @@ function SFIcon (props: {iconName: string, format: string, node: SFParagraphNode
       return false
     }
     for (const key in marks) {
-      console.debug('SFIcon marks11', key, Object.prototype.hasOwnProperty.call(marks, key))
-      // if (!Object.prototype.hasOwnProperty.call(marks, key)) {
-      //   continue
-      // }
-      console.debug('SFIcon marks22', key)
       if (key === props.format && typeof marks[key] === 'boolean') {
         return Boolean(marks[key])
       }
     }
     return false
   }
-  return <IconButton iconProps={{ iconName: props.iconName }}
-                       checked={isMarkActive(editor, isActive)}
-                       onMouseDown={(event) => {
-                         event.preventDefault()
+  const className = 'icon-button size-normal' + (isMarkActive(editor, isActive) ? ' active' : '')
+  return <button title='段落' className={className}
+                 onMouseDown={(event) => {
+                   event.preventDefault()
 
-                         const selection = calcSelection(editor, props.node)
-                         if (selection) {
-                           Transforms.select(editor, selection)
-                           console.debug('toggleMark-toggleMark', isMarkActive(editor, isActive))
-                           if (isMarkActive(editor, isActive)) {
-                             Editor.removeMark(editor, props.format)
-                           } else {
-                             Editor.addMark(editor, props.format, true)
-                           }
-                         }
-                       }}/>
+                   const selection = calcSelection(editor, props.node)
+                   if (selection) {
+                     Transforms.select(editor, selection)
+                     console.debug('toggleMark-toggleMark', isMarkActive(editor, isActive))
+                     if (isMarkActive(editor, isActive)) {
+                       Editor.removeMark(editor, props.format)
+                     } else {
+                       Editor.addMark(editor, props.format, true)
+                     }
+                   }
+                 }}><i className={props.iconName}></i></button>
 }

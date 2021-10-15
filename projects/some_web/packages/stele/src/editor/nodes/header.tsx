@@ -2,13 +2,12 @@ import React from 'react'
 import { SFElement, SFText } from './node'
 import { ReactEditor, useSlate } from 'slate-react'
 import {
-  IconButton,
   Stack
 } from '@fluentui/react'
 import {
+  Editor, Element as SlateElement, Node as SlateNode,
   Transforms
 } from 'slate'
-import { isBlockActive } from './paragraph'
 import { NewTextNode } from './text'
 import { useBoolean } from '@fluentui/react-hooks'
 
@@ -34,21 +33,35 @@ export function header2Markdown (node: SFHeaderNode): string {
   return mdStr + '\n\n'
 }
 
+export function isBlockActive (editor: ReactEditor, isActive: (node: any) => boolean): boolean {
+  const [match] = Editor.nodes(editor, {
+    match: (n: SlateNode) => {
+      return !Editor.isEditor(n) && SlateElement.isElement(n) && isActive(n)
+    }
+  })
+  return !!match
+}
+
+function isActive (props: any): boolean {
+  const node = props as SFElement
+  return node.name === HeaderName
+}
+
 export function SFHeaderToolbar (props: {disabled: boolean}) {
   const editor = useSlate() as ReactEditor
   const headerNode: SFHeaderNode = NewHeaderNode(1, '')
   console.debug('SFHeaderToolbar', headerNode)
+  const className = 'icon-button size-normal' + (isBlockActive(editor, isActive) ? ' active' : '')
   return <Stack horizontal horizontalAlign="space-between">
-        <IconButton iconProps={{ iconName: 'Header1' }} title="标题"
-                    className={'icon'}
-                    disabled={props.disabled}
-                    onMouseDown={(event) => {
-                      event.preventDefault()
-                      Transforms.insertNodes(
-                        editor,
-                        headerNode
-                      )
-                    }}/>
+    <button title='标题' className={className}
+                   disabled={props.disabled}
+                   onMouseDown={(event) => {
+                     event.preventDefault()
+                     Transforms.insertNodes(
+                       editor,
+                       headerNode
+                     )
+                   }}><i className="ri-heading"></i></button>
 </Stack>
 }
 
@@ -101,14 +114,11 @@ function ToolboxIcon (props: {iconName: string, header: number}) {
     }
     return element.name === HeaderName && element.header === props.header
   }
-  return <IconButton iconProps={{ iconName: props.iconName }}
-                       className={'icon'}
-                       checked={isBlockActive(editor, isHeaderActive)}
-                       onMouseDown={(event) => {
-                         event.preventDefault()
-                         // toggleBlock(editor, headerNode, isHeaderActive);
-                         // 在设置样式之前其实已经不需要检测header是否激活了，直接设置即可
-                         // 所以也没必要再经过toggleBlock方法
-                         Transforms.setNodes(editor, headerNode) // setNodes似乎只能改变元素属性而不能改变内容
-                       }}/>
+
+  const className = 'icon-button size-normal' + (isBlockActive(editor, isHeaderActive) ? ' active' : '')
+  return <button title='标题' className={className}
+          onMouseDown={(event) => {
+            event.preventDefault()
+            Transforms.setNodes(editor, headerNode) // setNodes似乎只能改变元素属性而不能改变内容
+          }}><i className={'ri-h-' + props.header}></i></button>
 }

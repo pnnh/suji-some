@@ -19,6 +19,3 @@ export function App6 () {
 }
 
 initializeIcons()
-// registerDefaultFontFaces('/')
-
-// ReactDOM.render(<App />, document.getElementById('root'))

@@ -48,6 +48,8 @@ import {
 } from './nodes/markdown'
 import { getLocalStorage, setLocalStorage } from './helpers'
 import './editor.scss'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faFileCode, faMinus, faParagraph, faRedo, faUndo } from '@fortawesome/free-solid-svg-icons'
 
 const StorageKey = 'editor-value'
 // 这里是单例的，一个页面只能有一个Editor
@@ -95,26 +97,27 @@ function SFXEditor (props: { value: SFEditorModel, onChange: (value: SFEditorMod
                             <Stack.Item>
                                 <Stack horizontal tokens={{ childrenGap: 8 }}>
                                     <Stack.Item>
-                                        <IconButton iconProps={{ iconName: 'Undo' }}
-                                                    disabled={sourceMode}
-                                                    onClick={undoOperation} title="撤销" />
+                                      <button className={'icon-button'} title='撤销'
+                                              disabled={sourceMode}
+                                              onClick={undoOperation}><FontAwesomeIcon icon={faUndo} /></button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                        <IconButton iconProps={{ iconName: 'Redo' }}
-                                                    disabled={sourceMode}
-                                                    onClick={redoOperation} title="重做" />
+                                      <button className={'icon-button'} title='重做'
+                                              disabled={sourceMode}
+                                              onClick={redoOperation}><FontAwesomeIcon icon={faRedo} /></button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                        <IconButton iconProps={{ iconName: 'Clear' }}
-                                                    disabled={sourceMode}
-                                                    onClick={removeNodes} title="移除块" />
+                                      <button className={'icon-button'} title='移除块'
+                                              disabled={sourceMode}
+                                              onClick={removeNodes}><FontAwesomeIcon icon={faMinus} /></button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                        <IconButton onClick={() => {
-                                          console.debug('showSource', props.value)
-                                          toggleSourceMode()
-                                          showSource(props.value, sourceMode)
-                                        }} iconProps={{ iconName: 'FileCode' }} title="页面源码" />
+                                      <button className={'icon-button'} title='页面源码'
+                                              onClick={() => {
+                                                console.debug('showSource', props.value)
+                                                toggleSourceMode()
+                                                showSource(props.value, sourceMode)
+                                              }}><FontAwesomeIcon icon={faFileCode} /></button>
                                     </Stack.Item>
                                 </Stack>
                             </Stack.Item>

@@ -4,7 +4,7 @@ import {
   IconButton
 } from '@fluentui/react'
 import { ReactEditor, useSlate } from 'slate-react'
-import { Node as SlateNode, Path as SlatePath, Transforms } from 'slate'
+import { Editor, Element as SlateElement, Node as SlateNode, Path as SlatePath, Transforms } from 'slate'
 
 export const CodeBlockName = 'code-block'
 export const CodeName = 'code'
@@ -44,6 +44,20 @@ export function SFCodeBlockView (props: {attributes: any, children: any, node: S
         </pre>
 }
 
+export function isBlockActive (editor: ReactEditor, isActive: (node: any) => boolean): boolean {
+  const [match] = Editor.nodes(editor, {
+    match: (n: SlateNode) => {
+      return !Editor.isEditor(n) && SlateElement.isElement(n) && isActive(n)
+    }
+  })
+  return !!match
+}
+
+function isActive (props: any): boolean {
+  const node = props as SFElement
+  return node.name === CodeBlockName
+}
+
 export function SFCodeBlockLeafView (props: {attributes: any, children: any, node: any}) {
   console.debug('SFCodeBlockLeafView=========', props.node)
   let className = 'token '
@@ -63,17 +77,17 @@ export function SFCodeBlockToolbar (props: {disabled: boolean}) {
   const editor = useSlate() as ReactEditor
   const node = NewCodeBlockNode('js', '')
   console.debug('SFCodeBlockToolbar', node)
-  return <> <IconButton iconProps={{ iconName: 'CodeEdit' }} title="代码块"
-                        disabled={props.disabled}
-                       onMouseDown={(event) => {
-                         event.preventDefault()
-                         Transforms.insertNodes(
-                           editor,
-                           // [node, paragraphNode]    // 同时插入一个段落
-                           [node]
-                         )
-                       }}/>
-    </>
+  const className = 'icon-button' + (isBlockActive(editor, isActive) ? ' active' : '')
+  return <button title='段落' className={className}
+                 disabled={props.disabled}
+                 onMouseDown={(event) => {
+                   event.preventDefault()
+                   Transforms.insertNodes(
+                     editor,
+                     // [node, paragraphNode]    // 同时插入一个段落
+                     [node]
+                   )
+                 }}><i className={'ri-code-s-slash-line'}></i></button>
 }
 
 function SelectLanguage (props: {element: SFCodeBlockNode}) {
