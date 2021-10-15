@@ -39,7 +39,6 @@ import {
   parseText,
   SFEditorModel, SFText
 } from './nodes/node'
-import { css } from '@emotion/css'
 import { useBoolean } from '@fluentui/react-hooks'
 import {
   MarkdownName,
@@ -48,18 +47,8 @@ import {
   SFMarkdownView
 } from './nodes/markdown'
 import { getLocalStorage, setLocalStorage } from './helpers'
+import './editor.scss'
 
-const editorStyles = css`
-  border: 1px solid #edebe9;margin-bottom: 16px;
-  min-height: 400px;max-height:600px;
-`
-const toolbarStyles = css`
-  padding: 8px 16px 8px 16px;border-bottom: solid 1px #edebe9;
-`
-
-const editorBodyStyles = css`
-  margin-bottom: 16px; overflow-y: auto; overflow-x: hidden;margin-top:0;padding:16px;
-`
 const StorageKey = 'editor-value'
 // 这里是单例的，一个页面只能有一个Editor
 let editorObject: ReactEditor & HistoryEditor
@@ -87,8 +76,8 @@ function SFXEditor (props: { value: SFEditorModel, onChange: (value: SFEditorMod
                      // rootNode = {children: descendants};
                    }}>
 
-                <Stack className={editorStyles} tokens={{ childrenGap: 8 }}>
-                    <Stack.Item className={toolbarStyles}>
+                <Stack className={'stele-editor'} tokens={{ childrenGap: 8 }}>
+                    <Stack.Item className={'toolbar'}>
                         <Stack horizontal horizontalAlign={'space-between'}>
                             <Stack.Item>
                                 <Stack horizontal tokens={{ childrenGap: 8 }}>
@@ -131,7 +120,7 @@ function SFXEditor (props: { value: SFEditorModel, onChange: (value: SFEditorMod
                             </Stack.Item>
                         </Stack>
                     </Stack.Item>
-                    <Stack.Item grow={1} className={editorBodyStyles}>
+                    <Stack.Item grow={1} className={'body'}>
                         <Editable
                             decorate={decorate}
                             renderElement={renElement}

@@ -10,7 +10,6 @@ import {
   Transforms
 } from 'slate'
 import { NewTextNode, TextName } from './text'
-import { css } from '@emotion/css'
 import { useBoolean } from '@fluentui/react-hooks'
 import isHotkey from 'is-hotkey'
 import { v4 as uuid4 } from 'uuid'
@@ -23,7 +22,7 @@ export function SFParagraphToolbar (props: {disabled: boolean}) {
   console.debug('SFParagraphToolbar', paragraph)
   return <IconButton iconProps={{ iconName: 'HalfAlpha' }} title="段落"
                        checked={isBlockActive(editor, isActive)}
-                       className={iconStyles}
+                       className={'icon'}
                      disabled={props.disabled}
                        onMouseDown={(event) => {
                          event.preventDefault()
@@ -58,25 +57,14 @@ function isActive (props: any): boolean {
   return node.name === 'paragraph'
 }
 
-const showStyles = css`
-  position: absolute;
-  top: -32px;
-  left: 40%;
-  overflow: hidden;background-color:#fff;
-`
-const hideStyles = css`
-  display: none;
-`
-const paraBoxStyles = css`position: relative;`
-
 export function SFParagraphView (props: {attributes: any, children: any, node: SFParagraphNode}) {
   const editor = useSlate() as ReactEditor
   const [isCalloutVisible, { setTrue, setFalse }] = useBoolean(false)
   return <div onMouseEnter={setTrue}
-                 onMouseLeave={setFalse} className={paraBoxStyles}>
+                 onMouseLeave={setFalse} className={'paragraph'}>
         <Stack horizontal horizontalAlign="start" contentEditable={false} tokens={{ childrenGap: 8 }}
                // styles={{root:{overflow: "hidden", float:"right"}}}
-            className={isCalloutVisible ? showStyles : hideStyles}>
+            className={isCalloutVisible ? 'show' : 'hidden'}>
             <Stack.Item>
                 <SFIcon iconName={'Bold'} format={'bold'} node={props.node}/>
             </Stack.Item>
@@ -205,7 +193,3 @@ function SFIcon (props: {iconName: string, format: string, node: SFParagraphNode
                          }
                        }}/>
 }
-
-const iconStyles = css`
-  background-color:rgb(237 235 233 / 40%)
-`

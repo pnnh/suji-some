@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { TextField } from '@fluentui/react/lib/TextField'
 import { PrimaryButton, Stack } from '@fluentui/react'
-import { css } from '@emotion/css'
 import { SFXEditor, SFEditorModel } from 'stele'
 import { getJsonData, updateTitle } from '@/utils/helpers'
 import { onEdit } from '@/pages/article/partial/save'
@@ -19,9 +18,6 @@ const initialValue = {
   }]
 }
 
-const descriptionStyles = css`
-  margin-bottom: 16px;
-`
 const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState) => {
   console.debug('EditPage')
   const [title, setTitle] = useState('')
@@ -39,25 +35,21 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
     updateTitle(serverData.title)
   }, [])
 
-  return <Stack horizontal horizontalAlign={'space-between'} tokens={{ childrenGap: 16 }}>
+  return <Stack horizontal className={'article-edit'} horizontalAlign={'space-between'} tokens={{ childrenGap: 16 }}>
             <Stack.Item grow={1}>
                 <Stack tokens={{ childrenGap: 8 }}>
                     <Stack.Item>
-                        <TextField placeholder={'标题'} value={title}
-                                   onChange={(event, value) => {
-                                     if (!value) {
-                                       return
-                                     }
-                                     setTitle(value)
+                        <input placeholder={'标题'} value={title} className={'text-field'}
+                               size={64}
+                                   onChange={(event) => {
+                                     setTitle(event.target.value)
                                    }}/>
                     </Stack.Item>
-                    <Stack.Item className={descriptionStyles}>
-                        <TextField placeholder={'描述'} multiline={true} value={description}
-                                   onChange={(event, value) => {
-                                     if (!value) {
-                                       return
-                                     }
-                                     setDescription(value)
+                    <Stack.Item className={'description'}>
+                        <textarea placeholder={'描述'} value={description} className={'text-area'}
+                                  cols={80} rows={4}
+                                   onChange={(event) => {
+                                     setDescription(event.target.value)
                                    }}/>
                     </Stack.Item>
                     <Stack.Item>
@@ -66,13 +58,11 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
                           setEditorValue(value)
                         }} />
                     </Stack.Item>
-                    <Stack.Item className={descriptionStyles}>
-                        <TextField placeholder={'关键字'} title={'逗号分隔'} value={keywords}
-                                   onChange={(event, value) => {
-                                     if (!value) {
-                                       return
-                                     }
-                                     setKeywords(value)
+                    <Stack.Item className={'description'}>
+                        <input placeholder={'关键字'} title={'逗号分隔'} value={keywords}
+                               className={'text-field'} size={64}
+                                   onChange={(event) => {
+                                     setKeywords(event.target.value)
                                    }}/>
                     </Stack.Item>
                     <Stack.Item>

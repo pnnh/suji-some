@@ -1,6 +1,7 @@
 import commonjs from '@rollup/plugin-commonjs'
 import { nodeResolve } from '@rollup/plugin-node-resolve'
 import typescript from '@rollup/plugin-typescript'
+import scss from 'rollup-plugin-scss'
 import { visualizer } from 'rollup-plugin-visualizer'
 
 export default {
@@ -19,6 +20,7 @@ function rollupPlugins () {
     typescript({ tsconfig: './tsconfig.json' }),
     commonjs(),
     nodeResolve(),
+    scss(),
     visualizer({
       filename: 'dist/status.html'
     })

@@ -5,7 +5,6 @@ import {
 } from '@fluentui/react'
 import { ReactEditor, useSlate } from 'slate-react'
 import { Node as SlateNode, Path as SlatePath, Transforms } from 'slate'
-import { css } from '@emotion/css'
 
 export const CodeBlockName = 'code-block'
 export const CodeName = 'code'
@@ -36,17 +35,9 @@ export function NewCodeBlockNode (language: string, text: string): SFCodeBlockNo
   return block
 }
 
-const codeBlockStyles = css`
-  background: #f6f6f6;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 8px 0;
-  line-height: 24px;
-`
-
 export function SFCodeBlockView (props: {attributes: any, children: any, node: SFCodeBlockNode}) {
   console.debug('SFCodeBlockView', props)
-  return <pre data-name={CodeBlockName} className={codeBlockStyles + 'language-' + props.node.language}
+  return <pre data-name={CodeBlockName} className={'code-block language-' + props.node.language}
               {...props.attributes}>
             <SelectLanguage element={props.node}/>
             {props.children}
@@ -70,7 +61,7 @@ export function SFCodeBlockLeafView (props: {attributes: any, children: any, nod
 
 export function SFCodeBlockToolbar (props: {disabled: boolean}) {
   const editor = useSlate() as ReactEditor
-  const node = NewCodeBlockNode('markdown', '')
+  const node = NewCodeBlockNode('js', '')
   console.debug('SFCodeBlockToolbar', node)
   return <> <IconButton iconProps={{ iconName: 'CodeEdit' }} title="代码块"
                         disabled={props.disabled}
@@ -85,13 +76,9 @@ export function SFCodeBlockToolbar (props: {disabled: boolean}) {
     </>
 }
 
-const selectStyles = css`
-  float: right;position: relative;top: 4px;
-`
-
 function SelectLanguage (props: {element: SFCodeBlockNode}) {
   const editor = useSlate() as ReactEditor
-  return <select name="select" defaultValue={props.element.language} className={selectStyles}
+  return <select name="select" defaultValue={props.element.language} className={'select-language'}
                    onChange={(event) => {
                      console.debug('Select Language', editor, event)
                      if (event.target.value) {

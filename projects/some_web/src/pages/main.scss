@@ -1,6 +1,7 @@
+@import "/node_modules/stele/dist/index.css";
 @import "src/styles/base";
 @import "src/styles/navtop";
-@import "~/prismjs/themes/prism.css";
+@import "./article/article-edit";
 
 html {
     overflow-x: hidden;

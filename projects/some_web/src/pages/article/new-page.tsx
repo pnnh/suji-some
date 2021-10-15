@@ -1,17 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { PrimaryButton, Stack } from '@fluentui/react'
-// import SFXEditor from 'stele/dist/types/editor/editor'
-// import { SFXEditor, App3, App4, App5, App6, App7 } from 'stele'
 import { SFXEditor, SFEditorModel } from 'stele'
 import { updateTitle } from '@/utils/helpers'
-import { css } from '@emotion/css'
 import { onCreate } from '@/pages/article/partial/save'
-
-// const a: string = App3()
-// const b: string = App4()
-// const c: string = <App5/>
-// const d: string = <App6/>
-// const d: string = <App7/>
 
 type NewPageState = {
     title: string;
@@ -26,15 +17,6 @@ const initialValue = {
   }]
 }
 
-const inputStyles = css`
-  border: 1px solid #edebe9;
-  padding: 8px;outline: none;
-`
-
-const descriptionStyles = css`
-  margin-bottom: 16px;
-`
-
 const NewPage = (props:{}, state: NewPageState) => {
   console.debug('NewPage')
   const [title, setTitle] = useState('')
@@ -46,15 +28,15 @@ const NewPage = (props:{}, state: NewPageState) => {
     updateTitle('创作')
   }, [])
 
-  return <Stack tokens={{ childrenGap: 8 }}>
+  return <Stack tokens={{ childrenGap: 8 }} className={'article-edit'}>
         <Stack.Item>
-            <input placeholder={'标题'} value={title} className={inputStyles} size={64}
+            <input placeholder={'标题'} value={title} className={'text-field'} size={64}
                        onChange={(event) => {
                          setTitle(event.target.value)
                        }}/>
         </Stack.Item>
-        <Stack.Item className={descriptionStyles}>
-            <textarea placeholder={'描述'} value={description} className={inputStyles}
+        <Stack.Item className={'description'}>
+            <textarea placeholder={'描述'} value={description} className={'text-area'}
                       cols={80} rows={4}
                        onChange={(event) => {
                          setDescription(event.target.value)
@@ -66,9 +48,9 @@ const NewPage = (props:{}, state: NewPageState) => {
               setEditorValue(value)
             }} />
         </Stack.Item>
-        <Stack.Item className={descriptionStyles}>
+        <Stack.Item className={'description'}>
             <input placeholder={'关键字'} title={'逗号分隔'} size={64}
-                   className={inputStyles} value={keywords}
+                   className={'text-field'} value={keywords}
                        onChange={(event) => {
                          setKeywords(event.target.value)
                        }}/>

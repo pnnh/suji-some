@@ -1,6 +1,5 @@
 import React from 'react'
 import { SFElement, SFText } from './node'
-import { css } from '@emotion/css'
 import { CodeName, SFCode } from './codeblock'
 
 export const MarkdownName = 'markdown'
@@ -26,17 +25,9 @@ export function NewMarkdownNode (text: string): SFMarkdownNode {
   return block
 }
 
-const codeBlockStyles = css`
-  background: #f6f6f6;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 0;
-  line-height: 24px;
-`
-
 export function SFMarkdownView (props: {attributes: any, children: any, node: SFMarkdownNode}) {
   console.debug('SFCodeBlockView', props)
-  return <pre contentEditable={false} data-name={MarkdownName} className={codeBlockStyles} {...props.attributes}>
+  return <pre contentEditable={false} data-name={MarkdownName} className={'sourcecode-block'} {...props.attributes}>
           {props.children}
         </pre>
 }

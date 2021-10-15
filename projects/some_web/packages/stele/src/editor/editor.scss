@@ -1,0 +1,37 @@
+.stele-editor {
+  border: 1px solid #edebe9;margin-bottom: 16px;
+  min-height: 400px;max-height:600px;
+
+  .toolbar {
+    padding: 8px 16px 8px 16px;border-bottom: solid 1px #edebe9;
+  }
+  .icon {
+    background-color:rgb(237 235 233 / 40%)
+  }
+  .body {
+    margin-bottom: 16px; overflow-y: auto; overflow-x: hidden;margin-top:0;padding:16px;
+  }
+  .code-block {
+    background: #f6f6f6;
+    border-radius: 4px;
+    padding: 8px;
+    margin: 8px 0;
+    line-height: 24px;
+
+    .select-language {
+      float: right;position: relative;top: 4px;
+    }
+  }
+  .paragraph {
+    position: relative;
+    .show {
+      position: absolute;
+      top: -32px;
+      left: 40%;
+      overflow: hidden;background-color:#fff;
+    }
+  }
+  .hidden {
+    display: none;
+  }
+}

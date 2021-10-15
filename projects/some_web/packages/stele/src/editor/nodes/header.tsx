@@ -10,7 +10,6 @@ import {
 } from 'slate'
 import { isBlockActive } from './paragraph'
 import { NewTextNode } from './text'
-import { css } from '@emotion/css'
 import { useBoolean } from '@fluentui/react-hooks'
 
 export interface SFHeaderNode extends SFElement {
@@ -41,7 +40,7 @@ export function SFHeaderToolbar (props: {disabled: boolean}) {
   console.debug('SFHeaderToolbar', headerNode)
   return <Stack horizontal horizontalAlign="space-between">
         <IconButton iconProps={{ iconName: 'Header1' }} title="标题"
-                    className={iconStyles}
+                    className={'icon'}
                     disabled={props.disabled}
                     onMouseDown={(event) => {
                       event.preventDefault()
@@ -93,10 +92,6 @@ export function SFHeaderView (props: {attributes: any, children: any, node: SFHe
     </div>
 }
 
-const iconStyles = css`
-  background-color:rgb(237 235 233 / 40%)
-`
-
 function ToolboxIcon (props: {iconName: string, header: number}) {
   const editor = useSlate() as ReactEditor
   const headerNode = NewHeaderNode(props.header, '')
@@ -107,7 +102,7 @@ function ToolboxIcon (props: {iconName: string, header: number}) {
     return element.name === HeaderName && element.header === props.header
   }
   return <IconButton iconProps={{ iconName: props.iconName }}
-                       className={iconStyles}
+                       className={'icon'}
                        checked={isBlockActive(editor, isHeaderActive)}
                        onMouseDown={(event) => {
                          event.preventDefault()
