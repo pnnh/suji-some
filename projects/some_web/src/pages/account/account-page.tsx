@@ -76,11 +76,11 @@ export default function AccountPage () {
                                                }} />
                                     </Stack.Item>
                                     <Stack.Item>
-                                        <Link onClick={() => {
+                                        <a onClick={() => {
                                           sendCodeToMail(email, (msg) => {
                                             setError(msg)
                                           })
-                                        }}>发送到邮箱</Link>
+                                        }}>发送到邮箱</a>
                                     </Stack.Item>
                                 </Stack>
                             </Stack.Item>

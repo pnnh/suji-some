@@ -1,7 +1,6 @@
 import ReactDOM from 'react-dom'
-import React from 'react'
+import React, { useEffect } from 'react'
 import {
-  DefaultButton,
   Stack
 } from '@fluentui/react'
 import { getJsonData } from '@/utils/helpers'
@@ -98,31 +97,37 @@ const ArticleMenu = () => {
                   })
                   toggleHideDialog()
                 }}>删除</button>
-                <DefaultButton onClick={toggleHideDialog} text="取消" />
+              <button className={'fx-primary-button'} onClick={toggleHideDialog}>取消</button>
             </DialogFooter>
         </Dialog>
     </>
 }
 
-// 右上角操作菜单
-const rootElement = document.getElementById('user-menu')
-if (rootElement) {
-  ReactDOM.render(<ArticleMenu />, rootElement)
-}
-
-// 代码块语法高亮
-const codes = document.getElementsByClassName('code')
-Array.from(codes).forEach(e => {
-  if (!(e instanceof HTMLElement)) {
-    return
-  }
-  const code = e.innerText
-  const language = e.dataset.lang
-  if (language) {
-    let html = code
-    if (Prism.languages[language]) {
-      html = Prism.highlight(code, Prism.languages[language], language)
+export function ReadPage () {
+  useEffect(() => {
+    // 右上角操作菜单
+    const rootElement = document.getElementById('user-menu')
+    if (rootElement) {
+      ReactDOM.render(<ArticleMenu />, rootElement)
     }
-    e.innerHTML = `<code>${html}</code>`
-  }
-})
+    // 代码块语法高亮
+    const codes = document.getElementsByClassName('code')
+    if (codes) {
+      Array.from(codes).forEach(e => {
+        if (!(e instanceof HTMLElement)) {
+          return
+        }
+        const code = e.innerText
+        const language = e.dataset.lang
+        if (language) {
+          let html = code
+          if (Prism.languages[language]) {
+            html = Prism.highlight(code, Prism.languages[language], language)
+          }
+          e.innerHTML = `<code>${html}</code>`
+        }
+      })
+    }
+  }, [])
+  return <div></div>
+}

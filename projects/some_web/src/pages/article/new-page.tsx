@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { Stack } from '@fluentui/react'
 import { SFXEditor, SFEditorModel } from 'stele'
 import { updateTitle } from '@/utils/helpers'
-import { onCreate } from '@/pages/article/partial/save'
+import { onCreate } from '@/pages/article/save'
 
 type NewPageState = {
     title: string;

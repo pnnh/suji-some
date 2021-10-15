@@ -8,8 +8,13 @@ html {
     overflow-x: hidden;
 }
 
-#root {
-    margin: 0 auto;height: 100%;
+.article-list {
+    .article-item {
+        .article-link {
+            color: #000;
+            text-decoration: none;
+        }
+    }
 }
 
 main {
