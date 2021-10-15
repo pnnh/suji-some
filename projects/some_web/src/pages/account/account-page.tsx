@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, MessageBar, MessageBarType, PrimaryButton, Stack, TextField } from '@fluentui/react'
+import { Link, MessageBar, MessageBarType, Stack } from '@fluentui/react'
 import { accountPost } from '@/services/account'
 import { sessionPost } from '@/services/session'
 import { updateTitle } from '@/utils/helpers'
@@ -62,22 +62,18 @@ export default function AccountPage () {
                     <Stack tokens={{ childrenGap: 8 }}>
                         <Stack tokens={{ childrenGap: 32 }}>
                             <Stack.Item>
-                                <TextField placeholder={'请输入邮箱'} value={email} onChange={(event, value) => {
-                                  if (!value) {
-                                    return
-                                  }
-                                  setEmail(value)
-                                }} />
+                                <input size={64} placeholder={'请输入邮箱'} className={'fx-text-field'}
+                                       value={email} onChange={(event) => {
+                                         setEmail(event.target.value)
+                                       }} />
                             </Stack.Item>
                             <Stack.Item>
                                 <Stack horizontal verticalAlign={'end'} tokens={{ childrenGap: 16 }}>
                                     <Stack.Item>
-                                        <TextField placeholder={'请输入验证码'} value={code} onChange={(event, value) => {
-                                          if (!value) {
-                                            return
-                                          }
-                                          setCode(value)
-                                        }} />
+                                        <input size={16} placeholder={'请输入验证码'} className={'fx-text-field'}
+                                               value={code} onChange={(event) => {
+                                                 setCode(event.target.value)
+                                               }} />
                                     </Stack.Item>
                                     <Stack.Item>
                                         <Link onClick={() => {
@@ -89,11 +85,11 @@ export default function AccountPage () {
                                 </Stack>
                             </Stack.Item>
                             <Stack.Item>
-                                <PrimaryButton onClick={() => {
+                                <button className={'fx-primary-button'} onClick={() => {
                                   loginByCode(email, code, (msg) => {
                                     setError(msg)
                                   })
-                                }}>登录</PrimaryButton>
+                                }}>登录</button>
                             </Stack.Item>
                             <Stack.Item>
                                 {useErrorMessage()}

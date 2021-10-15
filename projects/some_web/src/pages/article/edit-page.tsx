@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { TextField } from '@fluentui/react/lib/TextField'
-import { PrimaryButton, Stack } from '@fluentui/react'
+import { Stack } from '@fluentui/react'
 import { SFXEditor, SFEditorModel } from 'stele'
 import { getJsonData, updateTitle } from '@/utils/helpers'
 import { onEdit } from '@/pages/article/partial/save'
@@ -39,14 +38,14 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
             <Stack.Item grow={1}>
                 <Stack tokens={{ childrenGap: 8 }}>
                     <Stack.Item>
-                        <input placeholder={'标题'} value={title} className={'text-field'}
+                        <input placeholder={'标题'} value={title} className={'fx-text-field'}
                                size={64}
                                    onChange={(event) => {
                                      setTitle(event.target.value)
                                    }}/>
                     </Stack.Item>
                     <Stack.Item className={'description'}>
-                        <textarea placeholder={'描述'} value={description} className={'text-area'}
+                        <textarea placeholder={'描述'} value={description} className={'fx-text-area'}
                                   cols={80} rows={4}
                                    onChange={(event) => {
                                      setDescription(event.target.value)
@@ -60,19 +59,19 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
                     </Stack.Item>
                     <Stack.Item className={'description'}>
                         <input placeholder={'关键字'} title={'逗号分隔'} value={keywords}
-                               className={'text-field'} size={64}
+                               className={'fx-text-field'} size={64}
                                    onChange={(event) => {
                                      setKeywords(event.target.value)
                                    }}/>
                     </Stack.Item>
                     <Stack.Item>
-                        <PrimaryButton onClick={() => {
+                        <button className={'fx-primary-button'} onClick={() => {
                           console.debug('onSave', editorValue)
                           console.debug('onSave2', JSON.stringify(editorValue))
                           onEdit(props.match.params.pk, editorValue, title, description, keywords)
                         }}>
                             发布
-                        </PrimaryButton>
+                        </button>
                     </Stack.Item>
                 </Stack>
             </Stack.Item>

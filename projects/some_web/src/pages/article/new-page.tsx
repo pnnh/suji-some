@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { PrimaryButton, Stack } from '@fluentui/react'
+import { Stack } from '@fluentui/react'
 import { SFXEditor, SFEditorModel } from 'stele'
 import { updateTitle } from '@/utils/helpers'
 import { onCreate } from '@/pages/article/partial/save'
@@ -30,13 +30,13 @@ const NewPage = (props:{}, state: NewPageState) => {
 
   return <Stack tokens={{ childrenGap: 8 }} className={'article-edit'}>
         <Stack.Item>
-            <input placeholder={'标题'} value={title} className={'text-field'} size={64}
+            <input placeholder={'标题'} value={title} className={'fx-text-field'} size={64}
                        onChange={(event) => {
                          setTitle(event.target.value)
                        }}/>
         </Stack.Item>
         <Stack.Item className={'description'}>
-            <textarea placeholder={'描述'} value={description} className={'text-area'}
+            <textarea placeholder={'描述'} value={description} className={'fx-text-area'}
                       cols={80} rows={4}
                        onChange={(event) => {
                          setDescription(event.target.value)
@@ -50,17 +50,17 @@ const NewPage = (props:{}, state: NewPageState) => {
         </Stack.Item>
         <Stack.Item className={'description'}>
             <input placeholder={'关键字'} title={'逗号分隔'} size={64}
-                   className={'text-field'} value={keywords}
+                   className={'fx-text-field'} value={keywords}
                        onChange={(event) => {
                          setKeywords(event.target.value)
                        }}/>
         </Stack.Item>
         <Stack.Item>
-            <PrimaryButton onClick={() => {
+            <button className={'fx-primary-button'} onClick={() => {
               onCreate(editorValue, title, description, keywords)
             }}>
                 发布
-            </PrimaryButton>
+            </button>
         </Stack.Item>
     </Stack>
 }

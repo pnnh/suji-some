@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {
-  PrimaryButton,
   Stack,
   mergeStyleSets,
   Checkbox,
@@ -84,7 +83,7 @@ export default function RandomPasswordPage () {
                 />
             </Stack.Item>
             <Stack.Item align={'start'}>
-                <PrimaryButton onClick={() => {
+                <button className={'fx-primary-button'} onClick={() => {
                   const options = {
                     number: allowNumber,
                     letter: allowLetter,
@@ -97,7 +96,7 @@ export default function RandomPasswordPage () {
                   const history = passwordHistory.slice(0, 15)
                   history.splice(0, 0, password)
                   setPasswordHistory(history)
-                }}>点击生成</PrimaryButton>
+                }}>点击生成</button>
             </Stack.Item>
             <Stack.Item>
                 {renderPassword()}

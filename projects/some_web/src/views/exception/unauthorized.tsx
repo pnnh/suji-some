@@ -1,13 +1,12 @@
-import React from "react";
-import {PrimaryButton} from "@fluentui/react";
+import React from 'react'
 
-export default function UnauthorizedPage() {
-    return <div>
+export default function UnauthorizedPage () {
+  return <div>
         <h2>您尚未登录或无权访问该页面</h2>
-        <PrimaryButton onClick={()=>{
-            window.location.href = "/account/login"
+        <button className={'fx-primary-button'} onClick={() => {
+          window.location.href = '/account/login'
         }}>
             前往登录
-        </PrimaryButton>
+        </button>
     </div>
 }

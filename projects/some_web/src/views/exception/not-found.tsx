@@ -1,13 +1,12 @@
-import React from "react";
-import {PrimaryButton} from "@fluentui/react";
+import React from 'react'
 
-export default function NotFoundPage() {
-    return <div>
+export default function NotFoundPage () {
+  return <div>
         <h2>页面未找到</h2>
-        <PrimaryButton onClick={()=>{
-            window.location.href = "/"
+        <button className={'fx-primary-button'} onClick={() => {
+          window.location.href = '/'
         }}>
             前往首页
-        </PrimaryButton>
+        </button>
     </div>
 }

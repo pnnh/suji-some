@@ -2,7 +2,6 @@ import ReactDOM from 'react-dom'
 import React from 'react'
 import {
   DefaultButton,
-  PrimaryButton,
   Stack
 } from '@fluentui/react'
 import { getJsonData } from '@/utils/helpers'
@@ -34,19 +33,19 @@ const ArticleMenu = () => {
   const data = getJsonData<any>()
   if (!data || !data.login) {
     return <Stack.Item align={'center'}>
-            <PrimaryButton onClick={() => {
+            <button className={'fx-primary-button'} onClick={() => {
               window.location.href = '/account/login'
             }}>
                 登录
-            </PrimaryButton>
+            </button>
         </Stack.Item>
   }
   const children: JSX.Element[] = []
-  const createButton = <PrimaryButton onClick={() => {
+  const createButton = <button className={'fx-primary-button'} onClick={() => {
     window.location.href = '/article/new'
   }}>
             创作
-        </PrimaryButton>
+        </button>
   children.push(createButton)
 
   const [hideDialog, { toggle: toggleHideDialog }] = useBoolean(true)
@@ -54,12 +53,12 @@ const ArticleMenu = () => {
   const subTextId: string = useId('subTextLabel')
 
   if (data.creator) {
-    const editButton = <PrimaryButton onClick={() => {
+    const editButton = <button className={'fx-primary-button'} onClick={() => {
       window.location.href = '/article/edit/' + data.pk
-    }}>编辑</PrimaryButton>
+    }}>编辑</button>
     children.push(editButton)
 
-    const deleteButton = <PrimaryButton onClick={toggleHideDialog}>删除</PrimaryButton>
+    const deleteButton = <button className={'fx-primary-button'} onClick={toggleHideDialog}>删除</button>
     children.push(deleteButton)
   }
   const elements = children.map((element, index) =>
@@ -89,7 +88,7 @@ const ArticleMenu = () => {
             modalProps={modalProps}
         >
             <DialogFooter>
-                <PrimaryButton onClick={() => {
+                <button className={'fx-primary-button'} onClick={() => {
                   console.debug('确认删除')
                   articleDelete(data.pk).then((out) => {
                     console.debug('articleDelete', out)
@@ -98,7 +97,7 @@ const ArticleMenu = () => {
                     }
                   })
                   toggleHideDialog()
-                }} text="删除" />
+                }}>删除</button>
                 <DefaultButton onClick={toggleHideDialog} text="取消" />
             </DialogFooter>
         </Dialog>
