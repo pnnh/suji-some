@@ -34,11 +34,12 @@ phases:
             - echo Pushing the Docker images...
             - docker push $REPOSITORY_URI:latest
             - docker push $REPOSITORY_URI:$IMAGE_TAG
-            - printf '{"ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > imageDetail.json
-            - printf '[{"name":"sfx-fargate-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+            - echo $CODEBUILD_SRC_DIR
+            - printf '{"ImageURI":"%s"}' $REPOSITORY_URI:$IMAGE_TAG > $CODEBUILD_SRC_DIR/imageDetail.json
+            - printf '[{"name":"sfx-fargate-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > $CODEBUILD_SRC_DIR/imagedefinitions.json
             - ls -a
-            - cat imageDetail.json
-            - cat imagedefinitions.json
+            - cat $CODEBUILD_SRC_DIR/imageDetail.json
+            - cat $CODEBUILD_SRC_DIR/imagedefinitions.json
 artifacts:
     files:
         - imagedefinitions.json
