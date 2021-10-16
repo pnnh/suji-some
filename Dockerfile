@@ -3,7 +3,7 @@ FROM ubuntu:21.10
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
 
-RUN apt-get update
+RUN apt-get update -y --allow-unauthenticated
 RUN apt-get install -y gnupg2
 RUN apt-get install -y ca-certificates
 RUN apt-get install -y build-essential
