@@ -20,10 +20,7 @@ phases:
         commands:
             - echo Build started on `date`
             - docker version
-            - docker build -t some .
-            - id=$(docker create some)
-            - docker cp $id:/home/dist $CODEBUILD_SRC_DIR
-            - docker rm -v $id
+            - ls
             - cd $CODEBUILD_SRC_DIR/dist/server/build
             - echo Building the Docker image...
             - echo $REPOSITORY_URI
