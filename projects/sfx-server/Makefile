@@ -11,7 +11,7 @@ build_proxy :
 		&& GOOS=linux go build -o ../../build/sfxproxy
 
 copy_web :
-	-cd $(DIR) && cp -r cmds/server/web build
+	-cd $(DIR) && cp -r cmds/server/web build && cp Dockerfile build
 
 clean :
 	-rm -f ./dist
