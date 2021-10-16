@@ -1,4 +1,4 @@
-FROM ubuntu:21.10
+FROM ubuntu:20.04
 
 # 指定RUN工作目录
 WORKDIR /home

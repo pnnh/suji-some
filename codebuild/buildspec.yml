@@ -1,0 +1,27 @@
+version: 0.2
+
+phases:
+    pre_build:
+        commands:
+            - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
+            - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+            - echo $COMMIT_HASH
+    build:
+        commands:
+            - echo Build started on `date`
+            - echo Asia/Shanghai > /etc/timezone
+            - apt-get update
+            - apt-get install -y tzdata
+            - apt-get install -y gnupg2
+            - apt-get install -y ca-certificates
+            - apt-get install -y build-essential
+            - apt-get install -y golang-go
+            - apt-get install -y nodejs npm
+            - go version
+            - node --version
+            - npm --version
+            - make
+            - ls -l
+artifacts:
+    files:
+        - dist/**/*
