@@ -25,7 +25,7 @@ console.log('listFile', listFile(path.resolve(__dirname, 'src/pages')))
 const config = defineConfig({
   plugins: [
     visualizer({
-      filename: 'dist/status.html'
+      filename: 'build/status.html'
     })
   ],
   base: '/',
@@ -34,7 +34,7 @@ const config = defineConfig({
   },
   build: {
     emptyOutDir: true,
-    outDir: 'dist',
+    outDir: 'build',
     manifest: true,
     ssrManifest: true,
     rollupOptions: {
@@ -53,7 +53,7 @@ const config = defineConfig({
         //   console.debug('assetFileNames', chunkInfo.name)
         //   return '[name].css'
         // },
-        dir: path.resolve(__dirname, 'dist'),
+        dir: path.resolve(__dirname, 'build'),
         format: 'esm'//,
         // manualChunks (id) {
         //   // 每个npm包一个chunk

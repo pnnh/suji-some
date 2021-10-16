@@ -37,6 +37,14 @@ func CssLink(resUrl string, proResUrl string) template.HTML {
 	return htmlText
 }
 
+func CssHtml() template.HTML {
+	return template.HTML(config.CssHtml)
+}
+
+func JsHtml() template.HTML {
+	return template.HTML(config.JsHtml)
+}
+
 func EqString(a interface{}, b string) bool {
 	if fmt.Sprintf("%s", a) == b {
 		return true
@@ -62,6 +70,8 @@ func FuncMap() template.FuncMap {
 	funcMap := template.FuncMap{
 		"jsLink":      JsLink,
 		"cssLink":     CssLink,
+		"cssHtml":     CssHtml,
+		"jsHtml":      JsHtml,
 		"eqString":    EqString,
 		"fmtTime":     FmtTime,
 		"fmtTimeUnix": FmtTimeUnix,

@@ -4,7 +4,7 @@ FROM ubuntu:20.04
 WORKDIR /home
 
 # 拷贝启动脚本
-COPY build/release /home
+COPY build /home
 
 RUN apt-get update \
 		&& apt-get install -y ca-certificates \

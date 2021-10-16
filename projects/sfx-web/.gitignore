@@ -10,3 +10,4 @@ build.sh
 bin/
 node_modules/
 /dist
+build/

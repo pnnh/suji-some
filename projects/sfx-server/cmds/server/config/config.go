@@ -77,6 +77,9 @@ func init() {
 	if len(QuestKey) < 1 {
 		logrus.Fatalln("未配置QUEST_KEY")
 	}
+	if err := initAssets(); err != nil {
+		logrus.Fatalln("初始化Assets出错: %w", err)
+	}
 }
 
 func Debug() bool {

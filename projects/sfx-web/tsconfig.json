@@ -11,7 +11,7 @@
     "esModuleInterop": true,
     "strict": true,
     "allowSyntheticDefaultImports": true,
-    "outDir": "dist",
+    "outDir": "build",
     "baseUrl": ".",
     "paths": {
       "@/*": ["src/*"]
