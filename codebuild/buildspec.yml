@@ -9,6 +9,16 @@ phases:
     build:
         commands:
             - echo Build started on `date`
+            - export TZ=Asia/Shanghai
+            - apt-get update
+            - apt-get install -y gnupg2
+            - apt-get install -y ca-certificates
+            - apt-get install -y build-essential
+            - apt-get install -y golang-go
+            - apt-get install -y nodejs npm
+            - go version
+            - node --version
+            - npm --version
             - make
 artifacts:
     files:
