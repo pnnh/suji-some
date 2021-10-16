@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import path from 'path'
 import { visualizer } from 'rollup-plugin-visualizer'
 import * as fs from 'fs'
-import { PreRenderedAsset, PreRenderedChunk } from 'rollup'
+// import { PreRenderedAsset, PreRenderedChunk } from 'rollup'
 
 function listFile (dir: string): string[] {
   const arr = fs.readdirSync(dir)
@@ -24,7 +24,6 @@ console.log('listFile', listFile(path.resolve(__dirname, 'src/pages')))
 
 const config = defineConfig({
   plugins: [
-    // reactRefresh(),
     visualizer({
       filename: 'dist/status.html'
     })
@@ -36,34 +35,36 @@ const config = defineConfig({
   build: {
     emptyOutDir: true,
     outDir: 'dist',
+    manifest: true,
+    ssrManifest: true,
     rollupOptions: {
-      // input: ["src/pages/main.tsx", "src/pages/main.scss"],
-      input: listFile(path.resolve(__dirname, 'src/pages')),
+      input: ['index.html'],
+      // input: listFile(path.resolve(__dirname, 'src/pages')),
       output: {
-        entryFileNames: (chunkInfo: PreRenderedChunk) => {
-          if (!chunkInfo.facadeModuleId) {
-            throw new Error('facadeModuleId为空')
-          }
-          console.debug('entryFileNames', chunkInfo.facadeModuleId)
-          const extName = path.extname(chunkInfo.facadeModuleId)
-          return `[name]${extName}.js`
-        },
-        assetFileNames: (chunkInfo: PreRenderedAsset) => {
-          console.debug('assetFileNames', chunkInfo.name)
-          return '[name].css'
-        },
+        // entryFileNames: (chunkInfo: PreRenderedChunk) => {
+        //   if (!chunkInfo.facadeModuleId) {
+        //     throw new Error('facadeModuleId为空')
+        //   }
+        //   console.debug('entryFileNames', chunkInfo.facadeModuleId)
+        //   const extName = path.extname(chunkInfo.facadeModuleId)
+        //   return `[name]${extName}.js`
+        // },
+        // assetFileNames: (chunkInfo: PreRenderedAsset) => {
+        //   console.debug('assetFileNames', chunkInfo.name)
+        //   return '[name].css'
+        // },
         dir: path.resolve(__dirname, 'dist'),
-        format: 'esm',
-        manualChunks (id) {
-          // 每个npm包一个chunk
-          if (id.includes('node_modules')) {
-            const idArray = id.split('/')
-            const index = idArray.indexOf('node_modules')
-            if (idArray.length > index + 1) {
-              return idArray[index + 1]
-            }
-          }
-        }
+        format: 'esm'//,
+        // manualChunks (id) {
+        //   // 每个npm包一个chunk
+        //   if (id.includes('node_modules')) {
+        //     const idArray = id.split('/')
+        //     const index = idArray.indexOf('node_modules')
+        //     if (idArray.length > index + 1) {
+        //       return idArray[index + 1]
+        //     }
+        //   }
+        // }
       }
     }
   },
