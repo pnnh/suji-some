@@ -9,7 +9,8 @@ make_dist :
 	-mkdir dist && mkdir dist/server && mkdir dist/web
 
 make_server : make_dist build_server
-	-cp -r projects/sfx-server/build dist/server
+	-cp -r projects/sfx-server/build dist/server \
+		&& cp projects/sfx-server/Dockerfile dist/server
 
 build_web :
 	cd projects/sfx-web && make
