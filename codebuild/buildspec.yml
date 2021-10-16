@@ -21,6 +21,7 @@ phases:
             - node --version
             - npm --version
             - make
+            - ls -l
 artifacts:
     files:
-        - dist
+        - dist/**/*
