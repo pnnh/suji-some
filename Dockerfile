@@ -3,12 +3,10 @@ FROM ubuntu:21.10
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Asia/Shanghai
 
-RUN apt-get update -y --allow-unauthenticated
-RUN apt-get install -y gnupg2
-RUN apt-get install -y ca-certificates
-RUN apt-get install -y build-essential
-RUN apt-get install -y golang-go
-RUN apt-get install -y nodejs npm
+RUN rm /var/lib/apt/lists/* -vf	\
+	&& apt-get clean \
+	&& apt-get update -y --allow-unauthenticated \
+	&& apt-get install -y gnupg2 ca-certificates build-essential golang-go nodejs npm
 
 ADD . /home
 
