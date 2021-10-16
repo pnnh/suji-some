@@ -1,0 +1,60 @@
+@import '/node_modules/prismjs/themes/prism.css';
+@import '/node_modules/remixicon/fonts/remixicon.css';
+.stele-editor {
+  border: 1px solid #edebe9;
+  margin-bottom: 16px;
+  min-height: 400px;
+  max-height: 600px;
+}
+.stele-editor .toolbar {
+  padding: 8px 16px 8px 16px;
+  border-bottom: solid 1px #edebe9;
+}
+.stele-editor .icon-button {
+  border: none;
+  background: none;
+  color: #0078d4;
+  padding: 8px;
+  cursor: pointer;
+}
+.stele-editor .icon-button i {
+  font-size: 16px;
+}
+.stele-editor .icon-button.active, .stele-editor .icon-button:hover {
+  background: #edebe966;
+}
+.stele-editor .icon {
+  background-color: rgba(237, 235, 233, 0.4);
+}
+.stele-editor .body {
+  margin-bottom: 16px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  margin-top: 0;
+  padding: 16px;
+}
+.stele-editor .code-block {
+  background: #f6f6f6;
+  border-radius: 4px;
+  padding: 8px;
+  margin: 8px 0;
+  line-height: 24px;
+}
+.stele-editor .code-block .select-language {
+  float: right;
+  position: relative;
+  top: 4px;
+}
+.stele-editor .paragraph {
+  position: relative;
+}
+.stele-editor .paragraph .show {
+  position: absolute;
+  top: -32px;
+  left: 40%;
+  overflow: hidden;
+  background-color: #fff;
+}
+.stele-editor .hidden {
+  display: none;
+}

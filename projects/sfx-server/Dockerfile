@@ -1,0 +1,15 @@
+FROM ubuntu:20.04
+
+# 指定RUN工作目录
+WORKDIR /home
+
+# 拷贝启动脚本
+COPY build/release /home
+
+RUN apt-get update \
+		&& apt-get install -y ca-certificates \
+		&& apt-get clean \
+		&& ls -a /home
+
+# 启动程序
+ENTRYPOINT ["/home/sfxproxy"]

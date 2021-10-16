@@ -1,0 +1,56 @@
+{{ define "index/index.gohtml" }}
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    {{ template "partial/headmeta.gohtml" }}
+    {{ template "partial/analytics.gohtml" }}
+    <title>泛函</title>
+    {{ cssLink "/src/index.scss" "/main.css" }}
+</head>
+<body>
+    <div class="ms-Grid" dir="ltr">
+        {{ template "partial/header.gohtml" }}
+        <div class="ms-Grid-row">
+            <div class="ms-Grid-col ms-sm0 ms-xl2">
+            </div>
+            <div class="ms-Grid-col ms-sm12 ms-xl8">
+                <main>
+                    <div>
+                        <div class="article-list">
+                            {{range .list}}
+                                <div class="article-item">
+                                    <div data-name="{{.Pk}}" data-type="object">
+                                        <input type="hidden" data-name="pk" data-value="{{.Pk}}" />
+                                        <div>
+                                            <a href="/article/read/{{.Pk}}" class="article-link">
+                                                <h3 data-name="title">{{.Title}}</h3>
+                                            </a>
+                                        </div>
+                                        <span data-name="update_time" data-value="{{.UpdateTime}}">{{.UpdateTimeFormatted}}</span>
+                                    </div>
+                                </div>
+                            {{end}}
+                        </div>
+                    </div>
+                </main>
+            </div>
+            <div class="ms-Grid-col ms-sm0 ms-xl2">
+            </div>
+        </div>
+        <div class="ms-Grid-row">
+            <div class="ms-Grid-col ms-sm0 ms-xl2">
+            </div>
+            <div class="ms-Grid-col ms-sm12 ms-xl8">
+                <footer>
+                </footer>
+            </div>
+            <div class="ms-Grid-col ms-sm0 ms-xl2">
+            </div>
+        </div>
+    </div>
+    <div id="root"></div>
+    <script id="data" type="application/json">{{.data}}</script>
+    {{ jsLink "/src/index.tsx" "/main.tsx.js" }}
+</body>
+</html>
+{{ end }}
