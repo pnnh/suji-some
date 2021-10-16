@@ -9,7 +9,7 @@ phases:
     build:
         commands:
             - echo Build started on `date`
-            - export TZ=Asia/Shanghai
+            - echo Asia/Shanghai > /etc/timezone
             - apt-get update
             - apt-get install -y gnupg2
             - apt-get install -y ca-certificates
