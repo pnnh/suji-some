@@ -20,8 +20,9 @@ phases:
         commands:
             - echo Build started on `date`
             - go env
-            - cd projects/sfx-server
+            - node --version
             - make
+            - cd projects/sfx-server
             - echo Building the Docker image...
             - echo $REPOSITORY_URI
             - echo $IMAGE_TAG
