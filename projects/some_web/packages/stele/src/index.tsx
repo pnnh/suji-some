@@ -1,5 +1,4 @@
 import React from 'react'
-import { initializeIcons } from '@fluentui/react/lib/Icons'
 import './index.scss'
 
 export * from './editor/editor'
@@ -17,5 +16,3 @@ export function App3 () :string {
 export function App6 () {
   return <div>App6</div>
 }
-
-initializeIcons()

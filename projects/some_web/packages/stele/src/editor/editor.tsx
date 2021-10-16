@@ -7,7 +7,7 @@ import {
   Range as SlateRange, Text, NodeEntry
 } from 'slate'
 import { HistoryEditor, withHistory } from 'slate-history'
-import { IconButton, Stack } from '@fluentui/react'
+import { Stack } from '@fluentui/react'
 import {
   header2Markdown,
   HeaderName,
@@ -48,8 +48,6 @@ import {
 } from './nodes/markdown'
 import { getLocalStorage, setLocalStorage } from './helpers'
 import './editor.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faFileCode, faMinus, faParagraph, faRedo, faUndo } from '@fortawesome/free-solid-svg-icons'
 
 const StorageKey = 'editor-value'
 // 这里是单例的，一个页面只能有一个Editor
@@ -97,27 +95,30 @@ function SFXEditor (props: { value: SFEditorModel, onChange: (value: SFEditorMod
                             <Stack.Item>
                                 <Stack horizontal tokens={{ childrenGap: 8 }}>
                                     <Stack.Item>
-                                      <button className={'icon-button'} title='撤销'
-                                              disabled={sourceMode}
-                                              onClick={undoOperation}><FontAwesomeIcon icon={faUndo} /></button>
+                                      <button title='撤销' className={'icon-button'}
+                                              onMouseDown={undoOperation} disabled={sourceMode}>
+                                        <i className="ri-arrow-go-back-line"></i></button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                      <button className={'icon-button'} title='重做'
-                                              disabled={sourceMode}
-                                              onClick={redoOperation}><FontAwesomeIcon icon={faRedo} /></button>
+                                      <button title='重做' className={'icon-button'}
+                                              onMouseDown={redoOperation} disabled={sourceMode}>
+                                        <i className="ri-arrow-go-forward-line"></i></button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                      <button className={'icon-button'} title='移除块'
-                                              disabled={sourceMode}
-                                              onClick={removeNodes}><FontAwesomeIcon icon={faMinus} /></button>
+                                      <button title='移除块' className={'icon-button'}
+                                              onMouseDown={removeNodes} disabled={sourceMode}>
+                                        <i className="ri-close-line"></i>
+                                      </button>
                                     </Stack.Item>
                                     <Stack.Item>
-                                      <button className={'icon-button'} title='页面源码'
-                                              onClick={() => {
+                                      <button title='页面源码' className={'icon-button'} disabled={sourceMode}
+                                              onMouseDown={() => {
                                                 console.debug('showSource', props.value)
                                                 toggleSourceMode()
                                                 showSource(props.value, sourceMode)
-                                              }}><FontAwesomeIcon icon={faFileCode} /></button>
+                                              }}>
+                                        <i className="ri-file-code-line"></i>
+                                      </button>
                                     </Stack.Item>
                                 </Stack>
                             </Stack.Item>

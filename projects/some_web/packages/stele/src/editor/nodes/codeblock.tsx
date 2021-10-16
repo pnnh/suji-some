@@ -1,8 +1,5 @@
 import React from 'react'
 import { SFElement, SFText } from './node'
-import {
-  IconButton
-} from '@fluentui/react'
 import { ReactEditor, useSlate } from 'slate-react'
 import { Editor, Element as SlateElement, Node as SlateNode, Path as SlatePath, Transforms } from 'slate'
 

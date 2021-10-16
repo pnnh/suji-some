@@ -12,7 +12,6 @@ import {
 import { NewTextNode, TextName } from './text'
 import { useBoolean } from '@fluentui/react-hooks'
 import isHotkey from 'is-hotkey'
-import { v4 as uuid4 } from 'uuid'
 
 export const ParagraphName = 'paragraph'
 
@@ -33,12 +32,10 @@ export function SFParagraphToolbar (props: { disabled: boolean }) {
 }
 
 export interface SFParagraphNode extends SFElement {
-  id: string
 }
 
 export function NewParagraphNode (text: string): SFParagraphNode {
   return {
-    id: uuid4().substr(0, 8),
     name: ParagraphName,
     children: [NewTextNode(text)]
   }
@@ -158,7 +155,6 @@ function SFIcon (props: { iconName: string, format: string, node: SFParagraphNod
   const editor = useSlate() as ReactEditor
   const isMarkActive = (editor: ReactEditor, isActive: (node: any) => boolean): boolean => {
     const marks = Editor.marks(editor) as any
-    console.debug('SFIcon marks', marks)
     if (!marks) {
       return false
     }
