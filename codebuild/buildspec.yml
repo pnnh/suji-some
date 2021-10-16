@@ -3,7 +3,6 @@ version: 0.2
 phases:
     pre_build:
         commands:
-            - aws --version
             - echo $CODEBUILD_RESOLVED_SOURCE_VERSION
             - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
             - echo $COMMIT_HASH
