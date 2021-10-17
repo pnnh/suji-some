@@ -16,17 +16,19 @@ phases:
             - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
             - echo $COMMIT_HASH
             - IMAGE_TAG=${COMMIT_HASH:=latest}
+            - echo $IMAGE_TAG
     build:
         commands:
             - echo Build started on `date`
             - docker version
             - ls
-            - cd $CODEBUILD_SRC_DIR/dist/server/build
+            - cd $CODEBUILD_SRC_DIR/dist/server
             - echo Building the Docker image...
             - echo $REPOSITORY_URI
-            - echo $IMAGE_TAG
             - docker build -t $REPOSITORY_URI:latest .
             - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
+            - echo Sync S3 files
+            - aws s3 sync $CODEBUILD_SRC_DIR/dist/web/build s3://sfxres/ --delete
     post_build:
         commands:
             - echo Build completed on `date`
