@@ -1,4 +1,5 @@
 # 以下构建命令假设是在全新的ubuntu:21.10容器内执行
+
 echo Build started on `date`
 echo Asia/Shanghai > /etc/timezone
 apt-get update \
