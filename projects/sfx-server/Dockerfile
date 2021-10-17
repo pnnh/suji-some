@@ -8,6 +8,7 @@ COPY build /home
 
 RUN apt-get update \
 		&& apt-get install -y ca-certificates \
+		&& apt-get install -y libc6 \
 		&& apt-get clean \
 		&& ls -a /home
 
