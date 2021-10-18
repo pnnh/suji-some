@@ -4,8 +4,18 @@ phases:
     build:
         commands:
             - echo Build started on `date`
-            - chmod +x build.sh
-            - ./build.sh
+            - echo Asia/Shanghai > /etc/timezone
+            - apt-get update
+            - apt-get install -y tzdata
+            - apt-get install -y gnupg2
+            - apt-get install -y ca-certificates
+            - apt-get install -y build-essential
+            - apt-get install -y golang-go
+            - apt-get install -y nodejs npm
+            - go version
+            - node --version
+            - npm --version
+            - make
             
 artifacts:
     files:
