@@ -1,4 +1,4 @@
-import { SFEditorModel } from 'stele'
+import { SFEditorModel } from '@pnnh/stele'
 import { articlePost, articlePut } from '@/services/article'
 import { ApiUrl } from '@/utils/config'
 

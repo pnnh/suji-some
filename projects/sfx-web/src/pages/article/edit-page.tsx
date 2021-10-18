@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Stack } from '@fluentui/react'
-import { SFXEditor, SFEditorModel } from 'stele'
+import { SFXEditor, SFEditorModel } from '@pnnh/stele'
 import { getJsonData, updateTitle } from '@/utils/helpers'
 import { onEdit } from '@/pages/article/save'
 
