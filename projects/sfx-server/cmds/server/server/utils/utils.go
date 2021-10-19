@@ -68,8 +68,6 @@ func ClientPage(gctx *gin.Context, status int, data gin.H) {
 
 func FuncMap() template.FuncMap {
 	funcMap := template.FuncMap{
-		"jsLink":      JsLink,
-		"cssLink":     CssLink,
 		"cssHtml":     CssHtml,
 		"jsHtml":      JsHtml,
 		"eqString":    EqString,
