@@ -23,7 +23,7 @@
     "slate": "^0.66.2",
     "slate-history": "^0.66.0",
     "slate-react": "^0.66.2",
-    "@pnnh/stele": "0.0.3",
+    "@pnnh/stele": "0.0.5",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
