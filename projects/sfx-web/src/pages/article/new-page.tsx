@@ -33,7 +33,8 @@ const NewPage = (props:{}, state: NewPageState) => {
     return <div>当前为移动设备，请使用电脑编辑</div>
   }
 
-  return <div className={'article-edit'}>
+  return <div className={'article-edit-page'}>
+    <div className={'article-edit'}>
     <Stack tokens={{ childrenGap: 8 }} className={'title-area'}>
         <Stack.Item>
             <input placeholder={'标题'} value={title} className={'fx-text-field'} size={64}
@@ -73,6 +74,7 @@ const NewPage = (props:{}, state: NewPageState) => {
         </button>
       </Stack.Item>
     </Stack>
+  </div>
   </div>
 }
 

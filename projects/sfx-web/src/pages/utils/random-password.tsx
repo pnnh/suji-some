@@ -38,7 +38,8 @@ export default function RandomPasswordPage () {
             {historyList}
         </>
   }
-  return <Stack tokens={{ childrenGap: 16 }} className={'random-password'}>
+  return <div className={'random-password-page'}>
+    <Stack tokens={{ childrenGap: 16 }} className={'random-password'}>
             <Stack.Item>
                 <h2 className={'tool-title'}>随机密码生成器</h2>
                 <p className={'tool-desc'}>本页生成的密码不会保持，刷新或关闭页面后消失</p>
@@ -93,4 +94,5 @@ export default function RandomPasswordPage () {
                 {renderHistory()}
             </Stack.Item>
         </Stack>
+  </div>
 }

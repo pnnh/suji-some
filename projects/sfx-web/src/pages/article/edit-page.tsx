@@ -39,7 +39,8 @@ const EditPage = (props: { match: { params: { pk: string } } }, state: NewPageSt
     return <div>当前为移动设备，请使用电脑编辑</div>
   }
 
-  return <div className={'article-edit'}>
+  return <div className={'article-edit-page'}>
+    <div className={'article-edit'}>
     <Stack tokens={{ childrenGap: 8 }} className={'title-area'}>
       <Stack.Item>
         <input placeholder={'标题'} value={title} className={'fx-text-field'}
@@ -82,6 +83,7 @@ const EditPage = (props: { match: { params: { pk: string } } }, state: NewPageSt
         </button>
       </Stack.Item>
     </Stack>
+  </div>
   </div>
 }
 

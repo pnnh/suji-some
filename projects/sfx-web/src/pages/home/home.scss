@@ -1,16 +1,16 @@
 
-main {
-  background-color: #FFF;
-  margin: 0 auto 24px;
-  padding: 16px;
-  border-radius: 4px;
-  box-shadow: #f4f4f4;
-}
-
 .home-page {
   .new-button {
     display: none;
   }
+  main {
+    background: #FFFFFF;
+    margin: 0 auto 24px;
+    padding: 16px;
+    border-radius: 4px;
+    box-shadow: #f4f4f4;
+  }
+
   .article-list {
     .article-item {
       border-bottom: 1px solid #e5e6eb;
@@ -25,6 +25,12 @@ main {
           line-height: 1.6;
         }
       }
+      .article-description {
+        color: #5e5e5e;
+        font-size: 14px;
+        line-height: 22px;
+        margin-bottom: 8px;
+      }
       .update-time {
         font-size: 13px;
         color: #86909c;
@@ -34,17 +40,16 @@ main {
       border-bottom-width: 0;
     }
   }
-}
 
-@media (min-width: $screen-desktop) {
-  main {
-    width: 960px;
-    margin: 0 auto;
-  }
+  @media (min-width: $screen-desktop) {
+    main {
+      width: 960px;
+      margin: 0 auto;
+    }
 
-  .home-page {
     .new-button {
       display: block;
     }
   }
 }
+

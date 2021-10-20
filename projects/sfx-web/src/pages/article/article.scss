@@ -1,32 +1,43 @@
-.article-edit {
-  .title-area,.body-area,.submit-area {
-    background: #FFFFFF;
-    border-radius: 4px;
+// 文章编辑页面
+.article-edit-page {
+  .article-edit {
+    .title-area,.body-area,.submit-area {
+      background: #FFFFFF;
+      border-radius: 4px;
+    }
+    .title-area,.body-area {
+      margin-bottom: 16px;
+    }
+    .title-area,.submit-area {
+      padding: 16px;
+    }
+    .description {
+      margin-bottom: 16px;
+    }
   }
-  .title-area,.body-area {
-    margin-bottom: 16px;
-  }
-  .title-area,.submit-area {
-    padding: 16px;
-  }
-  .description {
-    margin-bottom: 16px;
+  @media (min-width: $screen-desktop) {
+    .article-edit {
+      width: 960px;
+      margin: 0 auto;
+    }
   }
 }
 
-.code {
-  background: #f6f6f6;
-  border-radius: 4px;
-  padding: 8px;
-  margin: 8px 0;
-  line-height: 20px;
-  overflow: auto;
-}
-
+// 文章查看页面
 .article-read-page {
+  .code {
+    background: #f6f6f6;
+    border-radius: 4px;
+    padding: 8px;
+    margin: 8px 0;
+    line-height: 20px;
+    overflow: auto;
+  }
+
   .new-button,.edit-button {
     display: none;
   }
+
   article {
     padding: 16px;
     background: #FFFFFF;
@@ -43,10 +54,12 @@
       word-break: break-word;
     }
   }
-}
 
-@media (min-width: $screen-desktop) {
-  .article-read-page {
+  @media (min-width: $screen-desktop) {
+    main {
+      width: 960px;
+      margin: 0 auto;
+    }
     .new-button, .edit-button {
       display: block;
     }
