@@ -3,6 +3,7 @@ import { Stack } from '@fluentui/react'
 import { SFXEditor, SFEditorModel } from '@pnnh/stele'
 import { getJsonData, updateTitle } from '@/utils/helpers'
 import { onEdit } from '@/pages/article/save'
+import { isScreenDesktop } from '@/utils/media'
 
 type NewPageState = {
   title: string;
@@ -33,6 +34,10 @@ const EditPage = (props: { match: { params: { pk: string } } }, state: NewPageSt
     setDescription(serverData.description)
     updateTitle(serverData.title)
   }, [])
+
+  if (!isScreenDesktop()) {
+    return <div>当前为移动设备，请使用电脑编辑</div>
+  }
 
   return <div className={'article-edit'}>
     <Stack tokens={{ childrenGap: 8 }} className={'title-area'}>

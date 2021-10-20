@@ -4,7 +4,6 @@ import {
   Stack
 } from '@fluentui/react'
 import { getJsonData } from '@/utils/helpers'
-import '@/utils/fluentui'
 import Prism from 'prismjs'
 import '@/utils/highlight'
 
@@ -40,7 +39,7 @@ const ArticleMenu = () => {
         </Stack.Item>
   }
   const children: JSX.Element[] = []
-  const createButton = <button className={'fx-primary-button'} onClick={() => {
+  const createButton = <button className={'fx-primary-button new-button'} onClick={() => {
     window.location.href = '/article/new'
   }}>
             创作
@@ -52,12 +51,12 @@ const ArticleMenu = () => {
   const subTextId: string = useId('subTextLabel')
 
   if (data.creator) {
-    const editButton = <button className={'fx-primary-button'} onClick={() => {
+    const editButton = <button className={'fx-primary-button edit-button'} onClick={() => {
       window.location.href = '/article/edit/' + data.pk
     }}>编辑</button>
     children.push(editButton)
 
-    const deleteButton = <button className={'fx-primary-button'} onClick={toggleHideDialog}>删除</button>
+    const deleteButton = <button className={'fx-primary-button delete-button'} onClick={toggleHideDialog}>删除</button>
     children.push(deleteButton)
   }
   const elements = children.map((element, index) =>

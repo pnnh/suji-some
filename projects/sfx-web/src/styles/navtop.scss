@@ -46,8 +46,7 @@ footer {
   height: 64px;
 }
 
-// 等于或大于 75*16 = 1200px（ pc宽屏）
-@media (min-width: 75em) {
+@media (min-width: $screen-desktop) {
   header,footer {
     .fx-grid {
       width: 960px;

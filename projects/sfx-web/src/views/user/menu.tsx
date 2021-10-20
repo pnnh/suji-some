@@ -8,7 +8,7 @@ import { ApiUrl } from '@/utils/config'
 const useActionButton = () => {
   const auth = getJsonData<any>()
   if (auth && auth.login) {
-    return <button className={'fx-primary-button'} onClick={() => {
+    return <button className={'fx-primary-button new-button'} onClick={() => {
       window.location.href = ApiUrl.article.new
     }}>
             创作
