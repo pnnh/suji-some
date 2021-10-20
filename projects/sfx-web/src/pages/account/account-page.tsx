@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { Link, MessageBar, MessageBarType, Stack } from '@fluentui/react'
+import { MessageBar, MessageBarType, Stack } from '@fluentui/react'
 import { accountPost } from '@/services/account'
 import { sessionPost } from '@/services/session'
 import { updateTitle } from '@/utils/helpers'

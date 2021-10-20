@@ -28,7 +28,8 @@ const NewPage = (props:{}, state: NewPageState) => {
     updateTitle('创作')
   }, [])
 
-  return <Stack tokens={{ childrenGap: 8 }} className={'article-edit'}>
+  return <div className={'article-edit'}>
+    <Stack tokens={{ childrenGap: 8 }} className={'title-area'}>
         <Stack.Item>
             <input placeholder={'标题'} value={title} className={'fx-text-field'} size={64}
                        onChange={(event) => {
@@ -42,27 +43,32 @@ const NewPage = (props:{}, state: NewPageState) => {
                          setDescription(event.target.value)
                        }}/>
         </Stack.Item>
-        <Stack.Item>
-            <SFXEditor value={editorValue} onChange={(value) => {
-              console.debug('onChange222')
-              setEditorValue(value)
-            }} />
-        </Stack.Item>
-        <Stack.Item className={'description'}>
-            <input placeholder={'关键字'} title={'逗号分隔'} size={64}
-                   className={'fx-text-field'} value={keywords}
-                       onChange={(event) => {
-                         setKeywords(event.target.value)
-                       }}/>
-        </Stack.Item>
-        <Stack.Item>
-            <button className={'fx-primary-button'} onClick={() => {
-              onCreate(editorValue, title, description, keywords)
-            }}>
-                发布
-            </button>
-        </Stack.Item>
     </Stack>
+    <Stack tokens={{ childrenGap: 8 }} className={'body-area'}>
+      <Stack.Item>
+        <SFXEditor value={editorValue} onChange={(value) => {
+          console.debug('onChange222')
+          setEditorValue(value)
+        }} />
+      </Stack.Item>
+    </Stack>
+    <Stack tokens={{ childrenGap: 8 }} className={'submit-area'}>
+      <Stack.Item className={'description'}>
+        <input placeholder={'关键字'} title={'逗号分隔'} size={64}
+               className={'fx-text-field'} value={keywords}
+               onChange={(event) => {
+                 setKeywords(event.target.value)
+               }}/>
+      </Stack.Item>
+      <Stack.Item>
+        <button className={'fx-primary-button'} onClick={() => {
+          onCreate(editorValue, title, description, keywords)
+        }}>
+          发布
+        </button>
+      </Stack.Item>
+    </Stack>
+  </div>
 }
 
 export default NewPage

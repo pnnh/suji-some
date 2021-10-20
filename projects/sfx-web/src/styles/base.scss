@@ -1,7 +1,6 @@
 @charset "UTF-8";
 
 @import "public/styles/fonts";
-@import "node_modules/@fluentui/react/dist/css/fabric";
 
 html, body {
   width: 100vw;
@@ -9,5 +8,6 @@ html, body {
   margin: 0;
   padding: 0;
   color: #000;
-  background: #FFF;
+  background: #F6F6F6;
+  overflow-x: hidden;
 }

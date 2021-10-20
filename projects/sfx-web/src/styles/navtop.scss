@@ -1,7 +1,9 @@
 
 .header {
-  border-bottom: solid 1px #ccc;
+  background: #FFFFFF;
+  border-bottom: solid 1px #f1f1f1;
   margin-bottom: 24px;
+  padding: 16px;
   .header-row {
     display: flex;
     flex-direction: row;
@@ -20,7 +22,7 @@
   a.link {
     color: #000;
     font-size: 18px;
-    font-weight: 500;
+    font-weight: 400;
     text-decoration: none;
     margin-right: 4px;
   }
@@ -39,3 +41,18 @@
     }
   }
 }
+
+footer {
+  height: 64px;
+}
+
+// 等于或大于 75*16 = 1200px（ pc宽屏）
+@media (min-width: 75em) {
+  header,footer {
+    .fx-grid {
+      width: 960px;
+      margin: 0 auto;
+    }
+  }
+}
+

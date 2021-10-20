@@ -3,20 +3,3 @@
 @import "src/styles/navtop";
 @import "src/styles/controls";
 @import "src/pages/pages";
-
-html {
-    overflow-x: hidden;
-}
-
-.article-list {
-    .article-item {
-        .article-link {
-            color: #000;
-            text-decoration: none;
-        }
-    }
-}
-
-main {
-    margin: 0 auto 24px;
-}

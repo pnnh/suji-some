@@ -1,4 +1,14 @@
 .article-edit {
+  .title-area,.body-area,.submit-area {
+    background: #FFFFFF;
+    border-radius: 4px;
+  }
+  .title-area,.body-area {
+    margin-bottom: 16px;
+  }
+  .title-area,.submit-area {
+    padding: 16px;
+  }
   .description {
     margin-bottom: 16px;
   }
@@ -11,4 +21,25 @@
   margin: 8px 0;
   line-height: 20px;
   overflow: auto;
+}
+
+.article-read-page {
+  article {
+    color: #333;
+    font-family: -apple-system,BlinkMacSystemFont,Helvetica Neue,PingFang SC,Microsoft YaHei,Source Han Sans SC,Noto Sans CJK SC,WenQuanYi Micro Hei,sans-serif;
+    padding: 16px;
+    background: #FFFFFF;
+    border-radius: 4px;
+
+    h1 {
+      margin-bottom: 32px;
+    }
+
+    p {
+      font-weight: 400;
+      font-size: 15px;
+      line-height: 1.6;
+      word-break: break-word;
+    }
+  }
 }

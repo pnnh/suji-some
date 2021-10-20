@@ -1,39 +1,30 @@
 {{ define "index/client.gohtml" }}
-<!DOCTYPE html>
-<html lang="zh">
-<head>
-    {{ template "partial/headmeta.gohtml" }}
-    {{ template "partial/analytics.gohtml" }}
-    <title>泛函</title>
-    {{ cssHtml }}
-</head>
-<body>
-    <div class="ms-Grid" dir="ltr">
-            {{ template "partial/header.gohtml" }}
-            <div class="ms-Grid-row">
-                <div class="ms-Grid-col ms-sm0 ms-xl2">
-                </div>
-                <div class="ms-Grid-col ms-sm12 ms-xl8">
-                    <main>
-                        <div id="root"></div>
-                    </main>
-                </div>
-                <div class="ms-Grid-col ms-sm0 ms-xl2">
-                </div>
-            </div>
-            <div class="ms-Grid-row">
-                <div class="ms-Grid-col ms-sm0 ms-xl2">
-                </div>
-                <div class="ms-Grid-col ms-sm12 ms-xl8">
-                    <footer>
-                    </footer>
-                </div>
-                <div class="ms-Grid-col ms-sm0 ms-xl2">
-                </div>
-            </div>
-        </div>
-    <script id="data" type="application/json">{{.data}}</script>
+	<!DOCTYPE html>
+	<html lang="zh">
+	<head>
+        {{ template "partial/headmeta.gohtml" }}
+        {{ template "partial/analytics.gohtml" }}
+		<title>泛函</title>
+        {{ cssHtml }}
+	</head>
+	<body>
+	<div class="ms-Grid" dir="ltr">
+        {{ template "partial/header.gohtml" }}
+		<main>
+			<div class="ms-Grid-row">
+				<div class="ms-Grid-col ms-sm0 ms-xl2">
+				</div>
+				<div class="ms-Grid-col ms-sm12 ms-xl8">
+					<div id="root"></div>
+				</div>
+				<div class="ms-Grid-col ms-sm0 ms-xl2">
+				</div>
+			</div>
+		</main>
+        {{ template "partial/footer.gohtml" }}
+	</div>
+	<script id="data" type="application/json">{{.data}}</script>
     {{ jsHtml }}
-</body>
-</html>
+	</body>
+	</html>
 {{ end }}

@@ -1,0 +1,42 @@
+
+main {
+  background-color: #FFF;
+  margin: 0 auto 24px;
+  padding: 16px;
+  border-radius: 4px;
+  box-shadow: #f4f4f4;
+}
+
+// 等于或大于 75*16 = 1200px（ pc宽屏）
+@media (min-width: 75em) {
+  main {
+      width: 960px;
+      margin: 0 auto;
+  }
+}
+
+.home-page {
+  .article-list {
+    .article-item {
+      border-bottom: 1px solid #e5e6eb;
+      padding-bottom: 16px;
+      .article-link {
+        margin: 16px auto;
+        a {
+          color: #000;
+          text-decoration: none;
+          font-size: 18px;
+          font-weight: 600;
+          line-height: 1.6;
+        }
+      }
+      .update-time {
+        font-size: 13px;
+        color: #86909c;
+      }
+    }
+    .article-item:last-child {
+      border-bottom-width: 0;
+    }
+  }
+}

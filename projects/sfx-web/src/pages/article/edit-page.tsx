@@ -5,9 +5,9 @@ import { getJsonData, updateTitle } from '@/utils/helpers'
 import { onEdit } from '@/pages/article/save'
 
 type NewPageState = {
-    title: string;
-    email: string;
-    saveErrorMsg?: string;
+  title: string;
+  email: string;
+  saveErrorMsg?: string;
 };
 
 const initialValue = {
@@ -17,7 +17,7 @@ const initialValue = {
   }]
 }
 
-const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState) => {
+const EditPage = (props: { match: { params: { pk: string } } }, state: NewPageState) => {
   console.debug('EditPage')
   const [title, setTitle] = useState('')
   const [keywords, setKeywords] = useState('')
@@ -34,48 +34,50 @@ const EditPage = (props:{match: { params: { pk: string } }}, state: NewPageState
     updateTitle(serverData.title)
   }, [])
 
-  return <Stack horizontal className={'article-edit'} horizontalAlign={'space-between'} tokens={{ childrenGap: 16 }}>
-            <Stack.Item grow={1}>
-                <Stack tokens={{ childrenGap: 8 }}>
-                    <Stack.Item>
-                        <input placeholder={'标题'} value={title} className={'fx-text-field'}
-                               size={64}
-                                   onChange={(event) => {
-                                     setTitle(event.target.value)
-                                   }}/>
-                    </Stack.Item>
-                    <Stack.Item className={'description'}>
+  return <div className={'article-edit'}>
+    <Stack tokens={{ childrenGap: 8 }} className={'title-area'}>
+      <Stack.Item>
+        <input placeholder={'标题'} value={title} className={'fx-text-field'}
+               size={64}
+               onChange={(event) => {
+                 setTitle(event.target.value)
+               }}/>
+      </Stack.Item>
+      <Stack.Item className={'description'}>
                         <textarea placeholder={'描述'} value={description} className={'fx-text-area'}
                                   cols={80} rows={4}
-                                   onChange={(event) => {
-                                     setDescription(event.target.value)
-                                   }}/>
-                    </Stack.Item>
-                    <Stack.Item>
-                        <SFXEditor value={editorValue} onChange={(value) => {
-                          console.debug('onChange222')
-                          setEditorValue(value)
-                        }} />
-                    </Stack.Item>
-                    <Stack.Item className={'description'}>
-                        <input placeholder={'关键字'} title={'逗号分隔'} value={keywords}
-                               className={'fx-text-field'} size={64}
-                                   onChange={(event) => {
-                                     setKeywords(event.target.value)
-                                   }}/>
-                    </Stack.Item>
-                    <Stack.Item>
-                        <button className={'fx-primary-button'} onClick={() => {
-                          console.debug('onSave', editorValue)
-                          console.debug('onSave2', JSON.stringify(editorValue))
-                          onEdit(props.match.params.pk, editorValue, title, description, keywords)
-                        }}>
-                            发布
-                        </button>
-                    </Stack.Item>
-                </Stack>
-            </Stack.Item>
-        </Stack>
+                                  onChange={(event) => {
+                                    setDescription(event.target.value)
+                                  }}/>
+      </Stack.Item>
+    </Stack>
+    <Stack tokens={{ childrenGap: 8 }} className={'body-area'}>
+      <Stack.Item>
+        <SFXEditor value={editorValue} onChange={(value) => {
+          console.debug('onChange222')
+          setEditorValue(value)
+        }}/>
+      </Stack.Item>
+    </Stack>
+    <Stack tokens={{ childrenGap: 8 }} className={'submit-area'}>
+      <Stack.Item className={'description'}>
+        <input placeholder={'关键字'} title={'逗号分隔'} value={keywords}
+               className={'fx-text-field'} size={64}
+               onChange={(event) => {
+                 setKeywords(event.target.value)
+               }}/>
+      </Stack.Item>
+      <Stack.Item>
+        <button className={'fx-primary-button'} onClick={() => {
+          console.debug('onSave', editorValue)
+          console.debug('onSave2', JSON.stringify(editorValue))
+          onEdit(props.match.params.pk, editorValue, title, description, keywords)
+        }}>
+          发布
+        </button>
+      </Stack.Item>
+    </Stack>
+  </div>
 }
 
 export default EditPage
