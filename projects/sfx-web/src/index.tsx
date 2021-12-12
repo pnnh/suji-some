@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import AccountPage from '@/pages/account/account-page'
 import RandomPasswordPage from '@/pages/utils/random-password'
 import { renderExceptionPage } from '@/views/exception/render'
@@ -10,6 +10,7 @@ import NewPage from '@/pages/article/new-page'
 import EditPage from '@/pages/article/edit-page'
 import { ReadPage } from '@/pages/article/read-page'
 import { HomePage } from '@/pages/home/home'
+import { GoTop } from '@/components/go-top'
 
 const App = () => {
   const data = getJsonData<any>()
@@ -18,15 +19,15 @@ const App = () => {
     return renderExceptionPage(data.status)
   }
   return <Router>
-    <Switch>
-      <Route path="/article/new" component={NewPage}/>
-      <Route path="/article/edit/:pk" component={EditPage}/>
-      <Route path="/article/read/:pk" component={ReadPage}/>
-      <Route path="/utils/random/password" component={RandomPasswordPage}/>
-      <Route path="/account/login" component={AccountPage}/>
-      <Route path="/" component={HomePage}/>
-      <Route path="*" component={NotFoundPage}/>
-    </Switch>
+    <Routes>
+      <Route path="/article/new" element={<NewPage/>}/>
+      <Route path="/article/edit/:pk" element={<EditPage/>}/>
+      <Route path="/article/read/:pk" element={<ReadPage />}/>
+      <Route path="/utils/random/password" element={<RandomPasswordPage/>}/>
+      <Route path="/account/login" element={<AccountPage/>}/>
+      <Route path="/" element={<HomePage/>}/>
+      <Route path="*" element={<NotFoundPage/>}/>
+    </Routes>
   </Router>
 }
 
@@ -34,4 +35,9 @@ const App = () => {
 const rootElement = document.getElementById('root')
 if (rootElement) {
   ReactDOM.render(<App/>, rootElement)
+}
+
+const goTopElement = document.getElementById('go-top')
+if (goTopElement) {
+  ReactDOM.render(<GoTop/>, goTopElement)
 }

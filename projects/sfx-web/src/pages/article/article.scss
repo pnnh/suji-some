@@ -39,19 +39,27 @@
   }
 
   article {
-    padding: 16px;
-    background: #FFFFFF;
-    border-radius: 4px;
-
-    h1 {
-      margin-bottom: 32px;
+    .title,.body {
+      padding: 16px;
+      background: #FFFFFF;
+      border-radius: 4px;
     }
-
-    p {
-      font-weight: 400;
-      font-size: 15px;
-      line-height: 1.6;
-      word-break: break-word;
+    .title {
+      h1 {
+        margin-bottom: 16px;
+      }
+      .description {
+        font-size: 14px;
+      }
+    }
+    .body {
+      margin-top: 16px;
+      p {
+        font-weight: 400;
+        font-size: 15px;
+        line-height: 1.6;
+        word-break: break-word;
+      }
     }
   }
 

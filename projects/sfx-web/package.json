@@ -11,19 +11,19 @@
   "private": true,
   "dependencies": {
     "@fluentui/react": "^8.16.0",
-    "axios": "^0.21.1",
+    "axios": "^0.24.0",
     "is-hotkey": "^0.2.0",
     "locate-character": "^2.0.5",
     "lodash": "^4.17.21",
     "prismjs": "^1.23.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
-    "react-router": "^5.2.0",
-    "react-router-dom": "^5.2.0",
-    "slate": "^0.66.2",
+    "react-router": "^6.1.0",
+    "react-router-dom": "^6.1.0",
+    "slate": "^0.72.0",
     "slate-history": "^0.66.0",
-    "slate-react": "^0.66.2",
-    "@pnnh/stele": "0.0.5",
+    "slate-react": "^0.72.1",
+    "@pnnh/stele": "0.0.9",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
@@ -34,10 +34,10 @@
     "@types/react-dom": "^17.0.4",
     "@types/react-router-dom": "^5.1.8",
     "@types/uuid": "^8.3.1",
-    "@typescript-eslint/eslint-plugin": "^4.31.2",
-    "@typescript-eslint/parser": "^4.31.2",
-    "esbuild": "^0.13.2",
-    "eslint": "^7.32.0",
+    "@typescript-eslint/eslint-plugin": "^5.6.0",
+    "@typescript-eslint/parser": "^5.6.0",
+    "esbuild": "^0.14.2",
+    "eslint": "^8.4.1",
     "eslint-config-standard": "^16.0.3",
     "eslint-plugin-import": "^2.24.2",
     "eslint-plugin-node": "^11.1.0",
@@ -47,6 +47,6 @@
     "rollup-plugin-visualizer": "^5.5.0",
     "sass": "^1.35.2",
     "typescript": "^4.3.2",
-    "vite": "^2.3.5"
+    "vite": "^2.7.1"
   }
 }

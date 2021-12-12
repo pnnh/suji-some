@@ -4,6 +4,7 @@ import { SFXEditor, SFEditorModel } from '@pnnh/stele'
 import { getJsonData, updateTitle } from '@/utils/helpers'
 import { onEdit } from '@/pages/article/save'
 import { isScreenDesktop } from '@/utils/media'
+import { useParams } from 'react-router'
 
 type NewPageState = {
   title: string;
@@ -14,31 +15,31 @@ type NewPageState = {
 const initialValue = {
   children: [{
     name: 'paragraph',
-    children: [{ name: 'text', text: '' }]
+    children: [{ name: 'text', text: 'aaa' }]
   }]
 }
 
-const EditPage = (props: { match: { params: { pk: string } } }, state: NewPageState) => {
+const EditPage = (props: {}, state: NewPageState) => {
   console.debug('EditPage')
-  const [title, setTitle] = useState('')
-  const [keywords, setKeywords] = useState('')
-  const [description, setDescription] = useState('')
-  const [editorValue, setEditorValue] = useState<SFEditorModel>(initialValue)
-
-  useEffect(() => {
-    const serverData = getJsonData<any>()
-    console.debug('NewPage useEffect', serverData)
-    setTitle(serverData.title)
-    setEditorValue(serverData.body)
-    setKeywords(serverData.keywords)
-    setDescription(serverData.description)
-    updateTitle(serverData.title)
-  }, [])
+  const serverData = getJsonData<any>()
+  const [title, setTitle] = useState(serverData.title)
+  const [keywords, setKeywords] = useState(serverData.keywords)
+  const [description, setDescription] = useState(serverData.description)
+  const [editorValue, setEditorValue] = useState<SFEditorModel>(serverData.body)
+  console.debug('NewPage useEffect3333333333')
+  console.debug('NewPage useEffect', serverData)
+  console.debug('NewPage useEffect=====\n', JSON.stringify(serverData.body))
+  updateTitle(serverData.title)
 
   if (!isScreenDesktop()) {
     return <div>当前为移动设备，请使用电脑编辑</div>
   }
+  const params = useParams() as { pk: string }
+  console.debug('params', params)
 
+  if (!params.pk) {
+    return <div>参数有误</div>
+  }
   return <div className={'article-edit-page'}>
     <div className={'article-edit'}>
     <Stack tokens={{ childrenGap: 8 }} className={'title-area'}>
@@ -77,7 +78,8 @@ const EditPage = (props: { match: { params: { pk: string } } }, state: NewPageSt
         <button className={'fx-primary-button'} onClick={() => {
           console.debug('onSave', editorValue)
           console.debug('onSave2', JSON.stringify(editorValue))
-          onEdit(props.match.params.pk, editorValue, title, description, keywords)
+
+          onEdit(params.pk, editorValue, title, description, keywords)
         }}>
           发布
         </button>
