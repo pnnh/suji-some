@@ -9,6 +9,7 @@
 				<div class="menu">
 					<a class="link" href='/'>文章</a>&nbsp;
 					<a class="link" href='/utils/random/password'>随机密码</a>
+					<a class="link" href='/utils/encrypt/md5'>哈希值</a>
 				</div>
 			</div>
 			<div class="ms-Grid-col ms-xl4 header-right">
@@ -18,5 +19,28 @@
 	</div>
 	<div class="ms-Grid-col ms-sm0 ms-xl2">
 	</div>
+	<div>
+		<canvas id="qt-canvas" style="display:none;" contentEditable="true" onContextMenu="event.preventDefault()"></canvas>
+	</div>
+	<script type="text/javascript">
+		document.addEventListener('DOMContentLoaded',function(){
+			console.log('3 seconds passed');
+			const qtCanvas = document.getElementById('qt-canvas')
+			if (qtCanvas) {
+				const qtLoader = QtLoader({
+					canvasElements: [qtCanvas],
+					showLoader: function () { },
+					showError: function (errorMessage) {
+						console.log('showError', errorMessage)
+					},
+					showExit: function () {
+					},
+					showCanvas: function () {
+					}
+				})
+				qtLoader.loadEmscriptenModule('http://localhost:3000/wasm/qt-canvas')
+			}
+		});
+	</script>
 </header>
 {{ end }}

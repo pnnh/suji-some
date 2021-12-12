@@ -39,12 +39,12 @@
   }
 
   article {
-    .title,.body {
+    .article-title,.article-body {
       padding: 16px;
       background: #FFFFFF;
       border-radius: 4px;
     }
-    .title {
+    .article-title {
       h1 {
         margin-bottom: 16px;
       }
@@ -52,7 +52,7 @@
         font-size: 14px;
       }
     }
-    .body {
+    .article-body {
       margin-top: 16px;
       p {
         font-weight: 400;

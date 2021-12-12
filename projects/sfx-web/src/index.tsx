@@ -11,6 +11,7 @@ import EditPage from '@/pages/article/edit-page'
 import { ReadPage } from '@/pages/article/read-page'
 import { HomePage } from '@/pages/home/home'
 import { GoTop } from '@/components/go-top'
+import MD5Page from '@/pages/utils/md5'
 
 const App = () => {
   const data = getJsonData<any>()
@@ -24,6 +25,7 @@ const App = () => {
       <Route path="/article/edit/:pk" element={<EditPage/>}/>
       <Route path="/article/read/:pk" element={<ReadPage />}/>
       <Route path="/utils/random/password" element={<RandomPasswordPage/>}/>
+      <Route path="/utils/encrypt/md5" element={<MD5Page/>}/>
       <Route path="/account/login" element={<AccountPage/>}/>
       <Route path="/" element={<HomePage/>}/>
       <Route path="*" element={<NotFoundPage/>}/>

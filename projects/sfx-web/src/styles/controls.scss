@@ -1,11 +1,11 @@
-.fx-text-field,.fx-text-area {
+.fx-text-field,.fx-text-area,.fx-input {
   border: 1px solid #edebe9;
   padding: 8px;
   outline: none;
   font-size: 14px;
   border-radius: 2px;
 }
-.fx-primary-button {
+.fx-button,.fx-primary-button {
   border: 1px solid rgb(0, 120, 212);
   background-color: rgb(0, 120, 212);
   color: rgb(255, 255, 255);
@@ -19,4 +19,9 @@
   border-radius: 2px;
   min-width: 80px;
   height: 32px;
+}
+.fx-card {
+  background: #FFFFFF;
+  padding: 16px;
+  border-radius: 4px;
 }
