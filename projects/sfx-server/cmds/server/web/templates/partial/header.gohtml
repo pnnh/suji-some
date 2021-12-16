@@ -22,25 +22,5 @@
 	<div>
 		<canvas id="qt-canvas" style="display:none;" contentEditable="true" onContextMenu="event.preventDefault()"></canvas>
 	</div>
-	<script type="text/javascript">
-		document.addEventListener('DOMContentLoaded',function(){
-			console.log('3 seconds passed');
-			const qtCanvas = document.getElementById('qt-canvas')
-			if (qtCanvas) {
-				const qtLoader = QtLoader({
-					canvasElements: [qtCanvas],
-					showLoader: function () { },
-					showError: function (errorMessage) {
-						console.log('showError', errorMessage)
-					},
-					showExit: function () {
-					},
-					showCanvas: function () {
-					}
-				})
-				qtLoader.loadEmscriptenModule('http://localhost:3000/wasm/qt-canvas')
-			}
-		});
-	</script>
 </header>
 {{ end }}

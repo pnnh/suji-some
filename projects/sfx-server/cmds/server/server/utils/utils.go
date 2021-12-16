@@ -24,7 +24,7 @@ func JsLink(resUrl string, proResUrl string) template.HTML {
 	if gin.Mode() == gin.DebugMode {
 		jsUrl = fmt.Sprintf("http://localhost:3000%s", resUrl)
 	}
-	htmlText := template.HTML(fmt.Sprintf("<script type='module' src='%s'></script>", jsUrl))
+	htmlText := template.HTML(jsUrl)
 	return htmlText
 }
 
@@ -33,16 +33,8 @@ func CssLink(resUrl string, proResUrl string) template.HTML {
 	if gin.Mode() == gin.DebugMode {
 		cssUrl = fmt.Sprintf("http://localhost:3000%s", resUrl)
 	}
-	htmlText := template.HTML(fmt.Sprintf("<link rel='stylesheet' type='text/css' href='%s' />", cssUrl))
+	htmlText := template.HTML(cssUrl)
 	return htmlText
-}
-
-func CssHtml() template.HTML {
-	return template.HTML(config.CssHtml)
-}
-
-func JsHtml() template.HTML {
-	return template.HTML(config.JsHtml)
 }
 
 func EqString(a interface{}, b string) bool {
@@ -68,8 +60,8 @@ func ClientPage(gctx *gin.Context, status int, data gin.H) {
 
 func FuncMap() template.FuncMap {
 	funcMap := template.FuncMap{
-		"cssHtml":     CssHtml,
-		"jsHtml":      JsHtml,
+		"jsLink":      JsLink,
+		"cssLink":     CssLink,
 		"eqString":    EqString,
 		"fmtTime":     FmtTime,
 		"fmtTimeUnix": FmtTimeUnix,

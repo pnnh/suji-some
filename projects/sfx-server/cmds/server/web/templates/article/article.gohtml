@@ -8,7 +8,7 @@
 		<meta name="description" content="{{.description}}"/>
 		<meta name="keywords" content="{{.keywords}}"/>
 		<link rel="canonical" href="https://www.sfx.xyz/article/read/{{.pk}}"/>
-        {{ cssHtml }}
+		{{ template "res/css.gohtml" }}
 	</head>
 	<body class="article-read-page">
 	<div>
@@ -29,7 +29,7 @@
 
 	<div id="root"></div>
 	<script id="data" type="application/json">{{.data}}</script>
-    {{ jsHtml }}
+	{{ template "res/js.gohtml" }}
 	</body>
 	</html>
 {{ end }}

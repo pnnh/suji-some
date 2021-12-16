@@ -5,7 +5,7 @@
         {{ template "partial/headmeta.gohtml" }}
         {{ template "partial/analytics.gohtml" }}
 		<title>泛函</title>
-        {{ cssHtml }}
+		{{ template "res/css.gohtml" }}
 	</head>
 	<body class="home-page">
 	<div>
@@ -39,7 +39,7 @@
 	</div>
 	<div id="root"></div>
 	<script id="data" type="application/json">{{.data}}</script>
-    {{ jsHtml }}
+	{{ template "res/js.gohtml" }}
 	</body>
 	</html>
 {{ end }}

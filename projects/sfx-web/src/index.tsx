@@ -43,3 +43,22 @@ const goTopElement = document.getElementById('go-top')
 if (goTopElement) {
   ReactDOM.render(<GoTop/>, goTopElement)
 }
+
+document.addEventListener('DOMContentLoaded', function () {
+  console.log('3 seconds passed')
+  const qtCanvas = document.getElementById('qt-canvas')
+  if (qtCanvas) {
+    const qtLoader = window.QtLoader({
+      canvasElements: [qtCanvas],
+      showLoader: function () { },
+      showError: function (errorMessage: string) {
+        console.log('showError', errorMessage)
+      },
+      showExit: function () {
+      },
+      showCanvas: function () {
+      }
+    })
+    qtLoader.loadEmscriptenModule('http://localhost:3000/wasm/qt-canvas')
+  }
+})
