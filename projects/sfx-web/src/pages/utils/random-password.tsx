@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import {
-  Stack,
   Checkbox,
   SpinButton
 } from '@fluentui/react'
@@ -39,28 +38,41 @@ export default function RandomPasswordPage () {
         </>
   }
   return <div className={'random-password-page'}>
-    <Stack tokens={{ childrenGap: 16 }} className={'random-password'}>
-            <Stack.Item>
+    <div className={'random-password'}>
+            <div>
                 <h2 className={'tool-title'}>随机密码生成器</h2>
                 <p className={'tool-desc'}>本页生成的密码不会保持，刷新或关闭页面后消失</p>
-            </Stack.Item>
-            <Stack.Item>
-                <Stack horizontal tokens={{ childrenGap: 16 }}>
-                    <Checkbox label="小写字母" title={'a-z'} checked={allowLetter} onChange={(event, isChecked) => {
-                      setAllowLetter(isChecked || false)
+            </div>
+            <div>
+                <div>
+                  <label>
+                    <input type={'checkbox'} checked={allowLetter} title={'a-z'} onChange={(event) => {
+                      console.debug('radio', event.target.checked)
+                      setAllowLetter(event.target.checked)
                     }} />
-                    <Checkbox label="大写字母" title={'A-Z'} checked={allowUppercaseLetter} onChange={(event, isChecked) => {
-                      setAllowUppercaseLetter(isChecked || false)
+                    小写字母
+                  </label>
+                  <label>
+                    <input type={'checkbox'} title={'A-Z'} checked={allowUppercaseLetter} onChange={(event) => {
+                      setAllowUppercaseLetter(event.target.checked)
                     }} />
-                    <Checkbox label="数字" title={'0-9'} checked={allowNumber} onChange={(event, isChecked) => {
-                      setAllowNumber(isChecked || false)
+                    大写字母
+                  </label>
+                  <label>
+                    <input type={'checkbox'} title={'0-9'} checked={allowNumber} onChange={(event) => {
+                      setAllowNumber(event.target.checked)
                     }} />
-                    <Checkbox label="特殊符号" title={'@#$...'} checked={allowSymbol} onChange={(event, isChecked) => {
-                      setAllowSymbol(isChecked || false)
+                    数字
+                  </label>
+                  <label>
+                    <input type={'checkbox'} title={'@#$...'} checked={allowSymbol} onChange={(event) => {
+                      setAllowSymbol(event.target.checked)
                     }} />
-                </Stack>
-            </Stack.Item>
-            <Stack.Item>
+                    特殊字符
+                  </label>
+                </div>
+            </div>
+            <div>
                 <SpinButton
                     value={length.toString()}
                     onChange={(event, value) => {
@@ -70,8 +82,8 @@ export default function RandomPasswordPage () {
                     min={4} max={64} step={2}
                     styles={{ spinButtonWrapper: { width: 75 } }}
                 />
-            </Stack.Item>
-            <Stack.Item align={'start'}>
+            </div>
+            <div>
                 <button className={'fx-primary-button'} onClick={() => {
                   const options = {
                     number: allowNumber,
@@ -86,13 +98,13 @@ export default function RandomPasswordPage () {
                   history.splice(0, 0, password)
                   setPasswordHistory(history)
                 }}>点击生成</button>
-            </Stack.Item>
-            <Stack.Item>
+            </div>
+            <div>
                 {renderPassword()}
-            </Stack.Item>
-            <Stack.Item>
+            </div>
+            <div>
                 {renderHistory()}
-            </Stack.Item>
-        </Stack>
+            </div>
+        </div>
   </div>
 }

@@ -12,7 +12,6 @@ export function GoTop () {
       } else {
         setDisplay('none')
       }
-      console.debug('GoTop target', target)
     }, { passive: true })
   }, [])
 
