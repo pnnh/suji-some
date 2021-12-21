@@ -27,10 +27,6 @@ phases:
             - echo $REPOSITORY_URI
             - docker build -t $REPOSITORY_URI:latest .
             - docker tag $REPOSITORY_URI:latest $REPOSITORY_URI:$IMAGE_TAG
-            - echo Sync S3 files
-            - cd $CODEBUILD_SRC_DIR/dist/web/build
-            - ls -l
-            - aws s3 sync . s3://sfxres/ --delete
     post_build:
         commands:
             - echo Build completed on `date`

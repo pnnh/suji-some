@@ -11,10 +11,7 @@ phases:
             - apt-get install -y ca-certificates
             - apt-get install -y build-essential
             - apt-get install -y golang-go
-            - apt-get install -y nodejs npm
             - go version
-            - node --version
-            - npm --version
             - make
             
 artifacts:
