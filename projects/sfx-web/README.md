@@ -15,3 +15,10 @@
 cd dist
 http-server --cors
 ```
+
+## 手动进行brotli压缩
+
+```shell
+npm i -g brotli-cli   # 安装压缩工具
+brotli-cli compress qt-canvas.wasm
+```
