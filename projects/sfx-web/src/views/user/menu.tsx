@@ -1,7 +1,4 @@
 import React from 'react'
-import {
-  Stack
-} from '@fluentui/react'
 import { getJsonData } from '@/utils/helpers'
 import { ApiUrl } from '@/utils/config'
 
@@ -23,7 +20,7 @@ const useActionButton = () => {
 }
 
 export default function UserMenu () {
-  return <Stack.Item align={'center'}>
+  return <div>
             {useActionButton()}
-        </Stack.Item>
+        </div>
 }

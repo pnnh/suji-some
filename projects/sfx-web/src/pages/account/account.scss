@@ -1,5 +1,17 @@
 
 .account-page {
+  .message-error {
+    color: red;
+  }
+  .message-info {
+    color: #333333;
+  }
+  .row-mail,.row-password,.row-login {
+    margin-bottom: 16px;
+  }
+  .send-mail-link {
+    margin-left: 8px;
+  }
   @media (min-width: $screen-desktop) {
     .content-body {
       width: 960px;
