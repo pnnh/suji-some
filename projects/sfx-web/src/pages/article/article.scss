@@ -12,6 +12,7 @@
       padding: 16px;
     }
     .description {
+      margin-top: 8px;
       margin-bottom: 16px;
     }
   }
@@ -33,7 +34,13 @@
     line-height: 20px;
     overflow: auto;
   }
-
+  .article-page-menu {
+    display: flex;
+    flex-direction: row;
+    >div {
+      margin-right: 8px;
+    }
+  }
   .new-button,.edit-button {
     display: none;
   }

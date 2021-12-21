@@ -1,28 +1,8 @@
 import ReactDOM from 'react-dom'
-import React, {useEffect} from 'react'
-import {getJsonData} from '@/utils/helpers'
+import React, { useEffect } from 'react'
+import { getJsonData } from '@/utils/helpers'
 import Prism from 'prismjs'
 import '@/utils/highlight'
-
-import {ContextualMenu} from '@fluentui/react/lib/ContextualMenu'
-import {useId, useBoolean} from '@fluentui/react-hooks'
-import {Dialog, DialogType, DialogFooter} from '@fluentui/react/lib/Dialog'
-import {articleDelete} from '@/services/article'
-import {ApiUrl} from '@/utils/config'
-
-const dialogStyles = {main: {maxWidth: 450}}
-const dragOptions = {
-  moveMenuItemText: '移动',
-  closeMenuItemText: '关闭',
-  menu: ContextualMenu,
-  keepInBounds: true
-}
-const dialogContentProps = {
-  type: DialogType.normal,
-  title: '确认',
-  closeButtonAriaLabel: '关闭',
-  subText: '确定删除文章吗？'
-}
 
 const ArticleMenu = () => {
   const data = getJsonData<any>()
@@ -43,9 +23,6 @@ const ArticleMenu = () => {
   </button>
   children.push(createButton)
 
-  const labelId: string = useId('dialogLabel')
-  const subTextId: string = useId('subTextLabel')
-
   if (data.creator) {
     const editButton = <button className={'fx-primary-button edit-button'} onClick={() => {
       window.location.href = '/article/edit/' + data.pk
@@ -53,10 +30,16 @@ const ArticleMenu = () => {
     children.push(editButton)
 
     const deleteButton = <button className={'fx-primary-button delete-button'}
-                                 onClick={() = {
+                                 onClick={() => {
                                    console.log('delete')
-                                   if (window.confirm("Do you really want to leave?")) {
-                                     window.open("exit.html", "Thanks for Visiting!");
+                                   if (confirm('确定删除吗？')) {
+                                     console.debug('确认删除')
+                                     // articleDelete(data.pk).then((out) => {
+                                     //   console.debug('articleDelete', out)
+                                     //   if (out) {
+                                     //     window.location.href = ApiUrl.home
+                                     //   }
+                                     // })
                                    }
                                  }}>删除</button>
     children.push(deleteButton)
@@ -66,46 +49,12 @@ const ArticleMenu = () => {
       {element}
     </div>)
 
-  const modalProps = React.useMemo(
-    () => ({
-      titleAriaId: labelId,
-      subtitleAriaId: subTextId,
-      isBlocking: false,
-      styles: dialogStyles,
-      dragOptions: dragOptions
-    }),
-    [labelId, subTextId]
-  )
-
-  return <>
-    <div>
+  return <div className={'article-page-menu'}>
       {elements}
     </div>
-    <Dialog
-      hidden={hideDialog}
-      onDismiss={toggleHideDialog}
-      dialogContentProps={dialogContentProps}
-      modalProps={modalProps}
-    >
-      <DialogFooter>
-        <button className={'fx-primary-button'} onClick={() => {
-          console.debug('确认删除')
-          articleDelete(data.pk).then((out) => {
-            console.debug('articleDelete', out)
-            if (out) {
-              window.location.href = ApiUrl.home
-            }
-          })
-          toggleHideDialog()
-        }}>删除
-        </button>
-        <button className={'fx-primary-button'} onClick={toggleHideDialog}>取消</button>
-      </DialogFooter>
-    </Dialog>
-  </>
 }
 
-export function ReadPage() {
+export function ReadPage () {
   useEffect(() => {
     // 右上角操作菜单
     const rootElement = document.getElementById('user-menu')
