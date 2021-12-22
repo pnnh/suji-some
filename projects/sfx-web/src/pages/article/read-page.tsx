@@ -3,6 +3,8 @@ import React, { useEffect } from 'react'
 import { getJsonData } from '@/utils/helpers'
 import Prism from 'prismjs'
 import '@/utils/highlight'
+import { articleDelete } from '@/services/article'
+import { ApiUrl } from '@/utils/config'
 
 const ArticleMenu = () => {
   const data = getJsonData<any>()
@@ -34,12 +36,12 @@ const ArticleMenu = () => {
                                    console.log('delete')
                                    if (confirm('确定删除吗？')) {
                                      console.debug('确认删除')
-                                     // articleDelete(data.pk).then((out) => {
-                                     //   console.debug('articleDelete', out)
-                                     //   if (out) {
-                                     //     window.location.href = ApiUrl.home
-                                     //   }
-                                     // })
+                                     articleDelete(data.pk).then((out) => {
+                                       console.debug('articleDelete', out)
+                                       if (out) {
+                                         window.location.href = ApiUrl.home
+                                       }
+                                     })
                                    }
                                  }}>删除</button>
     children.push(deleteButton)

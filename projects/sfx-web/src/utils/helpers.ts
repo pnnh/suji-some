@@ -22,7 +22,7 @@ export function updateTitle (title: string) {
     return
   }
   const titleEl = elements[0]
-  titleEl.innerText = title + ' - 泛函'
+  titleEl.innerText = title + ' - 泛涵'
 }
 
 export function setLocalStorage (key: string, value: any) {
