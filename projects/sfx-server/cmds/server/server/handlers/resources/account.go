@@ -122,7 +122,7 @@ func (s *accountHandler) LoadImage(gctx *gin.Context) {
 	}
 	startTime := time.Unix(timeUnix, 0)
 	now := time.Now()
-	if startTime.After(now) || now.Sub(startTime) > time.Minute * 5 {
+	if startTime.After(now) || now.Sub(startTime) > time.Minute*5 {
 		gctx.File("web/images/expired.jpeg")
 		return
 	}
@@ -187,7 +187,7 @@ func (s *accountHandler) LoginByOTPCode(gctx *gin.Context) {
 		return
 	}
 
-	logrus.Debugln("LoginResponse",  token)
+	logrus.Debugln("LoginResponse", token)
 	expire := time.Now().Add(time.Hour * 24 * 7)
 	cookieExpire := int(expire.Sub(time.Now()).Seconds())
 	gctx.SetSameSite(http.SameSiteStrictMode)
@@ -201,10 +201,36 @@ type sessionPostIn struct {
 	Code  string `json:"code"`
 }
 
+func (s *accountHandler) HandlePersonal(gctx *gin.Context) {
+	auth, err := middleware.GetAuth(gctx)
+	if err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错: %w", err)
+		return
+	}
+
+	userInfo := &dbmodels.AccountTable{
+		Pk: auth,
+	}
+	if err := s.middleware.DB.First(userInfo).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			utils.ClientPage(gctx, http.StatusNotFound, nil)
+			return
+		}
+		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+		return
+	}
+	gctx.HTML(http.StatusOK, "account/personal.gohtml", gin.H{
+		"pk":      userInfo.Pk,
+		"email":   userInfo.UName,
+		"regtime": utils.FmtTime(userInfo.CreateTime),
+	})
+}
+
 func (s *accountHandler) RegisterRouter(router *gin.Engine, name string) {
 	router.POST("/account/login", s.LoginByOTPCode)
 	router.POST("/account/verify", s.SendOTPCode)
 	router.GET("/account/image", s.LoadImage)
+	router.GET("/account/personal", s.HandlePersonal)
 }
 
 func NewAccountResource(middleware *middleware.ServerMiddleware) IResource {

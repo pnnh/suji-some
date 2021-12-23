@@ -3,6 +3,13 @@
   .new-button {
     display: none;
   }
+  .user-menu {
+    display: flex;
+    flex-direction: row;
+    >button {
+      margin-left: 8px;
+    }
+  }
   main {
     background: #FFFFFF;
     margin: 0 auto 24px;
