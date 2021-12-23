@@ -19,3 +19,12 @@
     }
   }
 }
+
+.personal-page {
+  @media (min-width: $screen-desktop) {
+    .content-body {
+      width: 960px;
+      margin: 0 auto;
+    }
+  }
+}
