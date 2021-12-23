@@ -13,6 +13,7 @@ import { HomePage } from '@/pages/home/home'
 import { GoTop } from '@/components/go-top'
 import MD5Page from '@/pages/utils/md5'
 import PersonalPage from '@/pages/account/personal-page'
+import AccountEditPage from '@/pages/account/edit-page'
 
 const App = () => {
   const data = getJsonData<any>()
@@ -29,6 +30,7 @@ const App = () => {
       <Route path="/utils/encrypt/md5" element={<MD5Page/>}/>
       <Route path="/account/login" element={<AccountPage/>}/>
       <Route path="/account/personal" element={<PersonalPage/>}/>
+      <Route path="/account/edit" element={<AccountEditPage/>}/>
       <Route path="/" element={<HomePage/>}/>
       <Route path="*" element={<NotFoundPage/>}/>
     </Routes>

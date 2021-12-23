@@ -3,12 +3,13 @@ package models
 import "time"
 
 type AccountTable struct {
-	Pk         string    `json:"pk" gorm:"primaryKey"`
-	UName      string    `json:"uname" gorm:"column:uname"`
-	UPass      string    `json:"upass" gorm:"column:upass"`
+	Pk         string    `json:"pk" gorm:"primaryKey"`      // 主键标识
+	UName      string    `json:"uname" gorm:"column:uname"` // 账号
+	UPass      string    `json:"upass" gorm:"column:upass"` // 密码
 	CreateTime time.Time `json:"create_time" gorm:"column:create_time"`
 	UpdateTime time.Time `json:"update_time" gorm:"column:update_time"`
 	Image      string    `json:"image" gorm:"column:image"`
+	NickName   string    `json:"nickname" gorm:"column:nickname"` // 昵称
 }
 
 func (AccountTable) TableName() string {

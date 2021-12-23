@@ -226,11 +226,41 @@ func (s *accountHandler) HandlePersonal(gctx *gin.Context) {
 	})
 }
 
+// 修改个人资料
+func (s *accountHandler) HandleEdit(gctx *gin.Context) {
+	auth, err := middleware.GetAuth(gctx)
+	if err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错: %w", err)
+		return
+	}
+
+	userInfo := &dbmodels.AccountTable{
+		Pk: auth,
+	}
+	if err := s.middleware.DB.First(userInfo).Error; err != nil {
+		if err == gorm.ErrRecordNotFound {
+			utils.ClientPage(gctx, http.StatusNotFound, nil)
+			return
+		}
+		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+		return
+	}
+	gctx.HTML(http.StatusOK, "account/edit.gohtml", gin.H{
+		"data": map[string]interface{}{
+			"pk":       userInfo.Pk,
+			"email":    userInfo.UName,
+			"nickname": userInfo.NickName,
+			"login":    len(auth) > 0,
+		},
+	})
+}
+
 func (s *accountHandler) RegisterRouter(router *gin.Engine, name string) {
 	router.POST("/account/login", s.LoginByOTPCode)
 	router.POST("/account/verify", s.SendOTPCode)
 	router.GET("/account/image", s.LoadImage)
 	router.GET("/account/personal", s.HandlePersonal)
+	router.GET("/account/edit", s.HandleEdit)
 }
 
 func NewAccountResource(middleware *middleware.ServerMiddleware) IResource {
