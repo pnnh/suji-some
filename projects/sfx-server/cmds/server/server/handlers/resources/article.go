@@ -7,6 +7,7 @@ import (
 	"html/template"
 	"log"
 	"net/http"
+	"strings"
 	"time"
 
 	dbmodels "sfxserver/application/services/db/models"
@@ -80,8 +81,8 @@ func (s *articleHandler) Edit(gctx *gin.Context) {
 	utils.ClientPage(gctx, http.StatusOK, gin.H{
 		"title":       article.Title,
 		"body":        value,
-		"description": article.Description,
-		"keywords":    article.Keywords,
+		"description": article.Description.String,
+		"keywords":    article.Keywords.String,
 	})
 }
 
@@ -146,9 +147,12 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 	gctx.HTML(http.StatusOK, "article/article.gohtml", gin.H{
 		"pk":          article.Pk,
 		"title":       article.Title,
-		"description": article.Description,
-		"keywords":    article.Keywords,
-		"body":        template.HTML(content),
+		"description": article.Description.String,
+		"keywords":    article.Keywords.String,
+		"keywordsList": strings.FieldsFunc(article.Keywords.String, func(c rune) bool {
+			return c == ','
+		}),
+		"body": template.HTML(content),
 		"data": map[string]interface{}{
 			"pk":      article.Pk,
 			"creator": auth == article.Creator,
