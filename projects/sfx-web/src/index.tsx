@@ -14,6 +14,7 @@ import { GoTop } from '@/components/go-top'
 import MD5Page from '@/pages/utils/md5'
 import PersonalPage from '@/pages/account/personal-page'
 import AccountEditPage from '@/pages/account/edit-page'
+import UserInfoPage from '@/pages/user/info-page'
 
 const App = () => {
   const data = getJsonData<any>()
@@ -31,6 +32,7 @@ const App = () => {
       <Route path="/account/login" element={<AccountPage/>}/>
       <Route path="/account/personal" element={<PersonalPage/>}/>
       <Route path="/account/edit" element={<AccountEditPage/>}/>
+      <Route path="/user/:pk" element={<UserInfoPage/>}/>
       <Route path="/" element={<HomePage/>}/>
       <Route path="*" element={<NotFoundPage/>}/>
     </Routes>

@@ -53,6 +53,7 @@ func (s *WebServer) Init() error {
 
 	s.resources["post"] = resources.NewArticleResource(s.middleware)
 	s.resources["account"] = resources.NewAccountResource(s.middleware)
+	s.resources["user"] = resources.NewUserResource(s.middleware)
 
 	for name, resource := range s.resources {
 		resource.RegisterRouter(s.router, name)

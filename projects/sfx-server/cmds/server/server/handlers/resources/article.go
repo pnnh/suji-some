@@ -1,6 +1,7 @@
 package resources
 
 import (
+	"database/sql"
 	"fmt"
 	"html"
 	"html/template"
@@ -181,8 +182,8 @@ func (s *articleHandler) Create(gctx *gin.Context) {
 		CreateTime:  time.Now(),
 		UpdateTime:  time.Now(),
 		Creator:     auth,
-		Keywords:    in.Keywords,
-		Description: in.Description,
+		Keywords:    sql.NullString{String: in.Keywords, Valid: true},
+		Description: sql.NullString{String: in.Description, Valid: true},
 	}
 	if err := s.middleware.DB.Create(article).Error; err != nil {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
@@ -260,8 +261,8 @@ func (s *articleHandler) Put(gctx *gin.Context) {
 	updateBody := &dbmodels.ArticleTable{
 		Title:       in.Title,
 		Body:        in.Body,
-		Keywords:    in.Keywords,
-		Description: in.Description,
+		Keywords:    sql.NullString{String: in.Keywords, Valid: true},
+		Description: sql.NullString{String: in.Description, Valid: true},
 		UpdateTime:  time.Now(),
 	}
 	if err := s.middleware.DB.Where(updateQuery).Updates(updateBody).Error; err != nil {

@@ -24,8 +24,11 @@
 									<div class="article-description">
                                         {{.Description}}
 									</div>
-									<span class="update-time" data-name="update_time"
-									      data-value="{{.UpdateTime}}">{{.UpdateTimeFormatted}}</span>
+									<div class="article-info">
+										<a class="article-creator" href="/user/{{.Creator}}">{{.NickName}}</a>
+										<span class="update-time" data-name="update_time"
+										      data-value="{{.UpdateTime}}">{{.UpdateTimeFormatted}}</span>
+									</div>
 								</div>
 							</div>
                         {{end}}

@@ -35,18 +35,19 @@ func (app *Application) initMiddleware() (*middleware.ServerMiddleware, error) {
 	app.Use("db", dbsvc)
 	mailSvc := email.NewService()
 	app.Use("mail", mailSvc)
-
+	sqlsvc := db.NewSqlxService(config.DBDSN)
+	app.Use("sqlx", sqlsvc)
 	tmpls := templs.NewService()
 	app.Use("templs", tmpls)
 
 	serverMiddleware := &middleware.ServerMiddleware{
-		DB:   dbsvc,
-		Mail: mailSvc,
-		Templs: tmpls,
+		DB:          dbsvc,
+		Mail:        mailSvc,
+		Templs:      tmpls,
+		SqlxService: sqlsvc,
 	}
 	return serverMiddleware, nil
 }
-
 
 func (app *Application) Init() error {
 	gin.SetMode(gin.ReleaseMode)

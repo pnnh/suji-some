@@ -1,0 +1,44 @@
+{{ define "user/info.gohtml" }}
+    <!DOCTYPE html>
+    <html lang="zh">
+    <head>
+        {{ template "partial/headmeta.gohtml" }}
+        {{ template "partial/analytics.gohtml" }}
+        <title>用户信息 - 泛涵</title>
+        {{ template "res/css.gohtml" }}
+    </head>
+    <body>
+    <div class="ms-Grid" dir="ltr">
+        {{ template "partial/header.gohtml" }}
+        <main>
+            <div class="ms-Grid-row">
+                <div class="ms-Grid-col ms-sm0 ms-xl2">
+                </div>
+                <div class="ms-Grid-col ms-sm12 ms-xl8">
+                    <div id="root"></div>
+                    <div class="personal-page">
+                        <div class="content-body fx-card">
+                            <div class="user-info">
+                                <div class="row-nickname">
+                                    <h3>昵称</h3>
+                                    {{.nickname}}
+                                </div>
+                                <div class="row-regtime">
+                                    <h3>注册时间</h3>
+                                    {{.regtime}}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="ms-Grid-col ms-sm0 ms-xl2">
+                </div>
+            </div>
+        </main>
+        {{ template "partial/footer.gohtml" }}
+    </div>
+    <script id="data" type="application/json">{{.data}}</script>
+    {{ template "res/js.gohtml" }}
+    </body>
+    </html>
+{{ end }}
