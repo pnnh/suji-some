@@ -35,6 +35,10 @@ const ApiUrl = {
     edit: '/article/edit/',
     delete: '/article/delete/',
     read: '/article/read/'
+  },
+  account: {
+    personal: '/account/personal',
+    edit: '/account/edit'
   }
 }
 

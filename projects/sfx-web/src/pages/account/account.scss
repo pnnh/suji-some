@@ -20,11 +20,17 @@
   }
 }
 
-.personal-page {
+.personal-page,.account-edit-page {
   @media (min-width: $screen-desktop) {
     .content-body {
       width: 960px;
       margin: 0 auto;
     }
+  }
+}
+
+.account-edit-page {
+  .row-email input, .row-nickname input {
+    width: 300px;
   }
 }

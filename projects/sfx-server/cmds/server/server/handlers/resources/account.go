@@ -220,9 +220,10 @@ func (s *accountHandler) HandlePersonal(gctx *gin.Context) {
 		return
 	}
 	gctx.HTML(http.StatusOK, "account/personal.gohtml", gin.H{
-		"pk":      userInfo.Pk,
-		"email":   userInfo.UName,
-		"regtime": utils.FmtTime(userInfo.CreateTime),
+		"pk":       userInfo.Pk,
+		"nickname": userInfo.NickName,
+		"regtime":  utils.FmtTime(userInfo.CreateTime),
+		"uptime":   utils.FmtTime(userInfo.UpdateTime),
 	})
 }
 
@@ -255,12 +256,48 @@ func (s *accountHandler) HandleEdit(gctx *gin.Context) {
 	})
 }
 
+// 修改个人资料
+func (s *accountHandler) HandleEditPut(gctx *gin.Context) {
+	in := &struct {
+		EMail    string `json:"email"`
+		NickName string `json:"nickname"`
+	}{}
+	if err := gctx.ShouldBindJSON(in); err != nil {
+		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+		return
+	}
+	if len(in.EMail) < 4 || len(in.NickName) < 1 {
+		utils.ResponseMessage(gctx, http.StatusBadRequest, "参数有误")
+		return
+	}
+
+	auth, err := middleware.GetAuth(gctx)
+	if err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错: %w", err)
+		return
+	}
+	updateQuery := &dbmodels.AccountTable{Pk: auth}
+	updateBody := &dbmodels.AccountTable{
+		UName:      in.EMail,
+		NickName:   in.NickName,
+		UpdateTime: time.Now(),
+	}
+	if err := s.middleware.DB.Where(updateQuery).Updates(updateBody).Error; err != nil {
+		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+		return
+	}
+	utils.ResponseData(gctx, http.StatusOK, gin.H{
+		"pk": auth,
+	})
+}
+
 func (s *accountHandler) RegisterRouter(router *gin.Engine, name string) {
 	router.POST("/account/login", s.LoginByOTPCode)
 	router.POST("/account/verify", s.SendOTPCode)
 	router.GET("/account/image", s.LoadImage)
 	router.GET("/account/personal", s.HandlePersonal)
 	router.GET("/account/edit", s.HandleEdit)
+	router.PUT("/account/edit", s.HandleEditPut)
 }
 
 func NewAccountResource(middleware *middleware.ServerMiddleware) IResource {
