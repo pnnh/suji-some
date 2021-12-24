@@ -35,11 +35,6 @@ func NewWebServer(smw *middleware.ServerMiddleware) (*WebServer, error) {
 
 	router.NoRoute(handlers.ClientPage)
 
-	//	router.GET("/", handlers.HandleIndex2)
-	//router.StaticFile("/favicon.ico", "./web/favicon.ico")
-	//router.GET("/new", handlers.HandleNew)
-	//router.POST("/create", handlers.HandleCreate)
-	//router.GET("/show/:uk/:pk", handlers.HandleShow)
 	return server, nil
 }
 

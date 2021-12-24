@@ -28,6 +28,15 @@ func JsLink(resUrl string, proResUrl string) template.HTML {
 	return htmlText
 }
 
+func ResLink(resUrl string, proResUrl string) template.HTML {
+	jsUrl := fmt.Sprintf("%s%s", config.ResourceUrl, proResUrl)
+	if gin.Mode() == gin.DebugMode {
+		jsUrl = fmt.Sprintf("http://localhost:3000%s", resUrl)
+	}
+	htmlText := template.HTML(jsUrl)
+	return htmlText
+}
+
 func CssLink(resUrl string, proResUrl string) template.HTML {
 	cssUrl := fmt.Sprintf("%s%s", config.ResourceUrl, proResUrl)
 	if gin.Mode() == gin.DebugMode {
@@ -62,6 +71,7 @@ func FuncMap() template.FuncMap {
 	funcMap := template.FuncMap{
 		"jsLink":      JsLink,
 		"cssLink":     CssLink,
+		"resLink":     ResLink,
 		"eqString":    EqString,
 		"fmtTime":     FmtTime,
 		"fmtTimeUnix": FmtTimeUnix,
