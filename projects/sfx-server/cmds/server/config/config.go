@@ -22,6 +22,7 @@ var JWTKey = ""
 var CSRFToken = ""
 var ServerUrl = "https://sfx.xyz"
 var ResourceUrl = "https://res.sfx.xyz"
+var FileUrl = "https://file.sfx.xyz"
 var QuestKey = ""
 
 var (

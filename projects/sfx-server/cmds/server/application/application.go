@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"sync"
 
+	"sfxserver/application/services"
 	"sfxserver/application/services/db"
 	"sfxserver/application/services/email"
 	"sfxserver/application/services/templs"
@@ -37,6 +38,8 @@ func (app *Application) initMiddleware() (*middleware.ServerMiddleware, error) {
 	app.Use("mail", mailSvc)
 	sqlsvc := db.NewSqlxService(config.DBDSN)
 	app.Use("sqlx", sqlsvc)
+	s3Svc := services.NewAwsS3Service()
+	app.Use("aws-s3", s3Svc)
 	tmpls := templs.NewService()
 	app.Use("templs", tmpls)
 
@@ -45,6 +48,7 @@ func (app *Application) initMiddleware() (*middleware.ServerMiddleware, error) {
 		Mail:        mailSvc,
 		Templs:      tmpls,
 		SqlxService: sqlsvc,
+		AwsS3:       s3Svc,
 	}
 	return serverMiddleware, nil
 }

@@ -1,14 +1,21 @@
 package resources
 
 import (
+	"context"
+	"database/sql"
 	"encoding/base64"
 	"errors"
 	"fmt"
+	"mime"
 	"net/http"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
+	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
 	dbmodels "sfxserver/application/services/db/models"
 	"sfxserver/config"
@@ -219,8 +226,14 @@ func (s *accountHandler) HandlePersonal(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
 	}
+	photoUrl := ""
+	if len(userInfo.Photo.String) > 0 {
+		photoUrl = config.FileUrl + userInfo.Photo.String
+	}
 	gctx.HTML(http.StatusOK, "account/personal.gohtml", gin.H{
 		"pk":       userInfo.Pk,
+		"email":    userInfo.UName,
+		"photo":    photoUrl,
 		"nickname": userInfo.NickName,
 		"regtime":  utils.FmtTime(userInfo.CreateTime),
 		"uptime":   utils.FmtTime(userInfo.UpdateTime),
@@ -256,31 +269,82 @@ func (s *accountHandler) HandleEdit(gctx *gin.Context) {
 	})
 }
 
+func isImageExt(fileExt string) bool {
+	if fileExt == ".png" ||
+		fileExt == ".jpg" ||
+		fileExt == ".jpeg" ||
+		fileExt == ".bmp" ||
+		fileExt == ".gif" ||
+		fileExt == ".webp" ||
+		fileExt == ".psd" ||
+		fileExt == ".svg" ||
+		fileExt == ".tiff" {
+		return true
+	}
+	return false
+}
+
 // 修改个人资料
 func (s *accountHandler) HandleEditPut(gctx *gin.Context) {
-	in := &struct {
-		EMail    string `json:"email"`
-		NickName string `json:"nickname"`
-	}{}
-	if err := gctx.ShouldBindJSON(in); err != nil {
-		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+	photoHeader, err := gctx.FormFile("photoFile")
+	auth, err := middleware.GetAuth(gctx)
+	if err != nil || len(auth) < 1 {
+		utils.ResponseServerError(gctx, "无效用户信息: %w", err)
 		return
 	}
-	if len(in.EMail) < 4 || len(in.NickName) < 1 {
-		utils.ResponseMessage(gctx, http.StatusBadRequest, "参数有误")
-		return
+	photoLocation := ""
+	// 上传图片
+	if err == nil && photoHeader != nil {
+		if photoHeader.Size > 2048*1024*1024 {
+			utils.ResponseMessage(gctx, http.StatusBadRequest, "文件过大")
+			return
+		}
+		fileExt := filepath.Ext(photoHeader.Filename)
+		fileMime := mime.TypeByExtension(fileExt)
+		if !isImageExt(fileExt) || len(fileMime) < 1 {
+			utils.ResponseMessage(gctx, http.StatusBadRequest, "未知图片格式")
+			return
+		}
+		logrus.Debug("fileExt", fileExt)
+
+		photoFile, err := photoHeader.Open()
+		if err != nil {
+			utils.ResponseError(gctx, http.StatusInternalServerError, err)
+			return
+		}
+
+		logrus.Debug("photoFile", photoHeader.Filename)
+		fileKey := strings.ReplaceAll(uuid.New().String(), "-", "")[:16]
+		fileKey = fmt.Sprintf("%s/%s%s", auth, fileKey, fileExt)
+
+		result, err := s.middleware.AwsS3.Uploader.Upload(context.TODO(), &s3.PutObjectInput{
+			Bucket:      aws.String("sfxfile"),
+			Key:         aws.String(fileKey),
+			Body:        photoFile,
+			ContentType: aws.String(fileMime),
+		})
+		if err != nil {
+			utils.ResponseError(gctx, http.StatusInternalServerError, err)
+			return
+		}
+		photoLocation = "/" + fileKey
+
+		logrus.Debugln("s3 upload result", result.Location)
 	}
 
-	auth, err := middleware.GetAuth(gctx)
-	if err != nil {
-		utils.ResponseServerError(gctx, "获取用户信息出错: %w", err)
+	nickname := gctx.PostForm("nickname")
+
+	if len(nickname) < 1 {
+		utils.ResponseMessage(gctx, http.StatusBadRequest, "参数有误")
 		return
 	}
 	updateQuery := &dbmodels.AccountTable{Pk: auth}
 	updateBody := &dbmodels.AccountTable{
-		UName:      in.EMail,
-		NickName:   in.NickName,
+		NickName:   nickname,
 		UpdateTime: time.Now(),
+	}
+	if len(photoLocation) > 0 {
+		updateBody.Photo = sql.NullString{String: photoLocation, Valid: true}
 	}
 	if err := s.middleware.DB.Where(updateQuery).Updates(updateBody).Error; err != nil {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
