@@ -39,9 +39,13 @@
   }
   .row-calc {
     margin-top: 16px;
+    >button {
+      margin-right: 8px;
+    }
   }
   .row-result {
     margin-top: 16px;
+    word-break: break-all;
   }
   @media (min-width: $screen-desktop) {
     .content-body {
