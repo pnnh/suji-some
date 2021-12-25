@@ -56,8 +56,20 @@
   .row-email input, .row-nickname input {
     width: 300px;
   }
-
-  .row-photo {
+  .user-info {
+    display: flex;
+  }
+  .column-right {
+    margin-left: 16px;
+    .photo {
+      width: 128px;
+      height: 128px;
+      border-radius: 40px;
+      padding: 2px;
+      border: solid 2px #07a;
+    }
+  }
+  .row-photo, .row-description {
     margin: 16px 0;
   }
 }

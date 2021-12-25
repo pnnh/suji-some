@@ -226,18 +226,23 @@ func (s *accountHandler) HandlePersonal(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
 	}
-	photoUrl := ""
-	if len(userInfo.Photo.String) > 0 {
-		photoUrl = config.FileUrl + userInfo.Photo.String
-	}
+	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
 	gctx.HTML(http.StatusOK, "account/personal.gohtml", gin.H{
-		"pk":       userInfo.Pk,
-		"email":    userInfo.UName,
-		"photo":    photoUrl,
-		"nickname": userInfo.NickName,
-		"regtime":  utils.FmtTime(userInfo.CreateTime),
-		"uptime":   utils.FmtTime(userInfo.UpdateTime),
+		"pk":          userInfo.Pk,
+		"email":       userInfo.UName,
+		"photo":       photoUrl,
+		"nickname":    userInfo.NickName,
+		"description": userInfo.Description.String,
+		"regtime":     utils.FmtTime(userInfo.CreateTime),
+		"uptime":      utils.FmtTime(userInfo.UpdateTime),
 	})
+}
+
+func GetPhotoOrDefault(photoPath string) string {
+	if len(photoPath) > 0 {
+		return config.FileUrl + photoPath
+	}
+	return config.DefaultPhotoUrl
 }
 
 // 修改个人资料
@@ -259,12 +264,15 @@ func (s *accountHandler) HandleEdit(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
 	}
+	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
 	gctx.HTML(http.StatusOK, "account/edit.gohtml", gin.H{
 		"data": map[string]interface{}{
-			"pk":       userInfo.Pk,
-			"email":    userInfo.UName,
-			"nickname": userInfo.NickName,
-			"login":    len(auth) > 0,
+			"pk":          userInfo.Pk,
+			"email":       userInfo.UName,
+			"nickname":    userInfo.NickName,
+			"photo":       photoUrl,
+			"description": userInfo.Description.String,
+			"login":       len(auth) > 0,
 		},
 	})
 }
@@ -333,6 +341,7 @@ func (s *accountHandler) HandleEditPut(gctx *gin.Context) {
 	}
 
 	nickname := gctx.PostForm("nickname")
+	description := gctx.PostForm("description")
 
 	if len(nickname) < 1 {
 		utils.ResponseMessage(gctx, http.StatusBadRequest, "参数有误")
@@ -340,8 +349,9 @@ func (s *accountHandler) HandleEditPut(gctx *gin.Context) {
 	}
 	updateQuery := &dbmodels.AccountTable{Pk: auth}
 	updateBody := &dbmodels.AccountTable{
-		NickName:   nickname,
-		UpdateTime: time.Now(),
+		NickName:    nickname,
+		UpdateTime:  time.Now(),
+		Description: sql.NullString{String: description, Valid: true},
 	}
 	if len(photoLocation) > 0 {
 		updateBody.Photo = sql.NullString{String: photoLocation, Valid: true}

@@ -22,7 +22,7 @@ func FmtTime(t time.Time) string {
 func JsLink(resUrl string, proResUrl string) template.HTML {
 	jsUrl := fmt.Sprintf("%s%s", config.ResourceUrl, proResUrl)
 	if gin.Mode() == gin.DebugMode {
-		jsUrl = fmt.Sprintf("http://localhost:3000%s", resUrl)
+		jsUrl = fmt.Sprintf("%s%s", config.ResourceUrl, resUrl)
 	}
 	htmlText := template.HTML(jsUrl)
 	return htmlText
@@ -31,7 +31,7 @@ func JsLink(resUrl string, proResUrl string) template.HTML {
 func ResLink(resUrl string, proResUrl string) template.HTML {
 	jsUrl := fmt.Sprintf("%s%s", config.ResourceUrl, proResUrl)
 	if gin.Mode() == gin.DebugMode {
-		jsUrl = fmt.Sprintf("http://localhost:3000%s", resUrl)
+		jsUrl = fmt.Sprintf("%s%s", config.ResourceUrl, resUrl)
 	}
 	htmlText := template.HTML(jsUrl)
 	return htmlText
@@ -40,7 +40,7 @@ func ResLink(resUrl string, proResUrl string) template.HTML {
 func CssLink(resUrl string, proResUrl string) template.HTML {
 	cssUrl := fmt.Sprintf("%s%s", config.ResourceUrl, proResUrl)
 	if gin.Mode() == gin.DebugMode {
-		cssUrl = fmt.Sprintf("http://localhost:3000%s", resUrl)
+		cssUrl = fmt.Sprintf("%s%s", config.ResourceUrl, resUrl)
 	}
 	htmlText := template.HTML(cssUrl)
 	return htmlText

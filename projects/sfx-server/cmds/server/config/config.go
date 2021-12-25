@@ -1,6 +1,7 @@
 package config
 
 import (
+	"fmt"
 	"os"
 	"strconv"
 
@@ -23,6 +24,7 @@ var CSRFToken = ""
 var ServerUrl = "https://sfx.xyz"
 var ResourceUrl = "https://res.sfx.xyz"
 var FileUrl = "https://file.sfx.xyz"
+var DefaultPhotoUrl = ""
 var QuestKey = ""
 
 var (
@@ -78,6 +80,7 @@ func init() {
 	if len(QuestKey) < 1 {
 		logrus.Fatalln("未配置QUEST_KEY")
 	}
+	DefaultPhotoUrl = fmt.Sprintf("%s%s", ResourceUrl, "/images/default.png")
 }
 
 func Debug() bool {

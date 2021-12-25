@@ -4,7 +4,6 @@ import (
 	"net/http"
 
 	dbmodels "sfxserver/application/services/db/models"
-	"sfxserver/config"
 	"sfxserver/server/middleware"
 	"sfxserver/server/utils"
 
@@ -37,15 +36,13 @@ func (s *userHandler) HandleInfo(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
 	}
-	photoUrl := ""
-	if len(userInfo.Photo.String) > 0 {
-		photoUrl = config.FileUrl + userInfo.Photo.String
-	}
+	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
 	gctx.HTML(http.StatusOK, "user/info.gohtml", gin.H{
-		"pk":       userInfo.Pk,
-		"nickname": userInfo.NickName,
-		"photo":    photoUrl,
-		"regtime":  utils.FmtTime(userInfo.CreateTime),
+		"pk":          userInfo.Pk,
+		"nickname":    userInfo.NickName,
+		"description": userInfo.Description.String,
+		"photo":       photoUrl,
+		"regtime":     utils.FmtTime(userInfo.CreateTime),
 	})
 }
 
