@@ -1,0 +1,31 @@
+{{ define "utils/timestamp.gohtml" }}
+	<!DOCTYPE html>
+	<html lang="zh">
+	<head>
+        {{ template "partial/headmeta.gohtml" }}
+        {{ template "partial/analytics.gohtml" }}
+		<title>时间戳 - 泛涵</title>
+		<meta name="keywords" content="timestamp"/>
+		<meta name="description" content="Unix时间戳小工具"/>
+		{{ template "res/css.gohtml" }}
+	</head>
+	<body>
+	<div class="ms-Grid" dir="ltr">
+        {{ template "partial/header.gohtml" }}
+		<main>
+			<div class="ms-Grid-row">
+				<div class="ms-Grid-col ms-sm0 ms-xl2">
+				</div>
+				<div class="ms-Grid-col ms-sm12 ms-xl8">
+					<div id="root"></div>
+				</div>
+				<div class="ms-Grid-col ms-sm0 ms-xl2">
+				</div>
+			</div>
+		</main>
+        {{ template "partial/footer.gohtml" }}
+	</div>
+	{{ template "res/js.gohtml" }}
+	</body>
+	</html>
+{{ end }}

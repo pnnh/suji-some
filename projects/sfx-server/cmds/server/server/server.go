@@ -45,6 +45,7 @@ func (s *WebServer) Init() error {
 	s.router.GET("/seo/sitemap", sitemapHandler.HandleSitemap)
 	s.router.GET("/utils/random/password", handlers.HandleRandomPassword)
 	s.router.GET("/utils/encrypt/md5", handlers.HandleCalcMd5)
+	s.router.GET("/utils/timestamp", handlers.HandleTimestamp)
 
 	s.resources["post"] = resources.NewArticleResource(s.middleware)
 	s.resources["account"] = resources.NewAccountResource(s.middleware)

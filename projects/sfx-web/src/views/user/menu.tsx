@@ -1,6 +1,7 @@
 import React from 'react'
 import { getJsonData } from '@/utils/helpers'
 import { ApiUrl } from '@/utils/config'
+import { isScreenPhone, isScreenTablet } from '@/utils/media'
 
 const useActionButton = () => {
   const auth = getJsonData<any>()
@@ -27,7 +28,7 @@ const useActionButton = () => {
 }
 
 export default function UserMenu () {
-  return <div className={'user-menu'}>
+  return <>
             {useActionButton()}
-        </div>
+        </>
 }

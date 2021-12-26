@@ -1,11 +1,7 @@
-$screen-mini: 10em;        // 160px
 $screen-small: 20em;        // 320px
-$screen-medium: 30em;       // 480px
-$screen-large: 40em;        // 640px
-$screen-extra-large: 64em;    // 1024px
-$screen-2extra-large: 90em;    // 1440px
-$screen-3extra-large: 120em;    // 1920px
+$screen-medium: 40em;       // 640px
+$screen-large: 80em;        // 1280px
 
 $screen-phone: $screen-small;     // 手机
-$screen-tablet: $screen-large;    // 平板
-$screen-desktop: $screen-extra-large;   // 电脑
+$screen-tablet: $screen-medium;    // 平板
+$screen-desktop: $screen-large;   // 电脑

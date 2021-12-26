@@ -41,12 +41,22 @@
     margin-top: 16px;
     >button {
       margin-right: 8px;
+      margin-top: 8px;
     }
   }
   .row-result {
     margin-top: 16px;
     word-break: break-all;
   }
+  @media (min-width: $screen-desktop) {
+    .content-body {
+      width: 960px;
+      margin: 0 auto;
+    }
+  }
+}
+
+.timestamp-page {
   @media (min-width: $screen-desktop) {
     .content-body {
       width: 960px;

@@ -15,6 +15,7 @@ import MD5Page from '@/pages/utils/md5'
 import PersonalPage from '@/pages/account/personal-page'
 import AccountEditPage from '@/pages/account/edit-page'
 import UserInfoPage from '@/pages/user/info-page'
+import TimestampPage from '@/pages/utils/timestamp'
 
 const App = () => {
   const data = getJsonData<any>()
@@ -29,6 +30,7 @@ const App = () => {
       <Route path="/article/read/:pk" element={<ReadPage />}/>
       <Route path="/utils/random/password" element={<RandomPasswordPage/>}/>
       <Route path="/utils/encrypt/md5" element={<MD5Page/>}/>
+      <Route path="/utils/timestamp" element={<TimestampPage/>}/>
       <Route path="/account/login" element={<AccountPage/>}/>
       <Route path="/account/personal" element={<PersonalPage/>}/>
       <Route path="/account/edit" element={<AccountEditPage/>}/>

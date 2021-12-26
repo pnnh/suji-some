@@ -15,3 +15,8 @@ func HandleRandomPassword(gctx *gin.Context) {
 func HandleCalcMd5(gctx *gin.Context) {
 	gctx.HTML(http.StatusOK, "utils/md5.gohtml", gin.H{})
 }
+
+// Unix时间戳工具
+func HandleTimestamp(gctx *gin.Context) {
+	gctx.HTML(http.StatusOK, "utils/timestamp.gohtml", gin.H{})
+}

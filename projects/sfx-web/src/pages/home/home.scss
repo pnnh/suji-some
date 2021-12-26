@@ -3,11 +3,17 @@
   .new-button {
     display: none;
   }
-  .user-menu {
-    display: flex;
-    flex-direction: row;
-    >button {
-      margin-left: 8px;
+  #user-menu {
+    display: none;
+  }
+
+  @media (min-width: $screen-tablet) {
+    #user-menu {
+      display: flex;
+      flex-direction: row;
+      >button {
+        margin-left: 8px;
+      }
     }
   }
   main {
