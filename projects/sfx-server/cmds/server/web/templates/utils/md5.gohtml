@@ -26,27 +26,27 @@
         {{ template "partial/footer.gohtml" }}
 	</div>
 	{{ template "res/js.gohtml" }}
-	<script type='text/javascript' crossorigin src='{{ jsLink "/wasm/qtloader.js" "/wasm/qtloader.js" }}'></script>
-	<script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function () {
-            console.log('3 seconds passed')
-            const qtCanvas = document.getElementById('qt-canvas')
-            if (qtCanvas) {
-                const qtLoader = window.QtLoader({
-                    canvasElements: [qtCanvas],
-                    showLoader: function () { },
-                    showError: function (errorMessage) {
-                        console.log('showError', errorMessage)
-                    },
-                    showExit: function () {
-                    },
-                    showCanvas: function () {
-                    }
-                })
-                qtLoader.loadEmscriptenModule('{{ jsLink "/wasm/qt-canvas" "/wasm/qt-canvas" }}')
-            }
-        })
-	</script>
+{{/*	<script type='text/javascript' crossorigin src='{{ jsLink "/wasm/qtloader.js" "/wasm/qtloader.js" }}'></script>*/}}
+{{/*	<script type="text/javascript">*/}}
+{{/*        document.addEventListener('DOMContentLoaded', function () {*/}}
+{{/*            console.log('3 seconds passed')*/}}
+{{/*            const qtCanvas = document.getElementById('qt-canvas')*/}}
+{{/*            if (qtCanvas) {*/}}
+{{/*                const qtLoader = window.QtLoader({*/}}
+{{/*                    canvasElements: [qtCanvas],*/}}
+{{/*                    showLoader: function () { },*/}}
+{{/*                    showError: function (errorMessage) {*/}}
+{{/*                        console.log('showError', errorMessage)*/}}
+{{/*                    },*/}}
+{{/*                    showExit: function () {*/}}
+{{/*                    },*/}}
+{{/*                    showCanvas: function () {*/}}
+{{/*                    }*/}}
+{{/*                })*/}}
+{{/*                qtLoader.loadEmscriptenModule('{{ jsLink "/wasm/qt-canvas" "/wasm/qt-canvas" }}')*/}}
+{{/*            }*/}}
+{{/*        })*/}}
+{{/*	</script>*/}}
 	</body>
 	</html>
 {{ end }}
