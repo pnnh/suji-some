@@ -1,8 +1,40 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
+import { QtLoader, Module } from '@/utils/qtloader'
+
+function initWasm () {
+  window.Module = Module
+  window.QtLoader = QtLoader
+  Module.locateFile = function (path: string, prefix: string) {
+    console.log('locateFile', path, prefix)
+    return prefix + path
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    console.log('3 seconds passed')
+    const qtCanvas = document.getElementById('qt-canvas')
+    if (qtCanvas) {
+      const qtLoader = window.QtLoader({
+        canvasElements: [qtCanvas],
+        showLoader: function () { },
+        showError: function (errorMessage: string) {
+          console.log('showError', errorMessage)
+        },
+        showExit: function () {
+        },
+        showCanvas: function () {
+        }
+      })
+      qtLoader.loadEmscriptenModule('http://127.0.0.1:3000/wasm/qt-canvas')
+    }
+  })
+}
 
 export default function MD5Page () {
   const [content, setContent] = useState<string>('')
   const [result, setResult] = useState<string>('')
+
+  useEffect(() => {
+    initWasm()
+  }, [[]])
 
   return <div className={'encrypt-md5-page'}>
     <div className={'content-body fx-card'}>

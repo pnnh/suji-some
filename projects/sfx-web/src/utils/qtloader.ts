@@ -1,9 +1,9 @@
 
-const Module = {}
+const Module: any = {}
 
 export { Module }
 
-export function QtLoader (config) {
+export function QtLoader (config: any) {
   function webAssemblySupported () {
     return typeof WebAssembly !== 'undefined'
   }
