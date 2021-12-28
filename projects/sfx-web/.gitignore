@@ -11,4 +11,3 @@ bin/
 node_modules/
 /dist
 build/
-gen/

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { QtLoader, Module } from '@/utils/qtloader'
+import { getHost } from '@/utils/config'
 
 function initWasm () {
   window.Module = Module
@@ -23,7 +24,8 @@ function initWasm () {
         showCanvas: function () {
         }
       })
-      qtLoader.loadEmscriptenModule('http://127.0.0.1:3000/wasm/qt-canvas')
+      const filePath = getHost() + '/wasm/qt-canvas'
+      qtLoader.loadEmscriptenModule(filePath)
     }
   })
 }

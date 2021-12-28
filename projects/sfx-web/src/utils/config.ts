@@ -28,6 +28,14 @@ export function getApiUrl (): string {
   return 'https://sfx.xyz'
 }
 
+export function getHost (): string {
+  console.log('getHost', isDev())
+  if (isDev()) {
+    return 'http://127.0.0.1:3000'
+  }
+  return 'https://res.sfx.xyz'
+}
+
 const ApiUrl = {
   home: '/',
   article: {
