@@ -22,3 +22,11 @@ http-server --cors
 npm i -g brotli-cli   # 安装压缩工具
 brotli-cli compress qt-canvas.wasm
 ```
+
+## 可以通过以下命令分割wasm文件
+将wasm文件拆分后，再分别进行br压缩。从服务器并行下载到浏览器再做合并，可以提高下载速度。
+
+```shell
+split -b 5m qt-canvas.wasm qt-canvas.wasm.  # 会生成.aa .ab .ac 类似的文件
+```
+
