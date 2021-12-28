@@ -1,5 +1,3 @@
-import axios from 'axios'
-
 const m = 1024 * 1024 * 10 // 分片大小
 const url = 'https://vodm0pihssv.vod.126.net/edu-video/nos/mp4/2017/10/10/1007299069_2cddd54a92e344639ad9669a2e0109ed_sd.mp4' // 下载url
 // const url = 'https://res.sfx.xyz/wasm/qt-canvas.wasm'
