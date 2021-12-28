@@ -30,3 +30,10 @@ brotli-cli compress qt-canvas.wasm
 split -b 5m qt-canvas.wasm qt-canvas.wasm.  # 会生成.aa .ab .ac 类似的文件
 ```
 
+如果将分割后的文件大小控制在10m以内，并在上传至s3时修改下Content-Type类型为text/plain，则CloudFront将会自动进行br压缩
+
+不过这种做法的话文件实际类型和返回的Content-Type不符，需要在js中通过xhr手动获取，并做文件合并
+
+经过最终试验，CloudFront似乎没有对用户单个链接做速度限制，所以直接将21m文件br压缩后下载，和分割成多个文件再压缩后下载，所花的时间差不多
+
+甚至通过xhr方式下载文件，在Firefox下面不会走缓存，而直接GET方式下载wasm第二次请求会缓存
