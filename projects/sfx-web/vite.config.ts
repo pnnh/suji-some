@@ -38,22 +38,22 @@ const config = defineConfig({
     manifest: true,
     ssrManifest: true,
     rollupOptions: {
-      input: ['index.html'],
+      //  input: ['index.html'],
       // input: listFile(path.resolve(__dirname, 'src/pages')),
-      // input: ['src/index.tsx', 'src/index.scss'],
+      input: ['src/index.tsx', 'src/index.scss'],
       output: {
-        // entryFileNames: (chunkInfo: PreRenderedChunk) => {
-        //   if (!chunkInfo.facadeModuleId) {
-        //     throw new Error('facadeModuleId为空')
-        //   }
-        //   console.debug('entryFileNames', chunkInfo.facadeModuleId)
-        //   const extName = path.extname(chunkInfo.facadeModuleId)
-        //   return '[name].js'
-        // },
-        // assetFileNames: (chunkInfo: PreRenderedAsset) => {
-        //   console.debug('assetFileNames', chunkInfo.name)
-        //   return '[name].css'
-        // },
+        entryFileNames: (chunkInfo: PreRenderedChunk) => {
+          if (!chunkInfo.facadeModuleId) {
+            throw new Error('facadeModuleId为空')
+          }
+          console.debug('entryFileNames', chunkInfo.facadeModuleId)
+          const extName = path.extname(chunkInfo.facadeModuleId)
+          return '[name].js'
+        },
+        assetFileNames: (chunkInfo: PreRenderedAsset) => {
+          console.debug('assetFileNames', chunkInfo.name)
+          return '[name].css'
+        },
         dir: path.resolve(__dirname, 'dist'),
         format: 'esm',
         manualChunks (id) {

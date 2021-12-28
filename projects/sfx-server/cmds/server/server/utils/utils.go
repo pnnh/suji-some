@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"html/template"
 	"net/http"
+	"strings"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -19,31 +20,22 @@ func FmtTime(t time.Time) string {
 	return t.Format("2006年01月02日 15:04")
 }
 
-func JsLink(resUrl string, proResUrl string) template.HTML {
-	jsUrl := fmt.Sprintf("%s%s", config.ResourceUrl, proResUrl)
-	if gin.Mode() == gin.DebugMode {
-		jsUrl = fmt.Sprintf("%s%s", config.ResourceUrl, resUrl)
-	}
-	htmlText := template.HTML(jsUrl)
-	return htmlText
-}
-
 func ResLink(resUrl string, proResUrl string) template.HTML {
 	jsUrl := fmt.Sprintf("%s%s", config.ResourceUrl, proResUrl)
 	if gin.Mode() == gin.DebugMode {
 		jsUrl = fmt.Sprintf("%s%s", config.ResourceUrl, resUrl)
 	}
+	if strings.ContainsAny(jsUrl, "?") {
+		jsUrl += fmt.Sprintf("&v=%s", config.RunVersion)
+	} else {
+		jsUrl += fmt.Sprintf("?v=%s", config.RunVersion)
+	}
 	htmlText := template.HTML(jsUrl)
 	return htmlText
 }
 
-func CssLink(resUrl string, proResUrl string) template.HTML {
-	cssUrl := fmt.Sprintf("%s%s", config.ResourceUrl, proResUrl)
-	if gin.Mode() == gin.DebugMode {
-		cssUrl = fmt.Sprintf("%s%s", config.ResourceUrl, resUrl)
-	}
-	htmlText := template.HTML(cssUrl)
-	return htmlText
+func ResHost() string {
+	return config.ResourceUrl
 }
 
 func EqString(a interface{}, b string) bool {
@@ -69,9 +61,8 @@ func ClientPage(gctx *gin.Context, status int, data gin.H) {
 
 func FuncMap() template.FuncMap {
 	funcMap := template.FuncMap{
-		"jsLink":      JsLink,
-		"cssLink":     CssLink,
 		"resLink":     ResLink,
+		"resHost":     ResHost,
 		"eqString":    EqString,
 		"fmtTime":     FmtTime,
 		"fmtTimeUnix": FmtTimeUnix,
