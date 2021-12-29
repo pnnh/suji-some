@@ -16,7 +16,7 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-const IndexPageSize = 3
+const IndexPageSize = 10
 
 type indexHandler struct {
 	md *middleware.ServerMiddleware
@@ -77,19 +77,19 @@ order by update_time desc offset %d limit %d;`, (currentPage-1)*IndexPageSize, I
 			NickName:            v.NickName.String,
 		}
 	}
-	pageIndexs := calcPageIndexs(maxPage, currentPage)
+	pagesHtml := calcPagesHtml(maxPage, currentPage)
 
 	gctx.HTML(http.StatusOK, "index/index.gohtml", gin.H{
-		"list":  list,
-		"count": listCount,
-		"pages": pageIndexs,
+		"list":      list,
+		"count":     listCount,
+		"pagesHtml": pagesHtml,
 		"data": gin.H{
 			"login": len(auth) > 0,
 		},
 	})
 }
 
-func calcPageIndexs(maxPage int, currentPage int) template.HTML {
+func calcPagesHtml(maxPage int, currentPage int) template.HTML {
 	startPage := currentPage - 5
 	endPage := currentPage + 5
 
@@ -103,16 +103,21 @@ func calcPageIndexs(maxPage int, currentPage int) template.HTML {
 	prevPage := currentPage - 1
 	nextPage := currentPage + 1
 
-	if prevPage < 1 {
-		prevPage = 1
+	if prevPage >= 1 {
+		prevPageHtml := fmt.Sprintf(`<a class="page" href="/?p=%d">«</a>`, prevPage)
+		pagesBuilder.WriteString(prevPageHtml)
 	}
-	if nextPage > maxPage {
-		nextPage = maxPage
-	}
-
 	for i := startPage; i <= endPage; i++ {
-		page := fmt.Sprintf(`<a class="page" href="/?p=%d">%d</a>`, i, i)
+		classActive := ""
+		if i == currentPage {
+			classActive = "active"
+		}
+		page := fmt.Sprintf(`<a class="page %s" href="/?p=%d">%d</a>`, classActive, i, i)
 		pagesBuilder.WriteString(page)
+	}
+	if nextPage <= maxPage {
+		nextPageHtml := fmt.Sprintf(`<a class="page" href="/?p=%d">»</a>`, nextPage)
+		pagesBuilder.WriteString(nextPageHtml)
 	}
 
 	pagesHtml := pagesBuilder.String()
