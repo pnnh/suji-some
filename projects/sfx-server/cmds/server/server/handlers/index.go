@@ -1,7 +1,11 @@
 package handlers
 
 import (
+	"errors"
+	"fmt"
+	"html/template"
 	"net/http"
+	"strconv"
 	"strings"
 
 	dbmodels "sfxserver/application/services/db/models"
@@ -12,19 +16,44 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+const IndexPageSize = 3
+
 type indexHandler struct {
 	md *middleware.ServerMiddleware
 }
 
 func (s *indexHandler) Handle(gctx *gin.Context) {
+	pageString, ok := gctx.GetQuery("p")
+	currentPage := 1
+	if ok {
+		if v, err := strconv.Atoi(pageString); err != nil || v <= 0 {
+			utils.ResponseError(gctx, http.StatusInternalServerError, errors.New("参数有误"))
+			return
+		} else {
+			currentPage = v
+		}
+	}
 	auth, err := middleware.GetAuth(gctx)
 	if err != nil {
 		utils.ResponseServerError(gctx, "获取用户信息出错", err)
 		return
 	}
-	sqlText := `select articles.*, accounts.nickname 
+	sqlCountText := `select count(*) from articles;`
+	var listCount int
+	if err := s.md.SqlxService.QueryRow(sqlCountText).Scan(&listCount); err != nil {
+		utils.ResponseServerError(gctx, "查询文章总数出错", err)
+		return
+	}
+	maxPage := listCount / IndexPageSize
+	if listCount%IndexPageSize != 0 {
+		maxPage += 1
+	}
+	if currentPage > maxPage {
+		currentPage = maxPage
+	}
+	sqlText := fmt.Sprintf(`select articles.*, accounts.nickname 
 from articles left join accounts on articles.creator = accounts.pk 
-order by update_time desc limit 64;`
+order by update_time desc offset %d limit %d;`, (currentPage-1)*IndexPageSize, IndexPageSize)
 	var sqlResults []dbmodels.IndexArticleList
 
 	if err := s.md.SqlxService.Select(&sqlResults, sqlText); err != nil {
@@ -48,13 +77,47 @@ order by update_time desc limit 64;`
 			NickName:            v.NickName.String,
 		}
 	}
+	pageIndexs := calcPageIndexs(maxPage, currentPage)
+
 	gctx.HTML(http.StatusOK, "index/index.gohtml", gin.H{
 		"list":  list,
-		"count": len(sqlResults),
+		"count": listCount,
+		"pages": pageIndexs,
 		"data": gin.H{
 			"login": len(auth) > 0,
 		},
 	})
+}
+
+func calcPageIndexs(maxPage int, currentPage int) template.HTML {
+	startPage := currentPage - 5
+	endPage := currentPage + 5
+
+	if startPage < 1 {
+		startPage = 1
+	}
+	if endPage > maxPage {
+		endPage = maxPage
+	}
+	pagesBuilder := strings.Builder{}
+	prevPage := currentPage - 1
+	nextPage := currentPage + 1
+
+	if prevPage < 1 {
+		prevPage = 1
+	}
+	if nextPage > maxPage {
+		nextPage = maxPage
+	}
+
+	for i := startPage; i <= endPage; i++ {
+		page := fmt.Sprintf(`<a class="page" href="/?p=%d">%d</a>`, i, i)
+		pagesBuilder.WriteString(page)
+	}
+
+	pagesHtml := pagesBuilder.String()
+
+	return template.HTML(pagesHtml)
 }
 
 func NewIndexHandler(md *middleware.ServerMiddleware) *indexHandler {

@@ -34,7 +34,9 @@
                         {{end}}
 					</div>
 					<div class="page-list">
-
+						{{ range .pages }}
+							<a class="page" href="/?p={{.}}">{{.}}</a>
+						{{ end }}
 					</div>
 				</div>
 			</div>
