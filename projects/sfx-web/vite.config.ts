@@ -38,21 +38,28 @@ const config = defineConfig({
     manifest: true,
     ssrManifest: true,
     rollupOptions: {
-      //  input: ['index.html'],
+      // input: ['index.html'],
       // input: listFile(path.resolve(__dirname, 'src/pages')),
-      input: ['src/index.tsx', 'src/index.scss'],
+      input: ['src/index.tsx'],
       output: {
         entryFileNames: (chunkInfo: PreRenderedChunk) => {
           if (!chunkInfo.facadeModuleId) {
-            throw new Error('facadeModuleId为空')
+            throw new Error('entryFileNames facadeModuleId为空')
           }
-          console.debug('entryFileNames', chunkInfo.facadeModuleId)
-          const extName = path.extname(chunkInfo.facadeModuleId)
-          return '[name].js'
+          const baseName = path.basename(chunkInfo.facadeModuleId)
+          const extName = path.extname(baseName)
+          console.debug('entryFileNames', chunkInfo.facadeModuleId, baseName)
+          const fileName = baseName.replace(extName, '.js')
+          return fileName
         },
         assetFileNames: (chunkInfo: PreRenderedAsset) => {
-          console.debug('assetFileNames', chunkInfo.name)
-          return '[name].css'
+          if (!chunkInfo.name) {
+            throw new Error('assetFileNames name为空')
+          }
+          const baseName = path.basename(chunkInfo.name)
+          const extName = path.extname(baseName)
+          console.debug('assetFileNames', chunkInfo.name, baseName, extName)
+          return baseName
         },
         dir: path.resolve(__dirname, 'dist'),
         format: 'esm',
@@ -75,7 +82,12 @@ const config = defineConfig({
       { find: '~', replacement: path.resolve(__dirname, 'node_modules') }
     ]
   },
-  publicDir: 'public'
+  publicDir: 'public',
+  css: {
+    preprocessorOptions: {
+      sass: {}
+    }
+  }
 })
 
 export default config

@@ -16,6 +16,7 @@ import PersonalPage from '@/pages/account/personal-page'
 import AccountEditPage from '@/pages/account/edit-page'
 import UserInfoPage from '@/pages/user/info-page'
 import TimestampPage from '@/pages/utils/timestamp'
+import './index.scss'
 
 const App = () => {
   const data = getJsonData<any>()
