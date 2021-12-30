@@ -177,6 +177,11 @@ func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
 	if len(clientIp) < 1 {
 		return
 	}
+	forwardedFor := gctx.GetHeader("X-Forwarded-For")
+	logrus.Errorln("updateViews3", forwardedFor)
+	if len(forwardedFor) > 0 {
+		clientIp = forwardedFor
+	}
 	key := "article_views:" + pk + ":" + clientIp
 	val, err := s.middleware.Redis.Get(gctx, key).Result()
 	if err != nil && err != redis.Nil {
