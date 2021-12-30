@@ -166,6 +166,13 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 }
 
 func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
+	// todo 测试aws返回了哪些头
+	for k, v := range gctx.Request.Header {
+		logrus.Errorln("updateViews", k, "|", v)
+	}
+	ip, ok := gctx.RemoteIP()
+	logrus.Errorln("updateViews2", ip.String(), ok)
+
 	clientIp := gctx.ClientIP()
 	if len(clientIp) < 1 {
 		return
