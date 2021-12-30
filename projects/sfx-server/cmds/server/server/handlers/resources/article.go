@@ -167,9 +167,16 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 }
 
 func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
-	clientIp := gctx.GetHeader("X-Forwarded-For")
+	clientIp := ""
 	if config.Debug() {
 		clientIp = gctx.ClientIP()
+	} else {
+		forwardedFor := gctx.GetHeader("X-Forwarded-For")
+		ipList := strings.Split(forwardedFor, ",")
+		if len(ipList) < 1 {
+			return
+		}
+		clientIp = strings.TrimSpace(ipList[0])
 	}
 	if len(clientIp) < 1 {
 		return
