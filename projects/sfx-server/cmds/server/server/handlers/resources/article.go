@@ -186,8 +186,8 @@ func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
 		return
 	}
 	expire := time.Second * 3600 // time.Hour*24
-	ok, err := s.middleware.Redis.SetNX(gctx, key, "", expire).Result()
-	if !ok || err != nil {
+	ok, err = s.middleware.Redis.SetNX(gctx, key, "", expire).Result()
+	if err != nil {
 		logrus.Errorln("updateViews出错", err)
 	}
 
