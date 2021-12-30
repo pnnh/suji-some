@@ -3,7 +3,8 @@ all : build_server build_proxy copy_web
 DIR := $(CURDIR)
 
 setup :
-	echo "package gen\nvar RunVersion = \"`openssl rand -base64 3 | md5sum | cut -c1-8`\"" \
+	-mkdir $(DIR)/cmds/server/gen
+	-echo "package gen\nvar RunVersion = \"`openssl rand -base64 3 | md5sum | cut -c1-8`\"" \
 		> $(DIR)/cmds/server/gen/gen.go
 
 build_server : setup
