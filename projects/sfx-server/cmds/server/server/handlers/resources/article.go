@@ -12,6 +12,7 @@ import (
 
 	redis "github.com/go-redis/redis/v8"
 	dbmodels "sfxserver/application/services/db/models"
+	"sfxserver/config"
 	"sfxserver/server/middleware"
 	"sfxserver/server/utils"
 
@@ -166,21 +167,12 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 }
 
 func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
-	// todo 测试aws返回了哪些头
-	for k, v := range gctx.Request.Header {
-		logrus.Errorln("updateViews", k, "|", v)
+	clientIp := gctx.GetHeader("X-Forwarded-For")
+	if config.Debug() {
+		clientIp = gctx.ClientIP()
 	}
-	ip, ok := gctx.RemoteIP()
-	logrus.Errorln("updateViews2", ip.String(), ok)
-
-	clientIp := gctx.ClientIP()
 	if len(clientIp) < 1 {
 		return
-	}
-	forwardedFor := gctx.GetHeader("X-Forwarded-For")
-	logrus.Errorln("updateViews3", forwardedFor)
-	if len(forwardedFor) > 0 {
-		clientIp = forwardedFor
 	}
 	key := "article_views:" + pk + ":" + clientIp
 	val, err := s.middleware.Redis.Get(gctx, key).Result()
@@ -191,7 +183,7 @@ func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
 		return
 	}
 	expire := time.Second * 3600 // time.Hour*24
-	ok, err = s.middleware.Redis.SetNX(gctx, key, "", expire).Result()
+	_, err = s.middleware.Redis.SetNX(gctx, key, "", expire).Result()
 	if err != nil {
 		logrus.Errorln("updateViews出错", err)
 	}
