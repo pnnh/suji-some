@@ -2,7 +2,11 @@ all : build_server build_proxy copy_web
 
 DIR := $(CURDIR)
 
-build_server :
+setup :
+	echo "package gen\nvar RunVersion = \"`openssl rand -base64 3 | md5sum | cut -c1-8`\"" \
+		> $(DIR)/cmds/server/gen/gen.go
+
+build_server : setup
 	cd cmds/server \
 		&& GOOS=linux go build -o ../../build/sfxserver
 

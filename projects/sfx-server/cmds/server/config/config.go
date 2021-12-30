@@ -4,15 +4,14 @@ import (
 	"fmt"
 	"os"
 	"strconv"
-	"strings"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
+	"sfxserver/gen"
 )
 
 const (
-	envDBKey   = "pg"
 	envResPath = "RES_PATH"
 )
 
@@ -27,7 +26,7 @@ var ResourceUrl = "https://res.sfx.xyz"
 var FileUrl = "https://file.sfx.xyz"
 var DefaultPhotoUrl = ""
 var QuestKey = ""
-var RunVersion = "" // 程序启动时会生成一个随机值，用以唯一标识
+var RunVersion = gen.RunVersion // 当前程序版本标识，在构建时自动生成
 
 var (
 	MailHost     = ""
@@ -37,7 +36,6 @@ var (
 )
 
 func init() {
-	RunVersion = strings.ReplaceAll(uuid.New().String(), "-", "")[:8]
 	resPath := os.Getenv(envResPath)
 	if len(resPath) > 0 {
 		ResourceUrl = resPath
