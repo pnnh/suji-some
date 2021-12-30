@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { SFXEditor, SFEditorModel } from '@pnnh/stele'
 import { getJsonData, updateTitle } from '@/utils/helpers'
 import { onEdit } from '@/pages/article/save'
-import { isScreenDesktop } from '@/utils/media'
+import { isScreenDesktop, isScreenTablet } from '@/utils/media'
 import { useParams } from 'react-router'
 
 type NewPageState = {
@@ -23,7 +23,7 @@ const EditPage = (props: {}, state: NewPageState) => {
   console.debug('NewPage useEffect=====\n', JSON.stringify(serverData.body))
   updateTitle(serverData.title)
 
-  if (!isScreenDesktop()) {
+  if (!isScreenDesktop() && !isScreenTablet()) {
     return <div>当前为移动设备，请使用电脑编辑</div>
   }
   const params = useParams() as { pk: string }

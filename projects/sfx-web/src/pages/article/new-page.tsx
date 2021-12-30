@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { SFXEditor, SFEditorModel } from '@pnnh/stele'
 import { updateTitle } from '@/utils/helpers'
 import { onCreate } from '@/pages/article/save'
-import { isScreenDesktop } from '@/utils/media'
+import { isScreenDesktop, isScreenTablet } from '@/utils/media'
 
 type NewPageState = {
     title: string;
@@ -28,7 +28,7 @@ const NewPage = (props:{}, state: NewPageState) => {
     updateTitle('创作')
   }, [])
 
-  if (!isScreenDesktop()) {
+  if (!isScreenDesktop() && !isScreenTablet()) {
     return <div>当前为移动设备，请使用电脑编辑</div>
   }
 
