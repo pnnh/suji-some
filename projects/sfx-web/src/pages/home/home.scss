@@ -41,14 +41,16 @@
         line-height: 22px;
         margin-bottom: 8px;
       }
-      .article-creator {
+      .update-time,.views,.article-creator {
         font-size: 13px;
         color: #86909c;
+        display: inline-flex;
+        align-items: center;
         text-decoration: none;
-      }
-      .update-time {
-        font-size: 13px;
-        color: #86909c;
+        margin-right: 4px;
+        i {
+          margin-right: 4px;
+        }
       }
     }
     .article-item:last-child {

@@ -10,6 +10,7 @@ import (
 	"strings"
 	"time"
 
+	redis "github.com/go-redis/redis/v8"
 	dbmodels "sfxserver/application/services/db/models"
 	"sfxserver/server/middleware"
 	"sfxserver/server/utils"
@@ -144,6 +145,9 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 		utils.ResponseServerError(gctx, "获取用户信息出错: %w", err)
 		return
 	}
+	// 更新文章查看次数
+	go s.updateViews(gctx, pk)
+
 	gctx.HTML(http.StatusOK, "article/article.gohtml", gin.H{
 		"pk":          article.Pk,
 		"title":       article.Title,
@@ -159,6 +163,36 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 			"login":   len(auth) > 0,
 		},
 	})
+}
+
+func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
+	clientIp := gctx.ClientIP()
+	if len(clientIp) < 1 {
+		return
+	}
+	key := "article_views:" + pk + ":" + clientIp
+	val, err := s.middleware.Redis.Get(gctx, key).Result()
+	if err != nil && err != redis.Nil {
+		logrus.Errorln("updateViews获取值出错", err)
+	}
+	if len(val) > 0 {
+		return
+	}
+	expire := time.Second * 3600 // time.Hour*24
+	ok, err := s.middleware.Redis.SetNX(gctx, key, "", expire).Result()
+	if !ok || err != nil {
+		logrus.Errorln("updateViews出错", err)
+	}
+
+	sqlCountText := `insert into articles_views(pk, views)
+values($1, 1)
+on conflict(pk)
+do update set views = articles_views.views + 1;`
+
+	if _, err = s.middleware.SqlxService.ExecContext(gctx, sqlCountText, pk); err != nil {
+		utils.ResponseServerError(gctx, "更新查看次数出错", err)
+		return
+	}
 }
 
 // 创建文章

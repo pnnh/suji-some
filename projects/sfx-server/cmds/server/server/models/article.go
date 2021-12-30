@@ -15,6 +15,7 @@ type ArticleView struct {
 	UpdateTimeFormatted string
 	KeywordsArray       []string
 	NickName            string
+	Views               int64
 }
 
 //func ParseArticleView(table *dbmodels.ArticleTable) *ArticleView {

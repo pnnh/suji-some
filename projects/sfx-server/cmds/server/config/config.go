@@ -15,7 +15,8 @@ const (
 	envResPath = "RES_PATH"
 )
 
-var DBDSN = "host=localhost user=postgres password=example dbname=sfxdb port=5432 sslmode=disable TimeZone=Asia/Shanghai"
+var DBDSN = ""
+var REDIS = ""
 var GINMODE = "release"
 var ISSUER = "sfx.xyz" // TOTP发行机构
 var JWTRealm = "sfx.xyz"
@@ -40,9 +41,14 @@ func init() {
 	if len(resPath) > 0 {
 		ResourceUrl = resPath
 	}
-	dsn := os.Getenv("DSN")
-	if len(dsn) > 0 {
-		DBDSN = dsn
+	DBDSN = os.Getenv("DSN")
+	if len(DBDSN) < 1 {
+		logrus.Fatalln("数据库未配置")
+	}
+
+	REDIS = os.Getenv("REDIS")
+	if len(REDIS) < 1 {
+		logrus.Fatalln("Redis未配置")
 	}
 
 	mode := os.Getenv("MODE")

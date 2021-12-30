@@ -51,12 +51,15 @@ func (s *indexHandler) Handle(gctx *gin.Context) {
 	if currentPage > maxPage {
 		currentPage = maxPage
 	}
-	sqlText := fmt.Sprintf(`select articles.*, accounts.nickname 
-from articles left join accounts on articles.creator = accounts.pk 
-order by update_time desc offset %d limit %d;`, (currentPage-1)*IndexPageSize, IndexPageSize)
+	sqlText := `select articles.*, accounts.nickname, articles_views.views
+from articles 
+    left join accounts on articles.creator = accounts.pk
+	left join articles_views on articles.pk = articles_views.pk
+order by update_time desc offset $1 limit $2;`
 	var sqlResults []dbmodels.IndexArticleList
 
-	if err := s.md.SqlxService.Select(&sqlResults, sqlText); err != nil {
+	offset, limit := (currentPage-1)*IndexPageSize, IndexPageSize
+	if err := s.md.SqlxService.Select(&sqlResults, sqlText, offset, limit); err != nil {
 		utils.ResponseServerError(gctx, "查询文章列表出错", err)
 		return
 	}
@@ -75,6 +78,7 @@ order by update_time desc offset %d limit %d;`, (currentPage-1)*IndexPageSize, I
 			UpdateTimeFormatted: utils.FmtTime(v.UpdateTime),
 			KeywordsArray:       strings.Split(v.Keywords.String, ","),
 			NickName:            v.NickName.String,
+			Views:               v.Views.Int64,
 		}
 	}
 	pagesHtml := calcPagesHtml(maxPage, currentPage)

@@ -40,6 +40,8 @@ func (app *Application) initMiddleware() (*middleware.ServerMiddleware, error) {
 	app.Use("sqlx", sqlsvc)
 	s3Svc := services.NewAwsS3Service()
 	app.Use("aws-s3", s3Svc)
+	redisSvc := services.NewRedisService()
+	app.Use("redis", redisSvc)
 	tmpls := templs.NewService()
 	app.Use("templs", tmpls)
 
@@ -49,6 +51,7 @@ func (app *Application) initMiddleware() (*middleware.ServerMiddleware, error) {
 		Templs:      tmpls,
 		SqlxService: sqlsvc,
 		AwsS3:       s3Svc,
+		Redis:       redisSvc,
 	}
 	return serverMiddleware, nil
 }

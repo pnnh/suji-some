@@ -19,7 +19,8 @@ type ArticleTable struct {
 // 首页的文章列表模型
 type IndexArticleList struct {
 	ArticleTable
-	NickName sql.NullString `json:"nickname" gorm:"column:nickname" db:"nickname"`
+	NickName sql.NullString `json:"nickname" db:"nickname"`
+	Views    sql.NullInt64  `json:"views" db:"views"`
 }
 
 func (ArticleTable) TableName() string {
