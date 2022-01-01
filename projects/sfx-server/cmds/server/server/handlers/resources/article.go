@@ -167,6 +167,10 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 }
 
 func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
+	// todo 临时代码，先打印请求头，后续观察特征过滤来自蜘蛛的请求
+	for k, v := range gctx.Request.Header {
+		logrus.Errorln("updateViews", k, v)
+	}
 	clientIp := ""
 	if config.Debug() {
 		clientIp = gctx.ClientIP()
