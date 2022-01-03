@@ -166,11 +166,24 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 	})
 }
 
+// 检查是否是机器人爬虫
+func isBot(userAgent string) bool {
+	userAgent = strings.ToLower(userAgent)
+	return strings.Contains(userAgent, "bot") ||
+		strings.Contains(userAgent, "spider")
+}
+
 func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
 	// todo 临时代码，先打印请求头，后续观察特征过滤来自蜘蛛的请求
 	for k, v := range gctx.Request.Header {
 		logrus.Errorln("updateViews", k, v)
 	}
+	userAgent := gctx.GetHeader("User-Agent")
+	logrus.Infoln("updateViews isBot", userAgent, isBot(userAgent))
+	if isBot(userAgent) {
+		return
+	}
+
 	clientIp := ""
 	if config.Debug() {
 		clientIp = gctx.ClientIP()
