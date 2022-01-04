@@ -37,3 +37,11 @@ split -b 5m qt-canvas.wasm qt-canvas.wasm.  # 会生成.aa .ab .ac 类似的文�
 经过最终试验，CloudFront似乎没有对用户单个链接做速度限制，所以直接将21m文件br压缩后下载，和分割成多个文件再压缩后下载，所花的时间差不多
 
 甚至通过xhr方式下载文件，在Firefox下面不会走缓存，而直接GET方式下载wasm第二次请求会缓存
+
+## 更新依赖包版本
+
+```shell
+npm update    # 更新依赖包版本
+npm outdated  # 检测是否有过时的包
+npm install # 安装依赖包
+```
