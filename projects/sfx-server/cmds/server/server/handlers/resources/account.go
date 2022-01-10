@@ -23,8 +23,6 @@ import (
 	"sfxserver/server/middleware"
 	"sfxserver/server/utils"
 
-	"gorm.io/gorm"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -43,13 +41,11 @@ func (s *accountHandler) SendOTPCode(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusInternalServerError, fmt.Errorf("邮箱不可为空"))
 		return
 	}
-	query := &dbmodels.AccountTable{UName: in.Email}
 	account := &dbmodels.AccountTable{}
-	if err := s.middleware.DB.Where(query).First(account).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
-			utils.ResponseError(gctx, http.StatusInternalServerError, err)
-			return
-		}
+	sqlText := `select accounts.* from accounts where uname = $1;`
+	if err := s.middleware.SqlxService.Get(account, sqlText, in.Email); err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错", err)
+		return
 	}
 	// 用户不存在，直接注册
 	if len(account.Pk) < 1 {
@@ -134,11 +130,10 @@ func (s *accountHandler) LoadImage(gctx *gin.Context) {
 		return
 	}
 	account := &dbmodels.AccountTable{}
-	if err := s.middleware.DB.First(account, "pk = ?", array[1]).Error; err != nil {
-		if err != gorm.ErrRecordNotFound {
-			utils.ResponseError(gctx, http.StatusInternalServerError, err)
-			return
-		}
+	sqlText := `select accounts.* from accounts where pk = $1;`
+	if err := s.middleware.SqlxService.Get(account, sqlText, array[1]); err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错", err)
+		return
 	}
 	if len(account.Pk) < 1 {
 		utils.ResponseError(gctx, http.StatusNotFound, errors.New("未找到"))
@@ -172,14 +167,10 @@ func (s *accountHandler) LoginByOTPCode(gctx *gin.Context) {
 		return
 	}
 
-	query := &dbmodels.AccountTable{UName: in.Email}
 	account := &dbmodels.AccountTable{}
-	if err := s.middleware.DB.Where(query).First(account).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			utils.ResponseServerError(gctx, "用户不存在，请发送验证码到邮箱", nil)
-			return
-		}
-		utils.ResponseServerError(gctx, "查询用户信息出错", err)
+	sqlText := `select accounts.* from accounts where uname = $1;`
+	if err := s.middleware.SqlxService.Get(account, sqlText, in.Email); err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错", err)
 		return
 	}
 	err := otp.Validate(account.UPass, in.Code)
@@ -215,15 +206,10 @@ func (s *accountHandler) HandlePersonal(gctx *gin.Context) {
 		return
 	}
 
-	userInfo := &dbmodels.AccountTable{
-		Pk: auth,
-	}
-	if err := s.middleware.DB.First(userInfo).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			utils.ClientPage(gctx, http.StatusNotFound, nil)
-			return
-		}
-		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+	userInfo := &dbmodels.AccountTable{}
+	sqlText := `select accounts.* from accounts where pk = $1;`
+	if err := s.middleware.SqlxService.Get(userInfo, sqlText, auth); err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错", err)
 		return
 	}
 	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
@@ -253,17 +239,13 @@ func (s *accountHandler) HandleEdit(gctx *gin.Context) {
 		return
 	}
 
-	userInfo := &dbmodels.AccountTable{
-		Pk: auth,
-	}
-	if err := s.middleware.DB.First(userInfo).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			utils.ClientPage(gctx, http.StatusNotFound, nil)
-			return
-		}
-		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+	userInfo := &dbmodels.AccountTable{}
+	sqlText := `select accounts.* from accounts where pk = $1;`
+	if err := s.middleware.SqlxService.Get(userInfo, sqlText, auth); err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错", err)
 		return
 	}
+
 	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
 	gctx.HTML(http.StatusOK, "account/edit.gohtml", gin.H{
 		"data": map[string]interface{}{

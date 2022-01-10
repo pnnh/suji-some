@@ -9,8 +9,8 @@ type ArticleTable struct {
 	Pk          string         `json:"pk" gorm:"primaryKey"`
 	Title       string         `json:"title"`
 	Body        string         `json:"body"`
-	CreateTime  time.Time      `json:"create_time" gorm:"column:create_time" db:"create_time"`
-	UpdateTime  time.Time      `json:"update_time" gorm:"column:update_time" db:"update_time"`
+	CreateTime  time.Time      `json:"create_time" db:"create_time" gorm:"column:create_time" db:"create_time"`
+	UpdateTime  time.Time      `json:"update_time" db:"update_time" gorm:"column:update_time" db:"update_time"`
 	Creator     string         `json:"creator"`
 	Keywords    sql.NullString `json:"keywords"`
 	Description sql.NullString `json:"description"`

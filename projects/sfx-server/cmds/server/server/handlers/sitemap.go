@@ -17,10 +17,11 @@ type sitemapHandler struct {
 }
 
 func (s *sitemapHandler) HandleSitemap(gctx *gin.Context) {
-	tables := make([]*dbmodels.ArticleTable, 0)
-	result := s.md.DB.Order("update_time desc").Limit(320).Find(&tables)
-	if result.Error != nil {
-		utils.ResponseServerError(gctx, "查询文章列表出错", result.Error)
+	sqlText := `select articles.* from articles order by update_time desc limit 100;`
+	var sqlResults []dbmodels.IndexArticleList
+
+	if err := s.md.SqlxService.Select(&sqlResults, sqlText); err != nil {
+		utils.ResponseServerError(gctx, "查询文章列表出错", err)
 		return
 	}
 
@@ -28,7 +29,7 @@ func (s *sitemapHandler) HandleSitemap(gctx *gin.Context) {
 	sm.Add(&sitemap.URL{
 		Loc: config.ServerUrl + "/",
 	})
-	for _, v := range tables {
+	for _, v := range sqlResults {
 		sm.Add(&sitemap.URL{
 			Loc: fmt.Sprintf("%s/article/read/%s", config.ServerUrl,
 				v.Pk),

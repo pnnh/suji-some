@@ -16,8 +16,6 @@ import (
 	"sfxserver/server/middleware"
 	"sfxserver/server/utils"
 
-	"gorm.io/gorm"
-
 	"github.com/sirupsen/logrus"
 
 	"github.com/gin-gonic/gin"
@@ -53,15 +51,10 @@ func (s *articleHandler) Edit(gctx *gin.Context) {
 	}
 	pk := gctx.Param("pk")
 
-	article := &dbmodels.ArticleTable{
-		Pk: pk,
-	}
-	if err := s.middleware.DB.First(article).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			utils.ClientPage(gctx, http.StatusOK, nil)
-			return
-		}
-		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+	article := &dbmodels.ArticleTable{}
+	sqlText := `select articles.* from articles where pk = $1;`
+	if err := s.middleware.SqlxService.Get(article, sqlText, pk); err != nil {
+		utils.ResponseServerError(gctx, "获取文章信息出错", err)
 		return
 	}
 
@@ -119,15 +112,10 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 	pk := gctx.Param("pk")
 	logrus.Debug("Article ", pk)
 
-	article := &dbmodels.ArticleTable{
-		Pk: pk,
-	}
-	if err := s.middleware.DB.First(article).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			utils.ClientPage(gctx, http.StatusNotFound, nil)
-			return
-		}
-		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+	article := &dbmodels.ArticleTable{}
+	sqlText := `select articles.* from articles where pk = $1;`
+	if err := s.middleware.SqlxService.Get(article, sqlText, pk); err != nil {
+		utils.ResponseServerError(gctx, "获取文章信息出错", err)
 		return
 	}
 	value := make(map[string]interface{})
@@ -301,16 +289,10 @@ func (s *articleHandler) Put(gctx *gin.Context) {
 			fmt.Errorf("文章PK不可为空"))
 		return
 	}
-	article := &dbmodels.ArticleTable{
-		Pk: pk,
-	}
-	if err := s.middleware.DB.First(article).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			utils.ResponseError(gctx, http.StatusNotFound,
-				fmt.Errorf("文章不存在"))
-			return
-		}
-		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+	article := &dbmodels.ArticleTable{}
+	sqlText := `select articles.* from articles where pk = $1;`
+	if err := s.middleware.SqlxService.Get(article, sqlText, pk); err != nil {
+		utils.ResponseServerError(gctx, "获取文章信息出错", err)
 		return
 	}
 
@@ -354,16 +336,10 @@ func (s *articleHandler) Delete(gctx *gin.Context) {
 			fmt.Errorf("文章PK不可为空"))
 		return
 	}
-	article := &dbmodels.ArticleTable{
-		Pk: pk,
-	}
-	if err := s.middleware.DB.First(article).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			utils.ResponseError(gctx, http.StatusNotFound,
-				fmt.Errorf("文章不存在"))
-			return
-		}
-		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+	article := &dbmodels.ArticleTable{}
+	sqlText := `select articles.* from articles where pk = $1;`
+	if err := s.middleware.SqlxService.Get(article, sqlText, pk); err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错", err)
 		return
 	}
 	if article.Creator != user {

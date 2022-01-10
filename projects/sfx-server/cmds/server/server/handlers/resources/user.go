@@ -7,8 +7,6 @@ import (
 	"sfxserver/server/middleware"
 	"sfxserver/server/utils"
 
-	"gorm.io/gorm"
-
 	"github.com/gin-gonic/gin"
 )
 
@@ -28,12 +26,9 @@ func (s *userHandler) HandleInfo(gctx *gin.Context) {
 	userInfo := &dbmodels.AccountTable{
 		Pk: pk,
 	}
-	if err := s.middleware.DB.First(userInfo).Error; err != nil {
-		if err == gorm.ErrRecordNotFound {
-			utils.ClientPage(gctx, http.StatusNotFound, nil)
-			return
-		}
-		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+	sqlText := `select accounts.* from accounts where pk = $1;`
+	if err := s.middleware.SqlxService.Get(userInfo, sqlText, pk); err != nil {
+		utils.ResponseServerError(gctx, "获取用户信息出错", err)
 		return
 	}
 	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
