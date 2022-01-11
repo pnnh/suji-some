@@ -32,8 +32,6 @@ func (app *Application) Use(key string, serv IService) {
 }
 
 func (app *Application) initMiddleware() (*middleware.ServerMiddleware, error) {
-	dbsvc := db.NewDBService(config.DBDSN)
-	app.Use("db", dbsvc)
 	mailSvc := email.NewService()
 	app.Use("mail", mailSvc)
 	sqlsvc := db.NewSqlxService(config.DBDSN)
@@ -46,7 +44,6 @@ func (app *Application) initMiddleware() (*middleware.ServerMiddleware, error) {
 	app.Use("templs", tmpls)
 
 	serverMiddleware := &middleware.ServerMiddleware{
-		DB:          dbsvc,
 		Mail:        mailSvc,
 		Templs:      tmpls,
 		SqlxService: sqlsvc,

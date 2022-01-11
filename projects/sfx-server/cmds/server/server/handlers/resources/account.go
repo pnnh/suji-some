@@ -54,15 +54,18 @@ func (s *accountHandler) SendOTPCode(gctx *gin.Context) {
 			utils.ResponseError(gctx, http.StatusInternalServerError, err)
 			return
 		}
-		account = &dbmodels.AccountTable{
-			Pk:         utils.NewPostId(),
-			UName:      in.Email,
-			UPass:      otpOut.Secret,
-			CreateTime: time.Now(),
-			UpdateTime: time.Now(),
-			Image:      otpOut.Image,
-		}
-		if err := s.middleware.DB.Create(account).Error; err != nil {
+		sqlText := `insert into accounts(pk, create_time, update_time, uname, upass, image)
+values(:pk, :create_time, :update_time, :uname, :upass, :image);`
+		_, err = s.middleware.SqlxService.NamedExec(sqlText,
+			map[string]interface{}{
+				":pk":          utils.NewPostId(),
+				":create_time": time.Now(),
+				":update_time": time.Now(),
+				":uname":       in.Email,
+				":upass":       otpOut.Secret,
+				":image":       otpOut.Image,
+			})
+		if err != nil {
 			utils.ResponseError(gctx, http.StatusInternalServerError, err)
 			return
 		}
@@ -329,16 +332,21 @@ func (s *accountHandler) HandleEditPut(gctx *gin.Context) {
 		utils.ResponseMessage(gctx, http.StatusBadRequest, "参数有误")
 		return
 	}
-	updateQuery := &dbmodels.AccountTable{Pk: auth}
-	updateBody := &dbmodels.AccountTable{
-		NickName:    nickname,
-		UpdateTime:  time.Now(),
-		Description: sql.NullString{String: description, Valid: true},
+	sqlText := `update accounts set nickname = :nickname, update_time=:update_time, 
+description=:description, photo='' where pk = '';`
+	sqlParams := map[string]interface{}{
+		":pk":          auth,
+		":nickname":    nickname,
+		":update_time": time.Now(),
+		":description": sql.NullString{String: description, Valid: true},
 	}
 	if len(photoLocation) > 0 {
-		updateBody.Photo = sql.NullString{String: photoLocation, Valid: true}
+		sqlText += ", photo=:photo"
+		sqlParams[":photo"] = sql.NullString{String: photoLocation, Valid: true}
 	}
-	if err := s.middleware.DB.Where(updateQuery).Updates(updateBody).Error; err != nil {
+	sqlText += " where pk = :pk;"
+	_, err = s.middleware.SqlxService.NamedExec(sqlText, sqlParams)
+	if err != nil {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
 	}

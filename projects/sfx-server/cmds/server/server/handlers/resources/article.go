@@ -201,9 +201,7 @@ func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
 	}
 
 	sqlCountText := `insert into articles_views(pk, views)
-values($1, 1)
-on conflict(pk)
-do update set views = articles_views.views + 1;`
+values($1, 1) on conflict(pk) do update set views = articles_views.views + 1;`
 
 	if _, err = s.middleware.SqlxService.ExecContext(gctx, sqlCountText, pk); err != nil {
 		utils.ResponseServerError(gctx, "更新查看次数出错", err)
@@ -229,22 +227,27 @@ func (s *articleHandler) Create(gctx *gin.Context) {
 		utils.ResponseServerError(gctx, "获取用户信息出错: %w", err)
 		return
 	}
-	article := &dbmodels.ArticleTable{
-		Pk:          utils.NewPostId(),
-		Title:       in.Title,
-		Body:        in.Body,
-		CreateTime:  time.Now(),
-		UpdateTime:  time.Now(),
-		Creator:     auth,
-		Keywords:    sql.NullString{String: in.Keywords, Valid: true},
-		Description: sql.NullString{String: in.Description, Valid: true},
-	}
-	if err := s.middleware.DB.Create(article).Error; err != nil {
+
+	articlePk := utils.NewPostId()
+	sqlText := `insert into articles(pk, title, body, create_time, update_time, creator, keywords, description)
+values(:pk, :title, :body, :create_time, :update_time, :creator, :keywords, :description);`
+	_, err = s.middleware.SqlxService.NamedExec(sqlText,
+		map[string]interface{}{
+			":pk":          articlePk,
+			":title":       in.Title,
+			":body":        in.Body,
+			":create_time": time.Now(),
+			":update_time": time.Now(),
+			":creator":     auth,
+			":keywords":    sql.NullString{String: in.Keywords, Valid: true},
+			":description": sql.NullString{String: in.Description, Valid: true},
+		})
+	if err != nil {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
 	}
 	utils.ResponseData(gctx, http.StatusOK, gin.H{
-		"pk": article.Pk,
+		"pk": articlePk,
 	})
 }
 
@@ -305,18 +308,17 @@ func (s *articleHandler) Put(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusUnauthorized, fmt.Errorf("无权限修改"))
 		return
 	}
-	updateQuery := &dbmodels.ArticleTable{Pk: pk}
-	updateBody := &dbmodels.ArticleTable{
-		Title:       in.Title,
-		Body:        in.Body,
-		Keywords:    sql.NullString{String: in.Keywords, Valid: true},
-		Description: sql.NullString{String: in.Description, Valid: true},
-		UpdateTime:  time.Now(),
+	sqlText = `update articles set title=:title, body=:body, keywords=:keywords, 
+description=:description, update_time=:update_time where pk = :pk;`
+	sqlParams := map[string]interface{}{
+		":pk":          pk,
+		":title":       in.Title,
+		":body":        in.Body,
+		":keywords":    sql.NullString{String: in.Keywords, Valid: true},
+		":description": sql.NullString{String: in.Description, Valid: true},
+		"update_time":  time.Now(),
 	}
-	if err := s.middleware.DB.Where(updateQuery).Updates(updateBody).Error; err != nil {
-		utils.ResponseError(gctx, http.StatusInternalServerError, err)
-		return
-	}
+	_, err = s.middleware.SqlxService.NamedExec(sqlText, sqlParams)
 	utils.ResponseData(gctx, http.StatusOK, gin.H{
 		"pk": article.Pk,
 	})
@@ -346,9 +348,9 @@ func (s *articleHandler) Delete(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusUnauthorized, fmt.Errorf("无权限修改"))
 		return
 	}
-	query := &dbmodels.ArticleTable{Pk: pk}
-	if err := s.middleware.DB.Delete(query).Error; err != nil {
-		utils.ResponseError(gctx, http.StatusInternalServerError, err)
+	sqlText = `delete from articles where pk = $1;`
+	if _, err := s.middleware.SqlxService.Exec(sqlText, pk); err != nil {
+		utils.ResponseServerError(gctx, "删除文章出错", err)
 		return
 	}
 	utils.ResponseData(gctx, http.StatusOK, gin.H{

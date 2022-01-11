@@ -8,7 +8,6 @@ import (
 )
 
 type ServerMiddleware struct {
-	DB          *db.DBService
 	SqlxService *db.SqlxService
 	Mail        *email.Service
 	Templs      *templs.Service
