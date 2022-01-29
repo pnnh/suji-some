@@ -38,9 +38,9 @@ const config = defineConfig({
     manifest: true,
     ssrManifest: true,
     rollupOptions: {
-      // input: ['index.html'],
+      input: ['index.html'],
       // input: listFile(path.resolve(__dirname, 'src/pages')),
-      input: ['src/index.tsx'],
+      // input: ['src/index.tsx'],
       output: {
         entryFileNames: (chunkInfo: PreRenderedChunk) => {
           if (!chunkInfo.facadeModuleId) {

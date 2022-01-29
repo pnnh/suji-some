@@ -1,0 +1,27 @@
+@import "src/styles/media";
+
+.todo-page {
+  .content {
+    background: #FFFFFF;
+    margin: 0 auto 24px;
+    padding: 16px;
+    border-radius: 4px;
+    box-shadow: #f4f4f4;
+  }
+
+  .task-list {
+    margin-top: 16px;
+
+    .task-item {
+      margin: 4px 0;
+      padding: 4px 0;
+    }
+  }
+
+  @media (min-width: $screen-desktop) {
+    .content {
+      width: 960px;
+      margin: 0 auto;
+    }
+  }
+}

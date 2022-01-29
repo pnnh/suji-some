@@ -1,6 +1,6 @@
 import ReactDOM from 'react-dom'
 import React from 'react'
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import AccountPage from '@/pages/account/account-page'
 import RandomPasswordPage from '@/pages/utils/random-password'
 import { renderExceptionPage } from '@/views/exception/render'
@@ -17,6 +17,8 @@ import AccountEditPage from '@/pages/account/edit-page'
 import UserInfoPage from '@/pages/user/info-page'
 import TimestampPage from '@/pages/utils/timestamp'
 import './index.scss'
+import { TodoPage } from '@/pages/todo/todo'
+import { CalendarPage } from '@/pages/calendar/calendar'
 
 const App = () => {
   const data = getJsonData<any>()
@@ -27,8 +29,10 @@ const App = () => {
   return <Router>
     <Routes>
       <Route path="/article/new" element={<NewPage/>}/>
+      <Route path="/work/todo" element={<TodoPage/>}/>
+      <Route path="/work/calendar" element={<CalendarPage/>}/>
       <Route path="/article/edit/:pk" element={<EditPage/>}/>
-      <Route path="/article/read/:pk" element={<ReadPage />}/>
+      <Route path="/article/read/:pk" element={<ReadPage/>}/>
       <Route path="/utils/random/password" element={<RandomPasswordPage/>}/>
       <Route path="/utils/encrypt/md5" element={<MD5Page/>}/>
       <Route path="/utils/timestamp" element={<TimestampPage/>}/>

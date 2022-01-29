@@ -10,10 +10,12 @@
   ],
   "private": true,
   "dependencies": {
+    "@pnnh/stele": "0.1.0",
     "axios": "^0.24.0",
     "is-hotkey": "^0.2.0",
     "locate-character": "^2.0.5",
     "lodash": "^4.17.21",
+    "lunar-javascript": "^1.2.26",
     "prismjs": "^1.23.0",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
@@ -22,7 +24,6 @@
     "slate": "^0.72.0",
     "slate-history": "^0.66.0",
     "slate-react": "^0.72.1",
-    "@pnnh/stele": "0.1.0",
     "uuid": "^8.3.2"
   },
   "devDependencies": {
