@@ -10,7 +10,7 @@
   ],
   "private": true,
   "dependencies": {
-    "@pnnh/stele": "0.1.5",
+    "@pnnh/stele": "0.1.6",
     "axios": "^0.24.0",
     "is-hotkey": "^0.2.0",
     "locate-character": "^2.0.5",

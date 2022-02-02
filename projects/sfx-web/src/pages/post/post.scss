@@ -1,0 +1,59 @@
+@import "src/styles/media";
+
+.post-page {
+
+  .content {
+    .post-new {
+      display: flex;
+
+      textarea {
+        width: 100%;
+        border: solid 1px #edebe9;
+        padding: 8px;
+        font-size: 16px;
+        outline: none;
+      }
+    }
+
+    .post-list {
+      margin-top: 16px;
+
+      .post-item {
+        border-bottom: 1px solid #e5e6eb;
+        padding-bottom: 16px;
+        padding-top: 16px;
+
+        .post-body {
+          color: #5e5e5e;
+          font-size: 14px;
+          line-height: 22px;
+          margin-bottom: 8px;
+        }
+
+        .update-time, .post-creator {
+          font-size: 13px;
+          color: #86909c;
+          display: inline-flex;
+          align-items: center;
+          text-decoration: none;
+          margin-right: 4px;
+
+          i {
+            margin-right: 4px;
+          }
+        }
+      }
+
+      .post-item:last-child {
+        border-bottom-width: 0;
+      }
+    }
+  }
+
+  @media (min-width: $screen-desktop) {
+    .content {
+      width: 960px;
+      margin: 0 auto;
+    }
+  }
+}

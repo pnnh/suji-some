@@ -19,6 +19,7 @@ import TimestampPage from '@/pages/utils/timestamp'
 import './index.scss'
 import { TodoPage } from '@/pages/todo/todo'
 import { CalendarPage } from '@/pages/calendar/calendar'
+import { PostPage } from '@/pages/post/post'
 
 const App = () => {
   const data = getJsonData<any>()
@@ -30,6 +31,7 @@ const App = () => {
     <Routes>
       <Route path="/article/new" element={<NewPage/>}/>
       <Route path="/work/todo" element={<TodoPage/>}/>
+      <Route path="/life/post" element={<PostPage/>}/>
       <Route path="/work/calendar" element={<CalendarPage/>}/>
       <Route path="/article/edit/:pk" element={<EditPage/>}/>
       <Route path="/article/read/:pk" element={<ReadPage/>}/>
