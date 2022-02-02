@@ -22,15 +22,60 @@ function renderPostList (postList: IPost[]) {
   return postElements
 }
 
+function renderPagination (maxPage: number, currentPage: number, pageClick: (page: number) => void) {
+  let startPage = currentPage - 5
+  let endPage = currentPage + 5
+
+  if (startPage < 1) {
+    startPage = 1
+  }
+  if (endPage > maxPage) {
+    endPage = maxPage
+  }
+  const pageElements: JSX.Element[] = []
+  const prevPage = currentPage - 1
+  const nextPage = currentPage + 1
+
+  if (prevPage >= 1) {
+    const element = <a className={'page'} onClick={() => pageClick(prevPage)}>«</a>
+    pageElements.push(element)
+  }
+  for (let i = startPage; i <= endPage; i++) {
+    let classActive = ''
+    if (i === currentPage) {
+      classActive = 'active'
+    }
+    const element = <a className={'page ' + classActive} onClick={() => pageClick(i)}>{i}</a>
+    pageElements.push(element)
+  }
+  if (nextPage <= maxPage) {
+    const element = <a className={'page'} onClick={() => pageClick(nextPage)}>»</a>
+    pageElements.push(element)
+  }
+  return pageElements
+}
+
 export function PostPage () {
   const serverData = getJsonData<any>()
   console.debug('serverData postpage', serverData)
-  let defaultPostList: IPost[] = []
-  if (serverData && serverData.list) {
-    defaultPostList = convertTime(serverData.list)
+  if (!serverData) {
+    return <div>页面呈现错误，服务端数据未下发</div>
   }
+  const defaultPostList = convertTime(serverData.list)
   const [post, setPost] = useState<string>()
   const [postList, setPostList] = useState<IPost[]>(defaultPostList)
+  const [maxPage, setMaxPage] = useState<number>(serverData.maxPage)
+  const [currentPage, setCurrentPage] = useState<number>(serverData.currentPage)
+
+  const loadPostList = (page: number) => {
+    selectPost(page).then(selectResult => {
+      console.log('selectResult', selectResult)
+      if (!selectResult || selectResult.list.length < 1) return
+      setPostList(selectResult.list)
+      setMaxPage(selectResult.maxPage)
+      setCurrentPage(page)
+    })
+  }
 
   return <div className={'post-page'}>
     <div className={'content'}>
@@ -51,11 +96,7 @@ export function PostPage () {
             createPost({ body: post }).then((result) => {
               console.log('createPost', result)
               setPost('')
-              selectPost(1).then(selectResult => {
-                console.log('selectResult', selectResult)
-                if (!selectResult || selectResult.length < 1) return
-                setPostList(selectResult)
-              })
+              loadPostList(1)
             })
           }}>发送
           </button>
@@ -64,9 +105,7 @@ export function PostPage () {
       <div className={'post-list fx-card'}>
         {renderPostList(postList)}
         <div className="page-list">
-          <a className="page active" href="/?p=1">1</a><a className="page " href="/?p=2">2</a><a className="page "
-                                                                                                 href="/?p=3">3</a><a
-          className="page " href="/?p=4">4</a><a className="page" href="/?p=2">»</a>
+          {renderPagination(maxPage, currentPage, loadPostList)}
         </div>
       </div>
     </div>

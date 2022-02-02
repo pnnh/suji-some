@@ -21,6 +21,7 @@ export interface IPost {
 
 export interface ISelectPostOut {
   list: IPost[]
+  maxPage: number
 }
 
 export function convertTime (postList: IPost[]) {
@@ -47,7 +48,8 @@ export function selectPost (page: number) {
     if (!selectResult.data) {
       return selectResult.data
     }
-    return convertTime(selectResult.data.list)
+    selectResult.data.list = convertTime(selectResult.data.list)
+    return selectResult.data
   }).catch((error) => {
     console.debug('selectPost', error)
   })

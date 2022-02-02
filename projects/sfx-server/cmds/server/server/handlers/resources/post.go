@@ -151,9 +151,11 @@ order by create_time desc offset $1 limit $2;`
 
 	gctx.HTML(http.StatusOK, "post/list.gohtml", gin.H{
 		"data": gin.H{
-			"login": len(auth) > 0,
-			"list":  list,
-			"count": listCount,
+			"login":       len(auth) > 0,
+			"list":        list,
+			"count":       listCount,
+			"maxPage":     maxPage,
+			"currentPage": currentPage,
 		},
 	})
 }
@@ -204,8 +206,9 @@ order by create_time desc offset $1 limit $2;`
 	}
 
 	utils.ResponseData(gctx, http.StatusOK, gin.H{
-		"list":  list,
-		"count": listCount,
+		"list":    list,
+		"count":   listCount,
+		"maxPage": maxPage,
 	})
 }
 
