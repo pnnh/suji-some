@@ -1,0 +1,22 @@
+{{ define "post/list.gohtml" }}
+	<!DOCTYPE html>
+	<html lang="zh">
+	<head>
+        {{ template "partial/headmeta.gohtml" }}
+        {{ template "partial/analytics.gohtml" }}
+		<title>动态列表 - 泛涵</title>
+		{{ template "res/css.gohtml" }}
+	</head>
+	<body>
+	<div class="ms-Grid" dir="ltr">
+        {{ template "partial/header.gohtml" }}
+		<main>
+			<div id="root"></div>
+		</main>
+        {{ template "partial/footer.gohtml" }}
+	</div>
+	<script id="data" type="application/json">{{.data}}</script>
+	{{ template "res/js.gohtml" }}
+	</body>
+	</html>
+{{ end }}

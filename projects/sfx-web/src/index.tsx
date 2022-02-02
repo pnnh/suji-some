@@ -31,7 +31,7 @@ const App = () => {
     <Routes>
       <Route path="/article/new" element={<NewPage/>}/>
       <Route path="/work/todo" element={<TodoPage/>}/>
-      <Route path="/life/post" element={<PostPage/>}/>
+      <Route path="/post" element={<PostPage/>}/>
       <Route path="/work/calendar" element={<CalendarPage/>}/>
       <Route path="/article/edit/:pk" element={<EditPage/>}/>
       <Route path="/article/read/:pk" element={<ReadPage/>}/>

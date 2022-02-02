@@ -59,8 +59,8 @@ values(:pk, :create_time, :update_time, :uname, :upass, :image);`
 		_, err = s.middleware.SqlxService.NamedExec(sqlText,
 			map[string]interface{}{
 				"pk":          utils.NewPostId(),
-				"create_time": time.Now(),
-				"update_time": time.Now(),
+				"create_time": time.Now().UTC(),
+				"update_time": time.Now().UTC(),
 				"uname":       in.Email,
 				"upass":       otpOut.Secret,
 				"image":       otpOut.Image,
@@ -337,7 +337,7 @@ description=:description, photo='' where pk = '';`
 	sqlParams := map[string]interface{}{
 		"pk":          auth,
 		"nickname":    nickname,
-		"update_time": time.Now(),
+		"update_time": time.Now().UTC(),
 		"description": sql.NullString{String: description, Valid: true},
 	}
 	if len(photoLocation) > 0 {

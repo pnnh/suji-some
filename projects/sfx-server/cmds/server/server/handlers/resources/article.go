@@ -236,8 +236,8 @@ values(:pk, :title, :body, :create_time, :update_time, :creator, :keywords, :des
 			"pk":          articlePk,
 			"title":       in.Title,
 			"body":        in.Body,
-			"create_time": time.Now(),
-			"update_time": time.Now(),
+			"create_time": time.Now().UTC(),
+			"update_time": time.Now().UTC(),
 			"creator":     auth,
 			"keywords":    sql.NullString{String: in.Keywords, Valid: true},
 			"description": sql.NullString{String: in.Description, Valid: true},
@@ -316,7 +316,7 @@ description=:description, update_time=:update_time where pk = :pk;`
 		"body":        in.Body,
 		"keywords":    sql.NullString{String: in.Keywords, Valid: true},
 		"description": sql.NullString{String: in.Description, Valid: true},
-		"update_time": time.Now(),
+		"update_time": time.Now().UTC(),
 	}
 	_, err = s.middleware.SqlxService.NamedExec(sqlText, sqlParams)
 	if err != nil {

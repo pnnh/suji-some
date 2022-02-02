@@ -47,9 +47,10 @@ func (s *WebServer) Init() error {
 	s.router.GET("/utils/encrypt/md5", handlers.HandleCalcMd5)
 	s.router.GET("/utils/timestamp", handlers.HandleTimestamp)
 
-	s.resources["post"] = resources.NewArticleResource(s.middleware)
+	s.resources["article"] = resources.NewArticleResource(s.middleware)
 	s.resources["account"] = resources.NewAccountResource(s.middleware)
 	s.resources["user"] = resources.NewUserResource(s.middleware)
+	s.resources["post"] = resources.NewPostResource(s.middleware)
 
 	for name, resource := range s.resources {
 		resource.RegisterRouter(s.router, name)
