@@ -3,6 +3,7 @@ package resources
 import (
 	"errors"
 	"fmt"
+	"html"
 	"strings"
 )
 
@@ -55,12 +56,14 @@ func buildParagraph(node interface{}) (string, error) {
 	}
 
 	builder := strings.Builder{}
-	builder.WriteString("<p>")
+	builder.WriteString("<p class='fx-paragraph'>")
 	for k, v := range children {
 		text, err := buildText(v)
 		if err != nil {
 			return "", fmt.Errorf("buildText错误: %d", k)
 		}
+		//text = html.EscapeString(text)
+		text = strings.ReplaceAll(text, "\n", "<br/>")
 		builder.WriteString(text)
 	}
 	builder.WriteString("</p>")
@@ -81,19 +84,19 @@ func buildCodeBlock(node interface{}) (string, error) {
 		return "", errors.New("缺少字段language")
 	}
 	builder := strings.Builder{}
-	builder.WriteString(fmt.Sprintf("<pre class='code' data-lang='%s'><code>", language))
+	builder.WriteString(fmt.Sprintf("<pre class='fx-code-block code' data-lang='%s'><code>", language))
 
 	for k, v := range children {
 		text, err := buildCode(v)
 		if err != nil {
 			return "", fmt.Errorf("buildText错误: %d", k)
 		}
-		builder.WriteString(text)
+		builder.WriteString(html.EscapeString(text))
 	}
 
 	builder.WriteString("</code></pre>")
 
-	return  builder.String(), nil
+	return builder.String(), nil
 }
 
 func buildHeader(node interface{}) (string, error) {
@@ -122,7 +125,7 @@ func buildHeader(node interface{}) (string, error) {
 
 	builder.WriteString(fmt.Sprintf("</h%.0f>", header))
 
-	return  builder.String(), nil
+	return builder.String(), nil
 }
 
 func buildText(node interface{}) (string, error) {
@@ -134,8 +137,33 @@ func buildText(node interface{}) (string, error) {
 	if !ok {
 		return "", fmt.Errorf("文本节点类型有误")
 	}
-	//return fmt.Sprintf("<span>%s</span>", text), nil
-	return text, nil
+	text = html.EscapeString(text)
+	textDecoration := ""
+	className := ""
+	if _, ok := value["strike"]; ok {
+		textDecoration += " line-through"
+	}
+	if _, ok := value["bold"]; ok {
+		className += " fx-bold"
+	}
+	if _, ok := value["italic"]; ok {
+		className += " fx-italic"
+	}
+	if _, ok := value["underline"]; ok {
+		textDecoration += " underline"
+	}
+	if _, ok := value["code"]; ok {
+		className += " fx-code"
+	}
+	property := ""
+	if len(className) > 0 {
+		property += fmt.Sprintf(" class='%s'", className)
+	}
+	if len(textDecoration) > 0 {
+		property += fmt.Sprintf(" style='text-decoration:%s'", textDecoration)
+	}
+	return fmt.Sprintf("<span %s>%s</span>", property, text), nil
+	//return text, nil
 }
 
 func buildCode(node interface{}) (string, error) {
@@ -150,4 +178,3 @@ func buildCode(node interface{}) (string, error) {
 	//return fmt.Sprintf("<span>%s</span>", text), nil
 	return text, nil
 }
-

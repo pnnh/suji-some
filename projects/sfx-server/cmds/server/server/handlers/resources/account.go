@@ -58,12 +58,12 @@ func (s *accountHandler) SendOTPCode(gctx *gin.Context) {
 values(:pk, :create_time, :update_time, :uname, :upass, :image);`
 		_, err = s.middleware.SqlxService.NamedExec(sqlText,
 			map[string]interface{}{
-				":pk":          utils.NewPostId(),
-				":create_time": time.Now(),
-				":update_time": time.Now(),
-				":uname":       in.Email,
-				":upass":       otpOut.Secret,
-				":image":       otpOut.Image,
+				"pk":          utils.NewPostId(),
+				"create_time": time.Now(),
+				"update_time": time.Now(),
+				"uname":       in.Email,
+				"upass":       otpOut.Secret,
+				"image":       otpOut.Image,
 			})
 		if err != nil {
 			utils.ResponseError(gctx, http.StatusInternalServerError, err)
@@ -335,14 +335,14 @@ func (s *accountHandler) HandleEditPut(gctx *gin.Context) {
 	sqlText := `update accounts set nickname = :nickname, update_time=:update_time, 
 description=:description, photo='' where pk = '';`
 	sqlParams := map[string]interface{}{
-		":pk":          auth,
-		":nickname":    nickname,
-		":update_time": time.Now(),
-		":description": sql.NullString{String: description, Valid: true},
+		"pk":          auth,
+		"nickname":    nickname,
+		"update_time": time.Now(),
+		"description": sql.NullString{String: description, Valid: true},
 	}
 	if len(photoLocation) > 0 {
 		sqlText += ", photo=:photo"
-		sqlParams[":photo"] = sql.NullString{String: photoLocation, Valid: true}
+		sqlParams["photo"] = sql.NullString{String: photoLocation, Valid: true}
 	}
 	sqlText += " where pk = :pk;"
 	_, err = s.middleware.SqlxService.NamedExec(sqlText, sqlParams)

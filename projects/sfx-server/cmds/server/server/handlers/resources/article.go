@@ -163,9 +163,9 @@ func isBot(userAgent string) bool {
 
 func (s *articleHandler) updateViews(gctx *gin.Context, pk string) {
 	// todo 临时代码，先打印请求头，后续观察特征过滤来自蜘蛛的请求
-	for k, v := range gctx.Request.Header {
-		logrus.Errorln("updateViews", k, v)
-	}
+	//for k, v := range gctx.Request.Header {
+	//	logrus.Errorln("updateViews", k, v)
+	//}
 	userAgent := gctx.GetHeader("User-Agent")
 	logrus.Infoln("updateViews isBot", userAgent, isBot(userAgent))
 	if isBot(userAgent) {
@@ -233,14 +233,14 @@ func (s *articleHandler) Create(gctx *gin.Context) {
 values(:pk, :title, :body, :create_time, :update_time, :creator, :keywords, :description);`
 	_, err = s.middleware.SqlxService.NamedExec(sqlText,
 		map[string]interface{}{
-			":pk":          articlePk,
-			":title":       in.Title,
-			":body":        in.Body,
-			":create_time": time.Now(),
-			":update_time": time.Now(),
-			":creator":     auth,
-			":keywords":    sql.NullString{String: in.Keywords, Valid: true},
-			":description": sql.NullString{String: in.Description, Valid: true},
+			"pk":          articlePk,
+			"title":       in.Title,
+			"body":        in.Body,
+			"create_time": time.Now(),
+			"update_time": time.Now(),
+			"creator":     auth,
+			"keywords":    sql.NullString{String: in.Keywords, Valid: true},
+			"description": sql.NullString{String: in.Description, Valid: true},
 		})
 	if err != nil {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
@@ -311,14 +311,18 @@ func (s *articleHandler) Put(gctx *gin.Context) {
 	sqlText = `update articles set title=:title, body=:body, keywords=:keywords, 
 description=:description, update_time=:update_time where pk = :pk;`
 	sqlParams := map[string]interface{}{
-		":pk":          pk,
-		":title":       in.Title,
-		":body":        in.Body,
-		":keywords":    sql.NullString{String: in.Keywords, Valid: true},
-		":description": sql.NullString{String: in.Description, Valid: true},
-		"update_time":  time.Now(),
+		"pk":          pk,
+		"title":       in.Title,
+		"body":        in.Body,
+		"keywords":    sql.NullString{String: in.Keywords, Valid: true},
+		"description": sql.NullString{String: in.Description, Valid: true},
+		"update_time": time.Now(),
 	}
 	_, err = s.middleware.SqlxService.NamedExec(sqlText, sqlParams)
+	if err != nil {
+		utils.ResponseServerError(gctx, "更新文章内容出错: %w", err)
+		return
+	}
 	utils.ResponseData(gctx, http.StatusOK, gin.H{
 		"pk": article.Pk,
 	})
