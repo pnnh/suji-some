@@ -22,6 +22,9 @@ import {CalendarPage} from '@/pages/calendar/calendar'
 import {PostPage} from '@/pages/post/post'
 
 export * from '@/components/hello.svelte'
+export * from '@/components/Clock.svelte'
+export * from '@/components/my-element'
+export * from '@/components/usercard'
 
 const App = () => {
   const data = getJsonData<any>()

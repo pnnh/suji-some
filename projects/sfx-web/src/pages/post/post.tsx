@@ -3,6 +3,7 @@ import type {IPost} from '@/services/post'
 import {convertTime, createPost, deletePost, selectPost} from '@/services/post'
 import {getJsonData} from '@/utils/helpers'
 
+
 function renderPostList (postList: IPost[], logined: boolean, deleteCallback: () => void) {
   const renderDelete = (pk: string) => {
     if (!logined) {
@@ -76,6 +77,8 @@ function renderPagination (maxPage: number, currentPage: number, pageClick: (pag
   return pageElements
 }
 
+export let onClick2: (v: number) => void
+
 export function PostPage () {
   const serverData = getJsonData<any>()
   console.debug('serverData postpage', serverData)
@@ -109,7 +112,16 @@ export function PostPage () {
                     onChange={(event) =>
                       setPost(event.target.value)}
           ></textarea>
-        <my-counter></my-counter>
+      </div>
+      <div>
+
+        <my-counter count={10} on:message={(v: any) => {
+          console.log('发生回调', v)
+        }}></my-counter>
+
+        <my-element name2="afdfdsafd" my-event={(v: any) => {
+          console.log('发生回调222', v)
+        }}></my-element>
       </div>
       <div className={'post-submit'}>
         <button className={'fx-button'} onClick={(event) => {

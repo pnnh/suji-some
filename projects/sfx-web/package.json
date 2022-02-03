@@ -13,6 +13,7 @@
     "@pnnh/stele": "0.1.6",
     "axios": "^0.24.0",
     "is-hotkey": "^0.2.0",
+    "lit": "^2.1.2",
     "locate-character": "^2.0.5",
     "lodash": "^4.17.21",
     "lunar-javascript": "^1.2.26",

@@ -3,6 +3,7 @@
   "compilerOptions": {
     "types": ["node", "svelte"],
     "experimentalDecorators": true,
+    "useDefineForClassFields": false,
     "module": "ESNext",
     "target": "ESNext",
     "moduleResolution": "Node",

@@ -11,6 +11,21 @@
         {{ template "partial/header.gohtml" }}
 		<main>
 			<div id="root"></div>
+			<script>
+				function callback() {
+					console.log('发生回调333')
+				}
+			</script>
+			<my-element id="my-element" name2="afdfdsafd" my-event="callback()"></my-element>
+			<user-card id="usercard" onpop="callback()"></user-card>
+			<script>
+
+				const myElement = document.getElementById('my-element');
+				myElement.addEventListener('my-event', (e) => {console.log('xxxxx')});
+
+				// const usercard = document.getElementById('usercard');
+				// usercard.addEventListener('my-event', (e) => {console.log('yyyyy usercard')});
+			</script>
 		</main>
         {{ template "partial/footer.gohtml" }}
 	<script id="data" type="application/json">{{.data}}</script>

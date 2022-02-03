@@ -1,7 +1,16 @@
 <script lang="ts">
-  let count = 0
+
+  import {createEventDispatcher} from 'svelte'
+
+  const dispatch = createEventDispatcher()
+
+  export let count = 0
+
   const increment = () => {
     count += 1
+    dispatch('message', {
+      text: 'Hello!'
+    })
   }
 </script>
 
@@ -11,6 +20,7 @@
 <button on:click={increment}>
   Clicks: {count}
 </button>
+<my-clock></my-clock>
 
 <style>
     button {
