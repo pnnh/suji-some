@@ -1,5 +1,6 @@
 import React, {useState} from 'react'
-import {convertTime, createPost, deletePost, IPost, selectPost} from '@/services/post'
+import type {IPost} from '@/services/post'
+import {convertTime, createPost, deletePost, selectPost} from '@/services/post'
 import {getJsonData} from '@/utils/helpers'
 
 function renderPostList (postList: IPost[], logined: boolean, deleteCallback: () => void) {
@@ -108,6 +109,7 @@ export function PostPage () {
                     onChange={(event) =>
                       setPost(event.target.value)}
           ></textarea>
+        <my-counter></my-counter>
       </div>
       <div className={'post-submit'}>
         <button className={'fx-button'} onClick={(event) => {

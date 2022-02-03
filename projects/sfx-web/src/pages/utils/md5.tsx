@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react'
-import { QtLoader, Module } from '@/utils/qtloader'
-import { getHost } from '@/utils/config'
+import React, {useEffect, useState} from 'react'
+import {Module, QtLoader} from '@/utils/qtloader'
+import {getHost} from '@/utils/config'
 
 function initWasm () {
   window.Module = Module
@@ -15,14 +15,14 @@ function initWasm () {
     if (qtCanvas) {
       const qtLoader = window.QtLoader({
         canvasElements: [qtCanvas],
-        showLoader: function () { },
+        //showLoader: () => { },
         showError: function (errorMessage: string) {
           console.log('showError', errorMessage)
         },
-        showExit: function () {
-        },
-        showCanvas: function () {
-        }
+        // showExit: function () {
+        // },
+        // showCanvas: function () {
+        // }
       })
       const filePath = getHost() + '/wasm/qt-canvas'
       qtLoader.loadEmscriptenModule(filePath)
@@ -42,39 +42,45 @@ export default function MD5Page () {
     <div className={'content-body fx-card'}>
       <div className={'row-content'}>
         <textarea className={'fx-input'} placeholder={'请输入内容'}
-               onChange={(event) => setContent(event.target.value)} />
+                  onChange={(event) => setContent(event.target.value)}/>
       </div>
       <div className={'row-calc'}>
         <button className={'fx-button'}
                 onClick={() => {
                   const result = window.Module.tryCalcMd5(content)
                   setResult(result)
-                }}>MD5</button>
+                }}>MD5
+        </button>
         <button className={'fx-button'}
                 onClick={() => {
                   const result = window.Module.tryCalcBase64(content)
                   setResult(result)
-                }}>Base64</button>
+                }}>Base64
+        </button>
         <button className={'fx-button'}
                 onClick={() => {
                   const result = window.Module.tryCalcHex(content)
                   setResult(result)
-                }}>HEX</button>
+                }}>HEX
+        </button>
         <button className={'fx-button'}
                 onClick={() => {
                   const result = window.Module.tryCalcSha1(content)
                   setResult(result)
-                }}>SHA1</button>
+                }}>SHA1
+        </button>
         <button className={'fx-button'}
                 onClick={() => {
                   const result = window.Module.tryCalcSha256(content)
                   setResult(result)
-                }}>SHA256</button>
+                }}>SHA256
+        </button>
         <button className={'fx-button'}
                 onClick={() => {
                   const result = window.Module.tryCalcSha512(content)
                   setResult(result)
-                }}>SHA512</button>
+                }}>SHA512
+        </button>
       </div>
       <div className={'row-result'}>
         {result}

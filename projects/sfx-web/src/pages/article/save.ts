@@ -1,6 +1,6 @@
-import { SFEditorModel } from '@pnnh/stele'
-import { articlePost, articlePut } from '@/services/article'
-import { ApiUrl } from '@/utils/config'
+import type {SFEditorModel} from '@pnnh/stele'
+import {articlePost, articlePut} from '@/services/article'
+import {ApiUrl} from '@/utils/config'
 
 export function onCreate (editorValue: SFEditorModel, title: string, description: string, keywords: string) {
   const postData = {

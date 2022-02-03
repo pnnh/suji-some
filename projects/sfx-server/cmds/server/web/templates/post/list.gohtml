@@ -8,13 +8,11 @@
 		{{ template "res/css.gohtml" }}
 	</head>
 	<body>
-	<div class="ms-Grid" dir="ltr">
         {{ template "partial/header.gohtml" }}
 		<main>
 			<div id="root"></div>
 		</main>
         {{ template "partial/footer.gohtml" }}
-	</div>
 	<script id="data" type="application/json">{{.data}}</script>
 	{{ template "res/js.gohtml" }}
 	</body>

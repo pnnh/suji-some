@@ -5,6 +5,8 @@ module.exports = {
   },
   extends: [
     'plugin:react/recommended',
+    'eslint:recommended',
+    'plugin:@typescript-eslint/recommended',
     'standard'
   ],
   globals: {
@@ -15,6 +17,9 @@ module.exports = {
   },
   parser: '@typescript-eslint/parser',
   parserOptions: {
+    // tsconfigRootDir: __dirname,
+    // project: ['./tsconfig.json'],
+    extraFileExtensions: ['.svelte'],
     ecmaFeatures: {
       jsx: true
     },
@@ -23,8 +28,18 @@ module.exports = {
   },
   plugins: [
     'react',
+    'svelte3',
     '@typescript-eslint'
   ],
+  overrides: [
+    {
+      files: ['*.svelte'],
+      processor: 'svelte3/svelte3'
+    }
+  ],
+  settings: {
+    'svelte3/typescript': true
+  },
   rules: {
     'no-use-before-define': 'off', // React已经全局定义，但是eslint识别不到所以会报错，这里禁用
     '@typescript-eslint/no-use-before-define': 'off',
@@ -34,6 +49,8 @@ module.exports = {
     'arrow-spacing': 'off',
     'padded-blocks': 'off',
     'space-infix-ops': 'off',
-    'no-multiple-empty-lines': 'off'
+    'no-multiple-empty-lines': 'off',
+    'spaced-comment': 'off',
+    'comma-dangle': 'off'
   }
 }

@@ -2,8 +2,9 @@ import {defineConfig} from 'vite'
 import path from 'path'
 import {visualizer} from 'rollup-plugin-visualizer'
 import * as fs from 'fs'
-import {PreRenderedAsset, PreRenderedChunk} from 'rollup'
+import type {PreRenderedAsset, PreRenderedChunk} from 'rollup'
 import strip from '@rollup/plugin-strip'
+import {svelte} from '@sveltejs/vite-plugin-svelte'
 
 function listFile (dir: string): string[] {
   const arr = fs.readdirSync(dir)
@@ -25,6 +26,12 @@ console.log('listFile', listFile(path.resolve(__dirname, 'src/pages')))
 
 const config = defineConfig({
   plugins: [
+    //react(),
+    svelte({
+      compilerOptions: {
+        customElement: true
+      }
+    }),
     visualizer({
       filename: 'dist/status.html'
     }),

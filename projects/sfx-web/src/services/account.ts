@@ -1,18 +1,15 @@
-import { sendRequest } from '@/utils/request'
-import { ApiUrl } from '@/utils/config'
+import {sendRequest} from '@/utils/request'
+import {ApiUrl} from '@/utils/config'
 import axios from 'axios'
 
 const accountUrl = '/account/verify'
 
 export interface IAccountIn {
-    email: string
-}
-
-export interface IAccountOut {
+  email: string
 }
 
 export function accountPost (params: IAccountIn) {
-  return sendRequest<IAccountOut>('POST', accountUrl, params)
+  return sendRequest<unknown>('POST', accountUrl, params)
 }
 
 // 修改个人资料

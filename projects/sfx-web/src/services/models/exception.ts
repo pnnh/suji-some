@@ -1,4 +1,3 @@
-
 // 错误码枚举
 export enum ECodes {
   Success = 0,
@@ -6,7 +5,7 @@ export enum ECodes {
 }
 
 export class Exception {
-  msg: string = ''
+  msg = ''
   code: ECodes = ECodes.Success
   param: any = {}
 }

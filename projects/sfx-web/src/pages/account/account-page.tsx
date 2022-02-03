@@ -1,14 +1,13 @@
-import React, { useEffect, useState } from 'react'
-import { accountPost } from '@/services/account'
-import { sessionPost } from '@/services/session'
-import { updateTitle } from '@/utils/helpers'
+import React, {useEffect, useState} from 'react'
+import {accountPost} from '@/services/account'
+import {sessionPost} from '@/services/session'
+import {updateTitle} from '@/utils/helpers'
 
 function sendCodeToMail (mail: string, callback: (msg: any) => void) {
   const postData = {
     email: mail
   }
-  accountPost(postData).then((out) => {
-  }).catch((error) => {
+  accountPost(postData).catch((error) => {
     if (error.data && error.data.msg) {
       callback(error.data.msg)
     }

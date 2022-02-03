@@ -1,9 +1,10 @@
-import React, { useState } from 'react'
-import { SFEditorModel, SFXEditor } from '@pnnh/stele'
-import { getJsonData, updateTitle } from '@/utils/helpers'
-import { isScreenDesktop, isScreenTablet } from '@/utils/media'
-import { useParams } from 'react-router'
-import { onEdit } from '@/pages/article/save'
+import React, {useState} from 'react'
+import type {SFEditorModel} from '@pnnh/stele'
+import {SFXEditor} from '@pnnh/stele'
+import {getJsonData, updateTitle} from '@/utils/helpers'
+import {isScreenDesktop, isScreenTablet} from '@/utils/media'
+import {useParams} from 'react-router'
+import {onEdit} from '@/pages/article/save'
 
 type NewPageState = {
   title: string;

@@ -1,4 +1,5 @@
-import axios, { AxiosRequestConfig, Method } from 'axios'
+import type {AxiosRequestConfig, Method} from 'axios'
+import axios from 'axios'
 
 // 创建 axios 实例
 const request = axios.create({
@@ -21,10 +22,6 @@ export function sendRequest<T> (method: Method, url: string, params: unknown) {
   }
   return request.request<T>(config).then(resp => {
     return resp.data
-  }).catch((error) => {
-    if (error.response) {
-      throw { status: error.response.status, data: error.response.data }
-    }
   })
 }
 

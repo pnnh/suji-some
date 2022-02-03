@@ -1,7 +1,6 @@
-import React, { useState } from 'react'
+import React, {useState} from 'react'
 
-// @ts-ignore
-import { Solar } from 'lunar-javascript'
+import {Solar} from 'lunar-javascript'
 
 function getLunar (date: Date) {
   // console.log('=============', date, date.getFullYear(), date.getMonth(), date.getDate())

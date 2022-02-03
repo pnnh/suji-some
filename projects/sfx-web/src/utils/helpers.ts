@@ -1,6 +1,5 @@
-
 // 获取服务端以json格式传输的状态数据
-export function getJsonData<T> (name: string = 'data'): T {
+export function getJsonData<T> (name = 'data'): T {
   const dataEl = document.getElementById(name)
   if (!dataEl) {
     return {} as T
@@ -30,7 +29,7 @@ export function setLocalStorage (key: string, value: any) {
   localStorage.setItem(key, stringValue)
 }
 
-export function getLocalStorage (key: string) :any {
+export function getLocalStorage (key: string): any {
   const stringValue = localStorage.getItem(key) ?? 'null'
   return JSON.parse(stringValue)
 }
