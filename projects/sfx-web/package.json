@@ -27,6 +27,7 @@
     "uuid": "^8.3.2"
   },
   "devDependencies": {
+    "@rollup/plugin-strip": "^2.1.0",
     "@types/estree": "^0.0.50",
     "@types/node": "^17.0.2",
     "@types/prismjs": "^1.26.0",

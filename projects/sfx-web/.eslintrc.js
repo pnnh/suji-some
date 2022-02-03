@@ -29,6 +29,11 @@ module.exports = {
     'no-use-before-define': 'off', // React已经全局定义，但是eslint识别不到所以会报错，这里禁用
     '@typescript-eslint/no-use-before-define': 'off',
     'no-unused-vars': 'off',
-    'no-trailing-spaces': 'off'
+    'no-trailing-spaces': 'off',
+    'object-curly-spacing': 'off',
+    'arrow-spacing': 'off',
+    'padded-blocks': 'off',
+    'space-infix-ops': 'off',
+    'no-multiple-empty-lines': 'off'
   }
 }

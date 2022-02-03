@@ -1,0 +1,20 @@
+{{ define "work/calendar.gohtml" }}
+	<!DOCTYPE html>
+	<html lang="zh">
+	<head>
+        {{ template "partial/headmeta.gohtml" }}
+        {{ template "partial/analytics.gohtml" }}
+		<title>日历程序 - 泛涵</title>
+		{{ template "res/css.gohtml" }}
+	</head>
+	<body>
+        {{ template "partial/header.gohtml" }}
+		<main>
+			<div id="root"></div>
+		</main>
+        {{ template "partial/footer.gohtml" }}
+	<script id="data" type="application/json">{{.data}}</script>
+	{{ template "res/js.gohtml" }}
+	</body>
+	</html>
+{{ end }}

@@ -46,6 +46,7 @@ func (s *WebServer) Init() error {
 	s.router.GET("/utils/random/password", handlers.HandleRandomPassword)
 	s.router.GET("/utils/encrypt/md5", handlers.HandleCalcMd5)
 	s.router.GET("/utils/timestamp", handlers.HandleTimestamp)
+	s.router.GET("/work/calendar", handlers.HandleCalendar)
 
 	s.resources["article"] = resources.NewArticleResource(s.middleware)
 	s.resources["account"] = resources.NewAccountResource(s.middleware)
@@ -54,6 +55,10 @@ func (s *WebServer) Init() error {
 
 	for name, resource := range s.resources {
 		resource.RegisterRouter(s.router, name)
+	}
+	// 在开发环境下，通过反向代理指向资源服务，避免一些js文件找不到
+	if config.Debug() {
+		s.router.NoRoute(devHandler)
 	}
 	return nil
 }

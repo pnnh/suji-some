@@ -1,8 +1,9 @@
-import { defineConfig } from 'vite'
+import {defineConfig} from 'vite'
 import path from 'path'
-import { visualizer } from 'rollup-plugin-visualizer'
+import {visualizer} from 'rollup-plugin-visualizer'
 import * as fs from 'fs'
-import { PreRenderedAsset, PreRenderedChunk } from 'rollup'
+import {PreRenderedAsset, PreRenderedChunk} from 'rollup'
+import strip from '@rollup/plugin-strip'
 
 function listFile (dir: string): string[] {
   const arr = fs.readdirSync(dir)
@@ -26,6 +27,12 @@ const config = defineConfig({
   plugins: [
     visualizer({
       filename: 'dist/status.html'
+    }),
+    strip({
+      include: '**/*.(js|mjs|ts|tsx)',
+      debugger: true,
+      functions: ['console.log', 'console.debug'],
+      sourceMap: true
     })
   ],
   base: '/',
@@ -78,8 +85,8 @@ const config = defineConfig({
   },
   resolve: {
     alias: [
-      { find: '@', replacement: path.resolve(__dirname, 'src') },
-      { find: '~', replacement: path.resolve(__dirname, 'node_modules') }
+      {find: '@', replacement: path.resolve(__dirname, 'src')},
+      {find: '~', replacement: path.resolve(__dirname, 'node_modules')}
     ]
   },
   publicDir: 'public',

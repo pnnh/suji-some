@@ -1,8 +1,23 @@
-import React, { useState } from 'react'
-import { convertTime, createPost, IPost, selectPost } from '@/services/post'
-import { getJsonData } from '@/utils/helpers'
+import React, {useState} from 'react'
+import {convertTime, createPost, deletePost, IPost, selectPost} from '@/services/post'
+import {getJsonData} from '@/utils/helpers'
 
-function renderPostList (postList: IPost[]) {
+function renderPostList (postList: IPost[], logined: boolean, deleteCallback: () => void) {
+  const renderDelete = (pk: string) => {
+    if (!logined) {
+      return <span></span>
+    }
+    return <span className="delete" onClick={() => {
+      console.log('delete')
+      if (confirm('确定删除吗？')) {
+        console.debug('确认删除')
+        deletePost(pk).then((out) => {
+          console.debug('deletePost', out)
+          deleteCallback()
+        })
+      }
+    }}><i className="ri-delete-bin-line"></i></span>
+  }
   const postElements: JSX.Element[] = []
   for (let i = 0; i < postList.length; i++) {
     const post = postList[i]
@@ -11,10 +26,15 @@ function renderPostList (postList: IPost[]) {
         {post.body}
       </div>
       <div className="post-info">
-        <a className="post-creator" href={'/user/' + post.creator}>
-          <i className="ri-user-line"></i>{post.creator_nickname}</a>
-        <span className="update-time">
+        <div className={'left-info'}>
+          <a className="post-creator" href={'/user/' + post.creator}>
+            <i className="ri-user-line"></i>{post.creator_nickname}</a>
+          <span className="update-time">
           <i className="ri-time-line"></i>{post.create_time.toISOString()}</span>
+        </div>
+        <div className={'right-actions'}>
+          {renderDelete(post.pk)}
+        </div>
       </div>
     </div>
     postElements.push(element)
@@ -37,7 +57,7 @@ function renderPagination (maxPage: number, currentPage: number, pageClick: (pag
   const nextPage = currentPage + 1
 
   if (prevPage >= 1) {
-    const element = <a className={'page'} onClick={() => pageClick(prevPage)}>«</a>
+    const element = <a key={'prev' + prevPage} className={'page'} onClick={() => pageClick(prevPage)}>«</a>
     pageElements.push(element)
   }
   for (let i = startPage; i <= endPage; i++) {
@@ -45,11 +65,11 @@ function renderPagination (maxPage: number, currentPage: number, pageClick: (pag
     if (i === currentPage) {
       classActive = 'active'
     }
-    const element = <a className={'page ' + classActive} onClick={() => pageClick(i)}>{i}</a>
+    const element = <a key={i} className={'page ' + classActive} onClick={() => pageClick(i)}>{i}</a>
     pageElements.push(element)
   }
   if (nextPage <= maxPage) {
-    const element = <a className={'page'} onClick={() => pageClick(nextPage)}>»</a>
+    const element = <a key={'next' + nextPage} className={'page'} onClick={() => pageClick(nextPage)}>»</a>
     pageElements.push(element)
   }
   return pageElements
@@ -77,33 +97,40 @@ export function PostPage () {
     })
   }
 
-  return <div className={'post-page'}>
-    <div className={'content'}>
-      <div className={'post-new fx-card'}>
-        <div className={'post-body'}>
+  const renderPostNew = () => {
+    if (!serverData.login) {
+      return <div></div>
+    }
+    return <div className={'post-new fx-card'}>
+      <div className={'post-body'}>
           <textarea className={'fx-textarea'} placeholder={'请输入动态'}
                     maxLength={4096} rows={4} value={post}
                     onChange={(event) =>
                       setPost(event.target.value)}
           ></textarea>
-        </div>
-        <div className={'post-submit'}>
-          <button className={'fx-button'} onClick={(event) => {
-            console.log('提交内容', post)
-            if (!post) {
-              return
-            }
-            createPost({ body: post }).then((result) => {
-              console.log('createPost', result)
-              setPost('')
-              loadPostList(1)
-            })
-          }}>发送
-          </button>
-        </div>
       </div>
+      <div className={'post-submit'}>
+        <button className={'fx-button'} onClick={(event) => {
+          console.log('提交内容', post)
+          if (!post) {
+            return
+          }
+          createPost({body: post}).then((result) => {
+            console.log('createPost', result)
+            setPost('')
+            loadPostList(1)
+          })
+        }}>发送
+        </button>
+      </div>
+    </div>
+  }
+
+  return <div className={'post-page'}>
+    <div className={'content'}>
+      {renderPostNew()}
       <div className={'post-list fx-card'}>
-        {renderPostList(postList)}
+        {renderPostList(postList, serverData.login, () => loadPostList(currentPage))}
         <div className="page-list">
           {renderPagination(maxPage, currentPage, loadPostList)}
         </div>

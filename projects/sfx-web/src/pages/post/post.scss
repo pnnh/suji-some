@@ -36,22 +36,32 @@
         padding-top: 16px;
 
         .post-body {
-          color: #5e5e5e;
-          font-size: 14px;
+          color: #000;
+          font-size: 16px;
           line-height: 22px;
           margin-bottom: 8px;
         }
 
-        .update-time, .post-creator {
-          font-size: 13px;
-          color: #86909c;
-          display: inline-flex;
-          align-items: center;
-          text-decoration: none;
-          margin-right: 4px;
+        .post-info {
+          display: flex;
+          flex-direction: row;
+          justify-content: space-between;
 
-          i {
+          .update-time, .post-creator {
+            font-size: 13px;
+            color: #86909c;
+            display: inline-flex;
+            align-items: center;
+            text-decoration: none;
             margin-right: 4px;
+
+            i {
+              margin-right: 4px;
+            }
+          }
+
+          .delete {
+            cursor: pointer;
           }
         }
       }

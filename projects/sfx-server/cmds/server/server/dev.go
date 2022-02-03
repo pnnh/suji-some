@@ -92,17 +92,17 @@ func (w *devResponseWriter) Pusher() (pusher http.Pusher) {
 	return nil
 }
 
-func devBlogHandler(w http.ResponseWriter, r *http.Request) {
-	target := "localhost:8080"
+func devHandler(gctx *gin.Context) {
+	target := "localhost:3000"
 	//devUrl := fmt.Sprintf("http://localhost:3000%s", realPath)
 	proxy := &httputil.ReverseProxy{Director: func(req *http.Request) {
 		req.URL.Scheme = "http"
 		req.URL.Host = target
-		req.URL.Path = r.URL.Path //"/svc/css/index.scss"
+		req.URL.Path = gctx.Request.URL.Path //"/svc/css/index.scss"
 		//r.Host = target
 	}}
 
-	proxy.ServeHTTP(w, r)
+	proxy.ServeHTTP(gctx.Writer, gctx.Request)
 	//rs1 := "http://localhost:3000"
 	//targetUrl, err := url.Parse(rs1)
 	//if err != nil {
