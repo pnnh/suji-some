@@ -114,11 +114,6 @@ export function PostPage () {
           ></textarea>
       </div>
       <div>
-
-        <my-counter count={10} on:message={(v: any) => {
-          console.log('发生回调', v)
-        }}></my-counter>
-
         <my-element name2="afdfdsafd" my-event={(v: any) => {
           console.log('发生回调222', v)
         }}></my-element>

@@ -16,15 +16,17 @@
 					console.log('发生回调333')
 				}
 			</script>
+
+			<my-counter id="my-counter" count={10} on:message={(v: any) => {
+				console.log('发生回调', v)
+				}}></my-counter>
 			<my-element id="my-element" name2="afdfdsafd" my-event="callback()"></my-element>
-			<user-card id="usercard" onpop="callback()"></user-card>
 			<script>
+				const myCounter = document.getElementById('my-counter');
+				myCounter.addEventListener('message', (e) => {console.log('message')});
 
 				const myElement = document.getElementById('my-element');
 				myElement.addEventListener('my-event', (e) => {console.log('xxxxx')});
-
-				// const usercard = document.getElementById('usercard');
-				// usercard.addEventListener('my-event', (e) => {console.log('yyyyy usercard')});
 			</script>
 		</main>
         {{ template "partial/footer.gohtml" }}

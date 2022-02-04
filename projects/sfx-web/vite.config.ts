@@ -5,6 +5,7 @@ import * as fs from 'fs'
 import {svelte} from '@sveltejs/vite-plugin-svelte'
 import type {PreRenderedAsset, PreRenderedChunk} from 'rollup'
 import strip from '@rollup/plugin-strip'
+import sveltePreprocess from 'svelte-preprocess'
 
 function listFile (dir: string): string[] {
   const arr = fs.readdirSync(dir)
@@ -28,7 +29,8 @@ const config = defineConfig(({command, mode}) => {
     svelte({
       compilerOptions: {
         customElement: true
-      }
+      },
+      preprocess: sveltePreprocess()
     }),
     visualizer({
       filename: 'dist/status.html'

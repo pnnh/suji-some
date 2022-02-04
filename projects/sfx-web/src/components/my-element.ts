@@ -1,6 +1,28 @@
 import {html, LitElement} from 'lit'
 import {customElement, property} from 'lit/decorators.js'
 
+@customElement('my-item')
+class MyItem extends LitElement {
+  render () {
+    return html`
+      <div>Hello from MyItem!</div>
+      <button @click="${this._handleClick}">MyItemClick</button>
+    `
+  }
+
+  private _handleClick () {
+    console.log('MyItemClickassssss')
+    const event = new CustomEvent('onItem', {
+      detail: {
+        message: 'Something onItem'
+      },
+      bubbles: true,
+      composed: true
+    })
+    this.dispatchEvent(event)
+  }
+}
+
 
 @customElement('my-element')
 class MyElement extends LitElement {
@@ -10,6 +32,7 @@ class MyElement extends LitElement {
     return html`
       <div>Hello from MyElement! ${this.name2}</div>
       <button @click="${this._handleClick}">click</button>
+      <my-item @onItem="${this._handleClick2}"></my-item>
     `
   }
 
@@ -25,7 +48,11 @@ class MyElement extends LitElement {
     this.dispatchEvent(event)
   }
 
-  private _handleClick (e) {
+  private _handleClick2 () {
+    console.log('MyItemClic Callback')
+  }
+
+  private _handleClick () {
     console.log('assssss')
 
     this.firstUpdated()
