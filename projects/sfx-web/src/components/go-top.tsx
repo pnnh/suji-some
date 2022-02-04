@@ -1,4 +1,4 @@
-import React, { CSSProperties, useEffect, useState } from 'react'
+import React, {useEffect, useState} from 'react'
 
 export function GoTop () {
   const [display, setDisplay] = useState<string>('none')
@@ -11,10 +11,10 @@ export function GoTop () {
       } else {
         setDisplay('none')
       }
-    }, { passive: true })
+    }, {passive: true})
   }, [])
 
-  return <button style={{ display: display }} onClick={() => {
+  return <button style={{display: display}} onClick={() => {
     bodyDom.scrollTop = 0
   }} title="回到顶部">
     <i className="ri-arrow-up-line"></i>

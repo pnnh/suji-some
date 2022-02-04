@@ -77,8 +77,6 @@ function renderPagination (maxPage: number, currentPage: number, pageClick: (pag
   return pageElements
 }
 
-export let onClick2: (v: number) => void
-
 export function PostPage () {
   const serverData = getJsonData<any>()
   console.debug('serverData postpage', serverData)
@@ -112,11 +110,6 @@ export function PostPage () {
                     onChange={(event) =>
                       setPost(event.target.value)}
           ></textarea>
-      </div>
-      <div>
-        <my-element name2="afdfdsafd" my-event={(v: any) => {
-          console.log('发生回调222', v)
-        }}></my-element>
       </div>
       <div className={'post-submit'}>
         <button className={'fx-button'} onClick={(event) => {

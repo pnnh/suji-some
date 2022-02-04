@@ -37,36 +37,3 @@
   }
 }
 
-.encrypt-md5-page {
-  .row-content {
-    display: flex;
-
-    textarea {
-      width: 100%;
-      height: 64px;
-    }
-  }
-
-  .row-calc {
-    margin-top: 16px;
-
-    > button {
-      margin-right: 8px;
-      margin-top: 8px;
-    }
-  }
-
-  .row-result {
-    margin-top: 16px;
-    word-break: break-all;
-  }
-
-  @media (min-width: $screen-desktop) {
-    .content-body {
-      width: 960px;
-      margin: 0 auto;
-    }
-  }
-}
-
-
