@@ -34,6 +34,8 @@ func (s *userHandler) HandleInfo(gctx *gin.Context) {
 	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
 	gctx.HTML(http.StatusOK, "user/info.gohtml", gin.H{
 		"pk":          userInfo.Pk,
+		"email":       userInfo.EMail.String,
+		"site":        userInfo.Site.String,
 		"nickname":    userInfo.NickName,
 		"description": userInfo.Description.String,
 		"photo":       photoUrl,

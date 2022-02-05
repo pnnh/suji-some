@@ -16,11 +16,15 @@ export function accountPost (params: IAccountIn) {
 export function accountEdit (params: {
   nickname: string,
   description: string,
+  email: string,
+  site: string,
   photoFile: any
 }) {
   const formData = new FormData()
   formData.append('nickname', params.nickname)
   formData.append('description', params.description)
+  formData.append('email', params.email)
+  formData.append('site', params.site)
   formData.append('photoFile', params.photoFile)
 
   return axios.put(ApiUrl.account.edit, formData, {

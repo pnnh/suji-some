@@ -218,7 +218,9 @@ func (s *accountHandler) HandlePersonal(gctx *gin.Context) {
 	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
 	gctx.HTML(http.StatusOK, "account/personal.gohtml", gin.H{
 		"pk":          userInfo.Pk,
-		"email":       userInfo.UName,
+		"uname":       userInfo.UName,
+		"email":       userInfo.EMail.String,
+		"site":        userInfo.Site.String,
 		"photo":       photoUrl,
 		"nickname":    userInfo.NickName,
 		"description": userInfo.Description.String,
@@ -253,7 +255,9 @@ func (s *accountHandler) HandleEdit(gctx *gin.Context) {
 	gctx.HTML(http.StatusOK, "account/edit.gohtml", gin.H{
 		"data": map[string]interface{}{
 			"pk":          userInfo.Pk,
-			"email":       userInfo.UName,
+			"uname":       userInfo.UName,
+			"email":       userInfo.EMail.String,
+			"site":        userInfo.Site.String,
 			"nickname":    userInfo.NickName,
 			"photo":       photoUrl,
 			"description": userInfo.Description.String,
@@ -327,16 +331,20 @@ func (s *accountHandler) HandleEditPut(gctx *gin.Context) {
 
 	nickname := gctx.PostForm("nickname")
 	description := gctx.PostForm("description")
+	email := gctx.PostForm("email")
+	site := gctx.PostForm("site")
 
 	if len(nickname) < 1 {
 		utils.ResponseMessage(gctx, http.StatusBadRequest, "参数有误")
 		return
 	}
 	sqlText := `update accounts set nickname = :nickname, update_time=:update_time, 
-description=:description, photo='' where pk = '';`
+description=:description, email=:email, site=:site`
 	sqlParams := map[string]interface{}{
 		"pk":          auth,
 		"nickname":    nickname,
+		"email":       sql.NullString{String: email, Valid: true},
+		"site":        sql.NullString{String: site, Valid: true},
 		"update_time": time.Now().UTC(),
 		"description": sql.NullString{String: description, Valid: true},
 	}

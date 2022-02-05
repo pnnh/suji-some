@@ -25,7 +25,8 @@
     "slate": "^0.72.0",
     "slate-history": "^0.66.0",
     "slate-react": "^0.72.1",
-    "uuid": "^8.3.2"
+    "uuid": "^8.3.2",
+    "@pnnh/hello-wasm": "0.1.0"
   },
   "devDependencies": {
     "@rollup/plugin-strip": "^2.1.0",
