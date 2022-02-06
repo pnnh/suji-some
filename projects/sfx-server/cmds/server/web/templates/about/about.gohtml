@@ -1,0 +1,139 @@
+{{ define "about/about.gohtml" }}
+	<!DOCTYPE html>
+	<html lang="zh">
+	<head>
+        {{ template "partial/headmeta.gohtml" }}
+        {{ template "partial/analytics.gohtml" }}
+		<title>关于本站 - 泛涵</title>
+		{{ template "res/css.gohtml" }}
+	</head>
+	<body>
+        {{ template "partial/header.gohtml" }}
+		<main>
+			<div class="about-page">
+				<div class="page-content fx-card">
+					<div class="page-title">关于本站</div>
+					<div class="page-desc">
+						初心不改，执念难断。为技术，也为生活。
+					</div>
+					<div class="page-title timeline">时间线</div>
+					<div class="about-list">
+						<div class="about-item">
+							<h3 class="date">2022年2月</h3>
+							<ul>
+								<li>网站运行了一段时间，想做SEO想挂广告可是没什么内容</li>
+								<li>实现了文章写作、动态、日历、随机值、加解密功能，实现关于页面</li>
+								<li>写作了36篇文章，都比较粗浅基础</li>
+								<li>这个网站会发展成什么样，算不算产品？或者只是自己所学技术的试验田？交给未来吧！</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2021年10月</h3>
+							<ul>
+								<li>网站建成，稳定运行，上线写文章功能</li>
+								<li>仅实现写作、删除、列表查看，不支持分页</li>
+								<li>功能实现了却没太多写作的动力，学了挺多但都是皮毛</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2021年6月</h3>
+							<ul>
+								<li>重新整理网站代码，并开源
+									<a href="https://github.com/pnnh/suji-some"
+									   target="_blank">https://github.com/pnnh/suji-some</a>
+								</li>
+								<li>改为通过AWS托管网站，配置CDN、数据库和对象存储</li>
+								<li>购买域名TLS证书</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2021年3月</h3>
+							<ul>
+								<li>学习Vue、学习React尝试对网站进行前后端分离</li>
+								<li>注册sfx.xyz域名</li>
+								<li>尝试通过Google Cloud托管网站服务</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2020年5月</h3>
+							<ul>
+								<li>学习flutter、学习swift、学习kotlin、学习c++都浅尝辄止</li>
+								<li>注册some.so、morose.me等域名</li>
+								<li>用Go语言重新实现网站程序，之前注册的域名大多已过期，服务器早已清理</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2018年11月</h3>
+							<ul>
+								<li>学习云原生，学习容器化，学习微服务，学习持续集成</li>
+								<li>考虑到底想做个什么类型的产品，学的乱七八糟的东西用在什么地方</li>
+								<li>为工作奔波</li>
+								<li>注册suji.me域名</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2017年3月</h3>
+							<ul>
+								<li>了解开源世界，了解各个语言生态</li>
+								<li>折腾Gentoo Linux发行版，创建自己的overlay
+									<a href="https://github.com/pnnh/larry"
+									   target="_blank">https://github.com/pnnh/larry</a>
+								</li>
+								<li>想起来时修改Coloc项目代码，网站因为费用问题下架，自己本地玩</li>
+								<li>工作非常忙碌，频繁变动，初创公司</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2015年10月</h3>
+							<ul>
+								<li>Coloc项目断断续续的维护，上线又下线，云服务器不便宜，数据库不便宜，维护费事费力</li>
+								<li>学习Linux用法，尝试安装各种发行版，不想局限在Windows和.NET平台</li>
+								<li>在博客园、简书、Blogger等平台写几篇文章</li>
+								<li>转岗Go语言开发，发现新世界</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2014年12月</h3>
+							<ul>
+								<li>自学了Ruby on Rails，做了一个网站，可能是一个偏Wiki一样的东西</li>
+								<li>网站源码托管在GitHub
+									<a href="https://github.com/pnnh/coloc"
+									   target="_blank">https://github.com/pnnh/coloc</a>
+								</li>
+								<li>注册了一个coloc.cc的域名</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2014年6月</h3>
+							<ul>
+								<li>注册了一个yuena.name的域名，又注册了一些yuena名称后缀不同的域名</li>
+								<li>想做一个网站，叫月之岛，或者叫风泉燕，想不好是什么类型的</li>
+								<li>去杭州阿里云公司现场对域名做了备案</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2013年6月</h3>
+							<ul>
+								<li>三年.NET平台开发，学了挺多东西</li>
+								<li>想做一个自己的产品，学以致用</li>
+								<li>想换工作，想做自己喜欢的行业，想做游戏，想做教育</li>
+							</ul>
+						</div>
+						<div class="about-item">
+							<h3 class="date">2010年5月</h3>
+							<ul>
+								<li>开始工作</li>
+								<li>努力学习</li>
+								<li>养活自己，贴补家用</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</main>
+        {{ template "partial/footer.gohtml" }}
+		<script id="data" type="application/json">{{.data}}</script>
+		{{ template "res/js.gohtml" }}
+	</body>
+	</html>
+{{ end }}

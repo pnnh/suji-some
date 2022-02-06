@@ -47,6 +47,7 @@ func (s *WebServer) Init() error {
 	s.router.GET("/utils/encrypt/md5", handlers.HandleCalcMd5)
 	s.router.GET("/utils/timestamp", handlers.HandleTimestamp)
 	s.router.GET("/work/calendar", handlers.HandleCalendar)
+	s.router.GET("/about", handlers.HandleAbout)
 
 	s.resources["article"] = resources.NewArticleResource(s.middleware)
 	s.resources["account"] = resources.NewAccountResource(s.middleware)
