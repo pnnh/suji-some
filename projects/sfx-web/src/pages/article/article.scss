@@ -35,6 +35,10 @@
     display: flex;
     flex-direction: row;
 
+    .page-left {
+      flex-grow: 1;
+    }
+
     .page-right {
       display: none;
       margin-left: 16px;
@@ -86,6 +90,25 @@
 
       .article-toc {
         margin-top: 16px;
+
+        .toc-item {
+          padding: 8px 0;
+          border-radius: 2px;
+
+          &:hover {
+            background-color: #ececec;
+          }
+
+          a {
+            color: #333;
+            font-size: 14px;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+            display: inline-block;
+            width: 100%;
+          }
+        }
       }
     }
   }

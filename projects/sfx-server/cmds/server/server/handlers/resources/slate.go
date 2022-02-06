@@ -7,7 +7,12 @@ import (
 	"strings"
 )
 
-func buildBody(nodes map[string]interface{}) (string, error) {
+type TocItem struct {
+	Title  string
+	Header int
+}
+
+func buildBody(tocArray *[]TocItem, nodes map[string]interface{}) (string, error) {
 	children, ok := nodes["children"].([]interface{})
 	if !ok {
 		return "", errors.New("缺少字段children")
@@ -19,7 +24,7 @@ func buildBody(nodes map[string]interface{}) (string, error) {
 		if !ok {
 			return "", fmt.Errorf("类型错误: %d", k)
 		}
-		content, err := buildNode(child)
+		content, err := buildNode(tocArray, child)
 		if err != nil {
 			return "", fmt.Errorf("buildNode出错: %w", err)
 		}
@@ -28,7 +33,7 @@ func buildBody(nodes map[string]interface{}) (string, error) {
 	return builder.String(), nil
 }
 
-func buildNode(node interface{}) (string, error) {
+func buildNode(tocArray *[]TocItem, node interface{}) (string, error) {
 	value, ok := node.(map[string]interface{})
 	if !ok {
 		return "", fmt.Errorf("类型错误")
@@ -38,7 +43,7 @@ func buildNode(node interface{}) (string, error) {
 	case "paragraph":
 		return buildParagraph(node)
 	case "header":
-		return buildHeader(node)
+		return buildHeader(tocArray, node)
 	case "code-block":
 		return buildCodeBlock(node)
 	}
@@ -99,31 +104,35 @@ func buildCodeBlock(node interface{}) (string, error) {
 	return builder.String(), nil
 }
 
-func buildHeader(node interface{}) (string, error) {
+func buildHeader(tocArray *[]TocItem, node interface{}) (string, error) {
 	value, ok := node.(map[string]interface{})
 	if !ok {
 		return "", fmt.Errorf("类型错误")
 	}
-	header, ok := value["header"].(float64)
+	headerFloat, ok := value["header"].(float64)
 	if !ok {
 		return "", fmt.Errorf("缺少字段header")
 	}
+	header := int(headerFloat)
 	children, ok := value["children"].([]interface{})
 	if !ok {
 		return "", errors.New("缺少字段children")
 	}
 	builder := strings.Builder{}
-	builder.WriteString(fmt.Sprintf("<h%.0f>", header))
+	headerText := ""
 
 	for k, v := range children {
-		text, err := buildText(v)
+		text, err := buildHeaderText(v)
 		if err != nil {
 			return "", fmt.Errorf("buildText错误: %d", k)
 		}
-		builder.WriteString(text)
+		headerText = text
+		*tocArray = append(*tocArray, TocItem{Title: headerText, Header: header})
+		break
 	}
-
-	builder.WriteString(fmt.Sprintf("</h%.0f>", header))
+	builder.WriteString(fmt.Sprintf("<h%d id='%s'>", header, headerText))
+	builder.WriteString(headerText)
+	builder.WriteString(fmt.Sprintf("</h%d>", header))
 
 	return builder.String(), nil
 }
@@ -164,6 +173,19 @@ func buildText(node interface{}) (string, error) {
 	}
 	return fmt.Sprintf("<span %s>%s</span>", property, text), nil
 	//return text, nil
+}
+
+func buildHeaderText(node interface{}) (string, error) {
+	value, ok := node.(map[string]interface{})
+	if !ok {
+		return "", fmt.Errorf("类型错误")
+	}
+	text, ok := value["text"].(string)
+	if !ok {
+		return "", fmt.Errorf("文本节点类型有误")
+	}
+	text = html.EscapeString(text)
+	return text, nil
 }
 
 func buildCode(node interface{}) (string, error) {

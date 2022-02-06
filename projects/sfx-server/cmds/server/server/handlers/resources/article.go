@@ -123,7 +123,8 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
 	}
-	content, err := buildBody(value)
+	tocArray := []TocItem{TocItem{Title: article.Title, Header: 0}}
+	content, err := buildBody(&tocArray, value)
 	if err != nil {
 		utils.ResponseError(gctx, http.StatusInternalServerError, err)
 		return
@@ -151,6 +152,7 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 		"keywordsList": strings.FieldsFunc(article.Keywords.String, func(c rune) bool {
 			return c == ','
 		}),
+		"tocList": tocArray,
 		"creator": gin.H{
 			"pk":          creatorInfo.Pk,
 			"email":       creatorInfo.EMail,

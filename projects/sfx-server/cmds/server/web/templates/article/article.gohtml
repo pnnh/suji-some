@@ -17,7 +17,7 @@
 				<div class="page-left">
 					<article>
 						<div class="article-title">
-							<h1>{{.title}}</h1>
+							<h1 id="{{.title}}">{{.title}}</h1>
 							<div class="description">{{.description}}</div>
 							<div class="keywords-list">
 								{{range .keywordsList}}
@@ -52,7 +52,13 @@
 					<div class="article-toc fx-card">
 						<div class="fx-card-title">文章目录</div>
 						<div class="fx-card-body">
-ssss
+							{{range .tocList}}
+								{{with .}}
+									<div class="toc-item" style="padding-left: calc(8px*{{.Header}});">
+										<a class="fx-link" href="#{{.Title}}" title="{{.Title}}">{{.Title}}</a>
+									</div>
+								{{end}}
+							{{end}}
 						</div>
 					</div>
 				</div>
