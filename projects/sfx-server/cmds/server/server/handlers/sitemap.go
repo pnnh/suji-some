@@ -3,9 +3,9 @@ package handlers
 import (
 	"fmt"
 
-	dbmodels "sfxserver/application/services/db/models"
 	"sfxserver/config"
 	"sfxserver/server/middleware"
+	"sfxserver/server/models"
 	"sfxserver/server/utils"
 
 	"github.com/gin-gonic/gin"
@@ -18,7 +18,7 @@ type sitemapHandler struct {
 
 func (s *sitemapHandler) HandleSitemap(gctx *gin.Context) {
 	sqlText := `select articles.* from articles order by update_time desc limit 100;`
-	var sqlResults []dbmodels.IndexArticleList
+	var sqlResults []models.IndexArticleList
 
 	if err := s.md.SqlxService.Select(&sqlResults, sqlText); err != nil {
 		utils.ResponseServerError(gctx, "查询文章列表出错", err)

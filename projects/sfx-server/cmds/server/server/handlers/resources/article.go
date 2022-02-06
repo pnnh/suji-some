@@ -11,9 +11,9 @@ import (
 	"time"
 
 	redis "github.com/go-redis/redis/v8"
-	dbmodels "sfxserver/application/services/db/models"
 	"sfxserver/config"
 	"sfxserver/server/middleware"
+	"sfxserver/server/models"
 	"sfxserver/server/utils"
 
 	"github.com/sirupsen/logrus"
@@ -51,7 +51,7 @@ func (s *articleHandler) Edit(gctx *gin.Context) {
 	}
 	pk := gctx.Param("pk")
 
-	article := &dbmodels.ArticleTable{}
+	article := &models.ArticleTable{}
 	sqlText := `select articles.* from articles where pk = $1;`
 	if err := s.middleware.SqlxService.Get(article, sqlText, pk); err != nil {
 		utils.ResponseServerError(gctx, "获取文章信息出错", err)
@@ -112,7 +112,7 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 	pk := gctx.Param("pk")
 	logrus.Debug("Article ", pk)
 
-	article := &dbmodels.ArticleTable{}
+	article := &models.ArticleTable{}
 	sqlText := `select articles.* from articles where pk = $1;`
 	if err := s.middleware.SqlxService.Get(article, sqlText, pk); err != nil {
 		utils.ResponseServerError(gctx, "获取文章信息出错", err)
@@ -137,6 +137,12 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 	// 更新文章查看次数
 	go s.updateViews(gctx, pk)
 
+	creatorInfo, err := models.GetAccountModel(gctx, s.middleware.SqlxService, article.Creator)
+	if err != nil {
+		utils.ResponseServerError(gctx, "获取作者信息出错: %w", err)
+		return
+	}
+
 	gctx.HTML(http.StatusOK, "article/article.gohtml", gin.H{
 		"pk":          article.Pk,
 		"title":       article.Title,
@@ -145,6 +151,14 @@ func (s *articleHandler) Read(gctx *gin.Context) {
 		"keywordsList": strings.FieldsFunc(article.Keywords.String, func(c rune) bool {
 			return c == ','
 		}),
+		"creator": gin.H{
+			"pk":          creatorInfo.Pk,
+			"email":       creatorInfo.EMail,
+			"nickname":    creatorInfo.NickName,
+			"description": creatorInfo.Description,
+			"photo":       creatorInfo.Photo,
+			"regtime":     utils.FmtTime(creatorInfo.CreateTime),
+		},
 		"body": template.HTML(content),
 		"data": map[string]interface{}{
 			"pk":      article.Pk,
@@ -292,7 +306,7 @@ func (s *articleHandler) Put(gctx *gin.Context) {
 			fmt.Errorf("文章PK不可为空"))
 		return
 	}
-	article := &dbmodels.ArticleTable{}
+	article := &models.ArticleTable{}
 	sqlText := `select articles.* from articles where pk = $1;`
 	if err := s.middleware.SqlxService.Get(article, sqlText, pk); err != nil {
 		utils.ResponseServerError(gctx, "获取文章信息出错", err)
@@ -342,7 +356,7 @@ func (s *articleHandler) Delete(gctx *gin.Context) {
 			fmt.Errorf("文章PK不可为空"))
 		return
 	}
-	article := &dbmodels.ArticleTable{}
+	article := &models.ArticleTable{}
 	sqlText := `select articles.* from articles where pk = $1;`
 	if err := s.middleware.SqlxService.Get(article, sqlText, pk); err != nil {
 		utils.ResponseServerError(gctx, "获取用户信息出错", err)

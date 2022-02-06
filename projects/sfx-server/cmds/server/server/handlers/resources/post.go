@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"time"
 
-	dbmodels "sfxserver/application/services/db/models"
 	"sfxserver/server/middleware"
 	"sfxserver/server/models"
 	"sfxserver/server/utils"
@@ -77,7 +76,7 @@ func (s *postHandler) Delete(gctx *gin.Context) {
 			fmt.Errorf("动态PK不可为空"))
 		return
 	}
-	article := &dbmodels.PostTable{}
+	article := &models.PostTable{}
 	sqlText := `select posts.* from posts where pk = $1;`
 	if err := s.middleware.SqlxService.Get(article, sqlText, pk); err != nil {
 		utils.ResponseServerError(gctx, "获取用户信息出错", err)
@@ -130,7 +129,7 @@ func (s *postHandler) List(gctx *gin.Context) {
 from posts 
     left join accounts on posts.creator = accounts.pk
 order by create_time desc offset $1 limit $2;`
-	var sqlResults []dbmodels.PostTableList
+	var sqlResults []models.PostTableList
 
 	offset, limit := (currentPage-1)*IndexPageSize, IndexPageSize
 	if err := s.middleware.SqlxService.Select(&sqlResults, sqlText, offset, limit); err != nil {
@@ -186,7 +185,7 @@ func (s *postHandler) Select(gctx *gin.Context) {
 from posts 
     left join accounts on posts.creator = accounts.pk
 order by create_time desc offset $1 limit $2;`
-	var sqlResults []dbmodels.PostTableList
+	var sqlResults []models.PostTableList
 
 	offset, limit := (currentPage-1)*IndexPageSize, IndexPageSize
 	if err := s.middleware.SqlxService.Select(&sqlResults, sqlText, offset, limit); err != nil {

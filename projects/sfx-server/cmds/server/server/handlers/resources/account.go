@@ -17,10 +17,10 @@ import (
 	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/google/uuid"
 	"github.com/sirupsen/logrus"
-	dbmodels "sfxserver/application/services/db/models"
 	"sfxserver/config"
 	"sfxserver/server/handlers/otp"
 	"sfxserver/server/middleware"
+	"sfxserver/server/models"
 	"sfxserver/server/utils"
 
 	"github.com/gin-gonic/gin"
@@ -41,7 +41,7 @@ func (s *accountHandler) SendOTPCode(gctx *gin.Context) {
 		utils.ResponseError(gctx, http.StatusInternalServerError, fmt.Errorf("邮箱不可为空"))
 		return
 	}
-	account := &dbmodels.AccountTable{}
+	account := &models.AccountTable{}
 	sqlText := `select accounts.* from accounts where uname = $1;`
 	if err := s.middleware.SqlxService.Get(account, sqlText, in.Email); err != nil {
 		utils.ResponseServerError(gctx, "获取用户信息出错", err)
@@ -132,7 +132,7 @@ func (s *accountHandler) LoadImage(gctx *gin.Context) {
 		gctx.File("web/images/expired.jpeg")
 		return
 	}
-	account := &dbmodels.AccountTable{}
+	account := &models.AccountTable{}
 	sqlText := `select accounts.* from accounts where pk = $1;`
 	if err := s.middleware.SqlxService.Get(account, sqlText, array[1]); err != nil {
 		utils.ResponseServerError(gctx, "获取用户信息出错", err)
@@ -170,7 +170,7 @@ func (s *accountHandler) LoginByOTPCode(gctx *gin.Context) {
 		return
 	}
 
-	account := &dbmodels.AccountTable{}
+	account := &models.AccountTable{}
 	sqlText := `select accounts.* from accounts where uname = $1;`
 	if err := s.middleware.SqlxService.Get(account, sqlText, in.Email); err != nil {
 		utils.ResponseServerError(gctx, "获取用户信息出错", err)
@@ -209,13 +209,13 @@ func (s *accountHandler) HandlePersonal(gctx *gin.Context) {
 		return
 	}
 
-	userInfo := &dbmodels.AccountTable{}
+	userInfo := &models.AccountTable{}
 	sqlText := `select accounts.* from accounts where pk = $1;`
 	if err := s.middleware.SqlxService.Get(userInfo, sqlText, auth); err != nil {
 		utils.ResponseServerError(gctx, "获取用户信息出错", err)
 		return
 	}
-	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
+	photoUrl := utils.GetPhotoOrDefault(userInfo.Photo.String)
 	gctx.HTML(http.StatusOK, "account/personal.gohtml", gin.H{
 		"pk":          userInfo.Pk,
 		"uname":       userInfo.UName,
@@ -229,13 +229,6 @@ func (s *accountHandler) HandlePersonal(gctx *gin.Context) {
 	})
 }
 
-func GetPhotoOrDefault(photoPath string) string {
-	if len(photoPath) > 0 {
-		return config.FileUrl + photoPath
-	}
-	return config.DefaultPhotoUrl
-}
-
 // 修改个人资料
 func (s *accountHandler) HandleEdit(gctx *gin.Context) {
 	auth, err := middleware.GetAuth(gctx)
@@ -244,14 +237,14 @@ func (s *accountHandler) HandleEdit(gctx *gin.Context) {
 		return
 	}
 
-	userInfo := &dbmodels.AccountTable{}
+	userInfo := &models.AccountTable{}
 	sqlText := `select accounts.* from accounts where pk = $1;`
 	if err := s.middleware.SqlxService.Get(userInfo, sqlText, auth); err != nil {
 		utils.ResponseServerError(gctx, "获取用户信息出错", err)
 		return
 	}
 
-	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
+	photoUrl := utils.GetPhotoOrDefault(userInfo.Photo.String)
 	gctx.HTML(http.StatusOK, "account/edit.gohtml", gin.H{
 		"data": map[string]interface{}{
 			"pk":          userInfo.Pk,

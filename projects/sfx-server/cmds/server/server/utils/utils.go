@@ -69,3 +69,10 @@ func FuncMap() template.FuncMap {
 	}
 	return funcMap
 }
+
+func GetPhotoOrDefault(photoPath string) string {
+	if len(photoPath) > 0 {
+		return config.FileUrl + photoPath
+	}
+	return config.DefaultPhotoUrl
+}

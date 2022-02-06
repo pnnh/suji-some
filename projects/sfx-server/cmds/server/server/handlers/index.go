@@ -8,7 +8,6 @@ import (
 	"strconv"
 	"strings"
 
-	dbmodels "sfxserver/application/services/db/models"
 	"sfxserver/server/middleware"
 	"sfxserver/server/models"
 	"sfxserver/server/utils"
@@ -56,7 +55,7 @@ from articles
     left join accounts on articles.creator = accounts.pk
 	left join articles_views on articles.pk = articles_views.pk
 order by update_time desc offset $1 limit $2;`
-	var sqlResults []dbmodels.IndexArticleList
+	var sqlResults []models.IndexArticleList
 
 	offset, limit := (currentPage-1)*IndexPageSize, IndexPageSize
 	if err := s.md.SqlxService.Select(&sqlResults, sqlText, offset, limit); err != nil {

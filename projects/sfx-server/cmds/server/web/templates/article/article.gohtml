@@ -14,20 +14,48 @@
 	<div>
         {{ template "partial/header.gohtml" }}
 		<main>
-			<article>
-				<div class="article-title">
-					<h1>{{.title}}</h1>
-					<div class="description">{{.description}}</div>
-					<div class="keywords-list">
-                        {{range .keywordsList}}
-	                        <span class="keyword">{{.}}</span>
-	                    {{end}}
+				<div class="page-left">
+					<article>
+						<div class="article-title">
+							<h1>{{.title}}</h1>
+							<div class="description">{{.description}}</div>
+							<div class="keywords-list">
+								{{range .keywordsList}}
+									<span class="keyword">{{.}}</span>
+								{{end}}
+							</div>
+						</div>
+						<div class="article-body">
+							{{.body}}
+						</div>
+					</article>
+				</div>
+				<div class="page-right">
+					<div class="creator-info fx-card">
+						<div class="fx-card-body">
+							{{with .creator}}
+								<div class="profile">
+									<div class="profile-left">
+										<a href="/user/{{.pk}}">
+											<img src="{{.photo}}" alt="作者头像" class="creator-photo"/>
+										</a>
+									</div>
+									<div class="profile-right">
+										<a class="nickname fx-link" href="/user/{{.pk}}">{{.nickname}}</a>
+										<span class="email">{{.email}}</span>
+									</div>
+								</div>
+								<div class="desc">{{.description}}</div>
+							{{end}}
+						</div>
+					</div>
+					<div class="article-toc fx-card">
+						<div class="fx-card-title">文章目录</div>
+						<div class="fx-card-body">
+ssss
+						</div>
 					</div>
 				</div>
-                <div class="article-body">
-					{{.body}}
-				</div>
-			</article>
 		</main>
         {{ template "partial/footer.gohtml" }}
 	</div>

@@ -3,8 +3,8 @@ package resources
 import (
 	"net/http"
 
-	dbmodels "sfxserver/application/services/db/models"
 	"sfxserver/server/middleware"
+	"sfxserver/server/models"
 	"sfxserver/server/utils"
 
 	"github.com/gin-gonic/gin"
@@ -23,7 +23,7 @@ func (s *userHandler) HandleInfo(gctx *gin.Context) {
 	}
 
 	pk := gctx.Param("pk")
-	userInfo := &dbmodels.AccountTable{
+	userInfo := &models.AccountTable{
 		Pk: pk,
 	}
 	sqlText := `select accounts.* from accounts where pk = $1;`
@@ -31,7 +31,7 @@ func (s *userHandler) HandleInfo(gctx *gin.Context) {
 		utils.ResponseServerError(gctx, "获取用户信息出错", err)
 		return
 	}
-	photoUrl := GetPhotoOrDefault(userInfo.Photo.String)
+	photoUrl := utils.GetPhotoOrDefault(userInfo.Photo.String)
 	gctx.HTML(http.StatusOK, "user/info.gohtml", gin.H{
 		"pk":          userInfo.Pk,
 		"email":       userInfo.EMail.String,
