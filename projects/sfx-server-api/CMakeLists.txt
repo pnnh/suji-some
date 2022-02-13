@@ -2,13 +2,7 @@ cmake_minimum_required(VERSION 3.18)
 project(sfx-server-api)
 
 set(CMAKE_CXX_STANDARD 20)
-
-find_package(AWSSDK REQUIRED COMPONENTS s3 appconfig appconfigdata)
-
-add_executable(sfx-server-api main.cpp)
-
-target_link_libraries(sfx-server-api ${AWSSDK_LINK_LIBRARIES}
-        ${AWSSDK_PLATFORM_DEPS})
+set(CMAKE_VERBOSE_MAKEFILE on)
 
 find_package(PkgConfig REQUIRED)
 
@@ -26,10 +20,17 @@ if (folly_FOUND)
     LINK_LIBRARIES(${FOLLY_LIBRARIES})
 endif (folly_FOUND)
 
-add_executable(server
+find_package(AWSSDK REQUIRED COMPONENTS s3 appconfig appconfigdata)
+
+add_executable(sfx-server-api
+        src/config/aws/init.cpp src/config/aws/init.h
         src/main.cc
         src/http_connection.cc
         src/state.cc
         src/md5.cc src/handlers/index.cpp src/handlers/index.h
-        src/utils/mime.h  src/utils/mime.cpp
-        src/markdown/markdown.cpp src/markdown/mdtransform.hpp src/markdown/markdown.h)
+        src/utils/mime.h src/utils/mime.cpp
+        src/markdown/markdown.cpp src/markdown/mdtransform.hpp src/markdown/markdown.h
+        src/config/aws/appconfig.cpp src/config/aws/appconfig.h)
+
+target_link_libraries(sfx-server-api ${AWSSDK_LINK_LIBRARIES}
+        ${AWSSDK_PLATFORM_DEPS})

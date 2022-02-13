@@ -1,3 +1,8 @@
+//
+// Created by ubuntu on 2/13/22.
+//
+
+#include "appconfig.h"
 #include <iostream>
 #include <utility>
 #include <aws/core/Aws.h>
@@ -12,8 +17,9 @@ using namespace Aws;
 using namespace AppConfigData;
 
 
-bool ListBuckets(const Aws::String& bucketName,
-                 const Aws::String& region) {
+bool ListBuckets(const std::string& bucketName,
+                 const std::string& region) {
+
     Aws::Client::ClientConfiguration config;
 
     if (!region.empty()) {
@@ -51,24 +57,4 @@ bool ListBuckets(const Aws::String& bucketName,
         std::cerr << "Failed " << result.GetError().GetMessage() << std::endl;
     }
     return true;
-}
-
-int main() {
-    std::cout << "Hello, World!" << std::endl;
-
-    Aws::SDKOptions options;
-    Aws::InitAPI(options);
-    {
-        const Aws::String bucket_name = "abcbucket";
-
-        Aws::String region = "ap-east-1";
-
-        if (!ListBuckets(bucket_name, region))
-        {
-            return 1;
-        }
-    }
-    Aws::ShutdownAPI(options);
-
-    return 0;
 }
