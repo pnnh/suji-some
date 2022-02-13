@@ -6,6 +6,7 @@
 #include "http_connection.h"
 #include "config/aws/init.h"
 #include "config/aws/appconfig.h"
+#include "database/postgresql/pq.h"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>
@@ -24,6 +25,8 @@ void http_server(tcp::acceptor &acceptor, tcp::socket &socket) {
 int main(int argc, char *argv[]) {
     std::cout << "Hello, World!" << std::endl;
 
+    runPqxxTest();
+    return 1;
     initAws();
 
     const std::string bucket_name = "abcbucket";

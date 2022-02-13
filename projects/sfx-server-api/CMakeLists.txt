@@ -30,7 +30,11 @@ add_executable(sfx-server-api
         src/md5.cc src/handlers/index.cpp src/handlers/index.h
         src/utils/mime.h src/utils/mime.cpp
         src/markdown/markdown.cpp src/markdown/mdtransform.hpp src/markdown/markdown.h
-        src/config/aws/appconfig.cpp src/config/aws/appconfig.h)
+        src/config/aws/appconfig.cpp src/config/aws/appconfig.h src/database/postgresql/pq.cpp src/database/postgresql/pq.h src/database/postgresql/init.cpp src/database/postgresql/init.h)
+
+find_library(PQXX_LIB pqxx)
+find_library(PQ_LIB pq)
 
 target_link_libraries(sfx-server-api ${AWSSDK_LINK_LIBRARIES}
         ${AWSSDK_PLATFORM_DEPS})
+target_link_libraries(sfx-server-api ${PQXX_LIB} ${PQ_LIB})
