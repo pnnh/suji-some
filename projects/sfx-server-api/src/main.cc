@@ -3,10 +3,10 @@
 #include <cstdlib>
 #include <iostream>
 #include <memory>
-#include "http_connection.h"
-#include "config/aws/init.h"
-#include "config/aws/appconfig.h"
-#include "database/postgresql/pq.h"
+#include "server/http_connection.h"
+#include "services/config/aws/init.h"
+#include "services/config/aws/appconfig.h"
+#include "services/database/postgresql/pq.h"
 
 namespace beast = boost::beast;         // from <boost/beast.hpp>
 namespace http = beast::http;           // from <boost/beast/http.hpp>

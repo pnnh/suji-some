@@ -24,14 +24,15 @@ endif (folly_FOUND)
 find_package(AWSSDK REQUIRED COMPONENTS s3 appconfig appconfigdata)
 
 add_executable(sfx-server-api
-        src/config/aws/init.cpp src/config/aws/init.h
+        src/services/config/aws/init.cpp src/services/config/aws/init.h
         src/main.cc
-        src/http_connection.cc
-        src/state.cc
-        src/md5.cc src/handlers/index.cpp src/handlers/index.h
+        src/server/http_connection.cc
+        src/server/state.cc
+        src/utils/md5.cc src/server/handlers/index.cpp src/server/handlers/index.h
         src/utils/mime.h src/utils/mime.cpp
-        src/markdown/markdown.cpp src/markdown/mdtransform.hpp src/markdown/markdown.h
-        src/config/aws/appconfig.cpp src/config/aws/appconfig.h src/database/postgresql/pq.cpp src/database/postgresql/pq.h src/database/postgresql/init.cpp src/database/postgresql/init.h)
+        src/services/markdown/markdown.cpp src/services/markdown/mdtransform.hpp src/services/markdown/markdown.h
+        src/services/config/aws/appconfig.cpp src/services/config/aws/appconfig.h src/services/database/postgresql/pq.cpp
+        src/services/database/postgresql/pq.h src/services/database/postgresql/init.cpp src/services/database/postgresql/init.h)
 
 find_library(PQXX_LIB pqxx)
 find_library(PQ_LIB pq)

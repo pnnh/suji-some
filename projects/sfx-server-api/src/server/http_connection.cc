@@ -3,17 +3,13 @@
 //
 
 #include "http_connection.h"
-#include "md5.h"
+#include "src/utils/md5.h"
 #include <utility>
 #include <iostream>
-#include <folly/Format.h>
-#include <folly/futures/Future.h>
-#include <folly/executors/ThreadedExecutor.h>
 #include <folly/Uri.h>
-#include <folly/FBString.h>
-#include "handlers/index.h"
-#include "utils/mime.h"
-#include "markdown/markdown.h"
+#include "src/server/handlers/index.h"
+#include "src/utils//mime.h"
+#include "src/services/markdown/markdown.h"
 
 void http_connection::read_request() {
     auto self = shared_from_this();
@@ -115,7 +111,7 @@ void http_connection::create_response() {
         HandleMarkdown(response_);
     } else if (uri.path() == "/") {
         HandleIndex(response_);
-      // send_file();
+        // send_file();
     } else {
         response_.result(boost::beast::http::status::not_found);
         response_.set(boost::beast::http::field::content_type, "text/plain");

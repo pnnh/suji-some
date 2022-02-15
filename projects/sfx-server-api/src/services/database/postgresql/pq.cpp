@@ -5,7 +5,7 @@
 #include "pq.h"
 #include <iostream>
 #include <pqxx/pqxx>
-#include "src/config/aws/appconfig.h"
+#include "src/services/config/aws/appconfig.h"
 
 void runPqxxTest() {
 

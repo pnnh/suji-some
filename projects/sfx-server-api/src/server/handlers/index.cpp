@@ -7,7 +7,7 @@
 #include <fstream>
 #include <boost/beast/core/error.hpp>
 #include <boost/iostreams/copy.hpp>
-#include "../utils/mime.h"
+#include "src/utils/mime.h"
 
 void HandleIndex(boost::beast::http::response<boost::beast::http::dynamic_body> &response_) {
     //response_.set(boost::beast::http::field::content_type, "text/html");
@@ -16,7 +16,7 @@ void HandleIndex(boost::beast::http::response<boost::beast::http::dynamic_body> 
 
     std::string path = "static/index.html";
 
-   std::string full_path = "static/index.html";
+    std::string full_path = "static/index.html";
 
     response_.result(boost::beast::http::status::ok);
     response_.keep_alive(false);

@@ -6,7 +6,7 @@
 #include <fstream>         // std::ofstream
 #include "markdown.h"
 #include "mdtransform.hpp"  // 需要实现的 Markdown 解析类
-#include "../utils/mime.h"
+#include "src/utils/mime.h"
 
 void HandleMarkdown(boost::beast::http::response<boost::beast::http::dynamic_body> &response_) {
 
@@ -32,5 +32,5 @@ void HandleMarkdown(boost::beast::http::response<boost::beast::http::dynamic_bod
     response_.set(boost::beast::http::field::server, "Beast");
     response_.set(boost::beast::http::field::content_type, "text/html");
 
-    boost::beast::ostream(response_.body()) << head+table+contents+end;
+    boost::beast::ostream(response_.body()) << head + table + contents + end;
 }
