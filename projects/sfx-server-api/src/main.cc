@@ -25,8 +25,8 @@ void http_server(tcp::acceptor &acceptor, tcp::socket &socket) {
 int main(int argc, char *argv[]) {
     std::cout << "Hello, World!" << std::endl;
 
-    runPqxxTest();
-    return 1;
+    //runPqxxTest();
+
     initAws();
 
     const std::string bucket_name = "abcbucket";

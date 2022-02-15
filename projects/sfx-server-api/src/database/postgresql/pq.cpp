@@ -8,8 +8,7 @@
 
 void runPqxxTest() {
     try {
-        pqxx::connection conn("host=sfxdb.cluster-cgeink4kxosf.ap-east-1.rds.amazonaws.com user=sfxuser "
-                              "password=RshmcUu4Ayz*J%Ir dbname=sfxdb_debug port=5432 sslmode=disable");
+        pqxx::connection conn("");
         if (conn.is_open()) {
             std::cout << "Opened database successfully: " << conn.dbname() << std::endl;
             char *sqlText = "select * from accounts;";

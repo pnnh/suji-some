@@ -5,6 +5,13 @@
 #include "appconfig.h"
 #include <iostream>
 #include <utility>
+#include <string>
+#include <sstream>
+#include <boost/algorithm/string.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <thread>
+#include <mutex>
+#include <vector>
 #include <aws/core/Aws.h>
 #include <aws/appconfigdata/AppConfigDataClient.h>
 #include <aws/appconfigdata/AppConfigDataRequest.h>
@@ -16,9 +23,27 @@
 using namespace Aws;
 using namespace AppConfigData;
 
+struct ConfigItem {
+    std::string key;
+    std::string value;
+};
 
-bool ListBuckets(const std::string& bucketName,
-                 const std::string& region) {
+std::once_flag configFlag;
+std::vector<ConfigItem> configVector;
+
+void buildConfigVector(const std::string configText) {
+    std::vector<std::string> words;
+
+    boost::split(words, configText, boost::is_any_of("\n"));
+    for (const auto &item: words) {
+        std::cout << "item " << item << "; ";
+    }
+    std::cout << std::endl;
+
+}
+
+bool ListBuckets(const std::string &bucketName,
+                 const std::string &region) {
 
     Aws::Client::ClientConfiguration config;
 
@@ -48,7 +73,9 @@ bool ListBuckets(const std::string& bucketName,
             std::stringstream ss;
             ss << getConfResult.GetResult().GetConfiguration().rdbuf();
             auto configText = ss.str();
-            std::cout << configText << std::endl;
+            std::cout << "configText: \n" << configText << std::endl;
+            buildConfigVector(configText);
+
         } else {
             std::cerr << "GetLatestConfiguration Failed " << getConfResult.GetError().GetMessage() << std::endl;
         }
