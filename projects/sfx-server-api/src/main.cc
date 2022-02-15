@@ -24,18 +24,11 @@ void http_server(tcp::acceptor &acceptor, tcp::socket &socket) {
 
 int main(int argc, char *argv[]) {
     std::cout << "Hello, World!" << std::endl;
-
-    //runPqxxTest();
-
     initAws();
-
-    const std::string bucket_name = "abcbucket";
-
     std::string region = "ap-east-1";
+    initConfig();
 
-    if (!ListBuckets(bucket_name, region)) {
-        return 1;
-    }
+    runPqxxTest();
 
     try {
         auto address_str = "0.0.0.0";

@@ -7,10 +7,9 @@
 #include <utility>
 #include <string>
 #include <sstream>
+#include <unordered_map>
 #include <boost/algorithm/string.hpp>
 #include <boost/algorithm/string/split.hpp>
-#include <thread>
-#include <mutex>
 #include <vector>
 #include <aws/core/Aws.h>
 #include <aws/appconfigdata/AppConfigDataClient.h>
@@ -23,39 +22,39 @@
 using namespace Aws;
 using namespace AppConfigData;
 
-struct ConfigItem {
-    std::string key;
-    std::string value;
-};
+std::unordered_map<std::string, std::string> configMap;
 
-std::once_flag configFlag;
-std::vector<ConfigItem> configVector;
+std::string GetConfigItem(const std::string &key) {
+    return configMap[key];
+}
 
 void buildConfigVector(const std::string configText) {
+
     std::vector<std::string> words;
 
     boost::split(words, configText, boost::is_any_of("\n"));
     for (const auto &item: words) {
-        std::cout << "item " << item << "; ";
+        std::cout << "item " << item << std::endl;
+        std::size_t index = item.find('=');
+        if (index != std::string::npos) {
+            auto key = item.substr(0, index);
+            auto value = item.substr(index + 1, item.length());
+            std::cout << "item key value " << key << "|" << value << std::endl;
+            configMap[key] = value;
+        }
     }
-    std::cout << std::endl;
-
 }
 
-bool ListBuckets(const std::string &bucketName,
-                 const std::string &region) {
+void initConfig() {
 
     Aws::Client::ClientConfiguration config;
 
-    if (!region.empty()) {
-        config.region = region;
-    }
     AppConfigData::AppConfigDataClient appConfigDataClient(config);
 
     Aws::AppConfigData::Model::StartConfigurationSessionRequest request;
     request.SetApplicationIdentifier("sfx");
-    request.SetEnvironmentIdentifier("release");
-    request.SetConfigurationProfileIdentifier("release.config");
+    request.SetEnvironmentIdentifier("debug");
+    request.SetConfigurationProfileIdentifier("debug.config");
 
     auto result = appConfigDataClient.StartConfigurationSession(request);
     if (result.IsSuccess()) {
@@ -73,7 +72,7 @@ bool ListBuckets(const std::string &bucketName,
             std::stringstream ss;
             ss << getConfResult.GetResult().GetConfiguration().rdbuf();
             auto configText = ss.str();
-            std::cout << "configText: \n" << configText << std::endl;
+            //std::cout << "configText: \n" << configText << std::endl;
             buildConfigVector(configText);
 
         } else {
@@ -83,5 +82,4 @@ bool ListBuckets(const std::string &bucketName,
     } else {
         std::cerr << "Failed " << result.GetError().GetMessage() << std::endl;
     }
-    return true;
 }

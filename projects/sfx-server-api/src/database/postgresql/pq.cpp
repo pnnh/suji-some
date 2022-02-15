@@ -5,13 +5,17 @@
 #include "pq.h"
 #include <iostream>
 #include <pqxx/pqxx>
+#include "src/config/aws/appconfig.h"
 
 void runPqxxTest() {
+
+    auto pqDsn = GetConfigItem("DSN");
+    std::cout << "pqDsn is: " << pqDsn << std::endl;
     try {
-        pqxx::connection conn("");
+        pqxx::connection conn(pqDsn);
         if (conn.is_open()) {
             std::cout << "Opened database successfully: " << conn.dbname() << std::endl;
-            char *sqlText = "select * from accounts;";
+            const char *sqlText = "select * from accounts;";
             pqxx::nontransaction N(conn);
             pqxx::result R(N.exec(sqlText));
 

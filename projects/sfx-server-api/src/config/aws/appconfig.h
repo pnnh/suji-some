@@ -7,7 +7,8 @@
 
 #include <string>
 
-bool ListBuckets(const std::string &bucketName,
-                 const std::string &region);
+void initConfig();
+
+std::string GetConfigItem(const std::string &key);
 
 #endif //SFX_SERVER_API_APPCONFIG_H
