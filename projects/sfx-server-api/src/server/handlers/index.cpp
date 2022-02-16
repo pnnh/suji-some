@@ -5,8 +5,6 @@
 #include "index.h"
 #include <iostream>
 #include <fstream>
-#include <boost/beast/core/error.hpp>
-#include <boost/iostreams/copy.hpp>
 #include "src/utils/mime.h"
 
 void HandleIndex(boost::beast::http::response<boost::beast::http::dynamic_body> &response_) {

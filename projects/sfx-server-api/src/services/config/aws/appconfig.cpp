@@ -34,7 +34,7 @@ void buildConfigVector(const std::string configText) {
 
     boost::split(words, configText, boost::is_any_of("\n"));
     for (const auto &item: words) {
-        std::cout << "item " << item << std::endl;
+        //std::cout << "item " << item << std::endl;
         std::size_t index = item.find('=');
         if (index != std::string::npos) {
             auto key = item.substr(0, index);

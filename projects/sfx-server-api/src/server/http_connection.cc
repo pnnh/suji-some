@@ -10,6 +10,7 @@
 #include "src/server/handlers/index.h"
 #include "src/utils//mime.h"
 #include "src/services/markdown/markdown.h"
+#include "src/server/handlers/sitemap.h"
 
 void http_connection::read_request() {
     auto self = shared_from_this();
@@ -112,6 +113,8 @@ void http_connection::create_response() {
     } else if (uri.path() == "/") {
         HandleIndex(response_);
         // send_file();
+    } else if (uri.path() == "/sitemap") {
+        HandleSitemap(response_);
     } else {
         response_.result(boost::beast::http::status::not_found);
         response_.set(boost::beast::http::field::content_type, "text/plain");
