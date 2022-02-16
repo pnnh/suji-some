@@ -5,7 +5,10 @@
 #ifndef SFX_SERVER_API_PQ_H
 #define SFX_SERVER_API_PQ_H
 
-void runPqxxTest();
+#include <vector>
+#include "src/models/article.h"
+
+std::vector<ArticleModel> selectArticles();
 
 
 #endif //SFX_SERVER_API_PQ_H

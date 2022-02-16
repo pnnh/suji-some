@@ -6,6 +6,7 @@
 #include <iostream>
 #include <fstream>
 #include "src/utils/mime.h"
+#include "src/services/database/postgresql/pq.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/typeof/typeof.hpp>
@@ -36,4 +37,9 @@ void HandleSitemap(boost::beast::http::response<boost::beast::http::dynamic_body
     boost::property_tree::write_xml(oss, pt);
     std::cout << "xml is " << oss.str() << std::endl;
     boost::beast::ostream(response.body()) << oss.str();
+
+    auto articlesList = selectArticles();
+    for (const auto &article: articlesList) {
+        std::cout << "article is " << article.pk << "|" << article.title << std::endl;
+    }
 }

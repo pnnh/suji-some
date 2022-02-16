@@ -28,8 +28,6 @@ int main(int argc, char *argv[]) {
     std::string region = "ap-east-1";
     initConfig();
 
-    runPqxxTest();
-
     try {
         auto address_str = "0.0.0.0";
         auto port_str = "5900";
