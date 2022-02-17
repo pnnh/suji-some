@@ -32,7 +32,7 @@ add_executable(sfx-server-api
         src/utils/mime.h src/utils/mime.cpp
         src/services/markdown/markdown.cpp src/services/markdown/mdtransform.hpp src/services/markdown/markdown.h
         src/services/config/aws/appconfig.cpp src/services/config/aws/appconfig.h src/services/database/postgresql/pq.cpp
-        src/services/database/postgresql/pq.h src/services/database/postgresql/init.cpp src/services/database/postgresql/init.h src/server/handlers/sitemap.cpp src/server/handlers/sitemap.h src/models/article.cpp src/models/article.h)
+        src/services/database/postgresql/pq.h src/services/database/postgresql/init.cpp src/services/database/postgresql/init.h src/server/handlers/sitemap.cpp src/server/handlers/sitemap.h src/models/article.cpp src/models/article.h src/utils/datetime.cpp src/utils/datetime.h)
 
 find_library(PQXX_LIB pqxx)
 find_library(PQ_LIB pq)

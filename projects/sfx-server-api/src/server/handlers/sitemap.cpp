@@ -7,6 +7,7 @@
 #include <fstream>
 #include "src/utils/mime.h"
 #include "src/services/database/postgresql/pq.h"
+#include "src/utils/datetime.h"
 #include <boost/property_tree/ptree.hpp>
 #include <boost/property_tree/xml_parser.hpp>
 #include <boost/typeof/typeof.hpp>
@@ -32,14 +33,16 @@ void HandleSitemap(boost::beast::http::response<boost::beast::http::dynamic_body
 
     pt.put("debug.filename", "cccc");  // 写入xml节点，通过点分割层级
     pt.put("debug.level", "wwww");
-    //pt.data()
-    std::ostringstream oss;
-    boost::property_tree::write_xml(oss, pt);
-    std::cout << "xml is " << oss.str() << std::endl;
-    boost::beast::ostream(response.body()) << oss.str();
 
     auto articlesList = selectArticles();
     for (const auto &article: articlesList) {
         std::cout << "article is " << article.pk << "|" << article.title << std::endl;
+        pt.put("debug.pk", article.pk);
+        pt.put("debug.title", article.title);
+        pt.put("debug.update_time", formatTime(article.update_time));
     }
+    std::ostringstream oss;
+    boost::property_tree::write_xml(oss, pt);
+    std::cout << "xml is " << oss.str() << std::endl;
+    boost::beast::ostream(response.body()) << oss.str();
 }

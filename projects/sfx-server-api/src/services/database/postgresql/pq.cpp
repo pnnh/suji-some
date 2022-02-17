@@ -5,7 +5,9 @@
 #include "pq.h"
 #include <iostream>
 #include <pqxx/pqxx>
+#include <chrono>
 #include "src/services/config/aws/appconfig.h"
+#include "src/utils/datetime.h"
 
 std::vector<ArticleModel> selectArticles() {
     std::vector<ArticleModel> articlesList;
@@ -23,7 +25,20 @@ std::vector<ArticleModel> selectArticles() {
             for (pqxx::result::const_iterator itr = R.begin(); itr != R.end(); ++itr) {
                 std::cout << "Pk = " << itr[0].as<std::string>() << std::endl;
                 std::cout << "Title = " << itr[1].as<std::string>() << std::endl;
-                auto model = ArticleModel{.pk=itr[0].as<std::string>(), .title=itr[1].as<std::string>()};
+                auto model = ArticleModel{
+                        .pk=itr[0].as<std::string>(),
+                        .title=itr[1].as<std::string>(),
+                        .body = itr[2].as<std::string>(),
+                        .create_time = makeTimePoint(itr[3].as<std::string>()),
+                        .update_time = makeTimePoint(itr[4].as<std::string>()),
+                        .creator = itr[5].as<std::string>()};
+                if (!itr[6].is_null()) {
+                    model.keywords = itr[6].as<std::string>();
+                }
+                if (!itr[7].is_null()) {
+                    model.description = itr[7].as<std::string>();
+                }
+
                 articlesList.push_back(model);
             }
             std::cout << "Operation done successfully" << std::endl;
@@ -36,4 +51,5 @@ std::vector<ArticleModel> selectArticles() {
         std::cerr << e.what() << std::endl;
         return articlesList;
     }
+    return articlesList;
 }
