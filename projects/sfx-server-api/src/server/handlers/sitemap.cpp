@@ -31,15 +31,18 @@ void HandleSitemap(boost::beast::http::response<boost::beast::http::dynamic_body
 //    boost::beast::ostream(response.body()) << infile.rdbuf();
     boost::property_tree::ptree pt;
 
-    pt.put("debug.filename", "cccc");  // 写入xml节点，通过点分割层级
-    pt.put("debug.level", "wwww");
+    pt.put("urlset.<xmlattr>.xmlns", "http://www.sitemaps.org/schemas/sitemap/0.9");
+    boost::property_tree::ptree homeNode;
+    homeNode.put("url.loc", "https://sfx.xyz/");
+    pt.add_child("urlset.url", homeNode.get_child("url"));
 
     auto articlesList = selectArticles();
     for (const auto &article: articlesList) {
         std::cout << "article is " << article.pk << "|" << article.title << std::endl;
-        pt.put("debug.pk", article.pk);
-        pt.put("debug.title", article.title);
-        pt.put("debug.update_time", formatTime(article.update_time));
+        boost::property_tree::ptree urlNode;
+        urlNode.put("url.loc", "https://sfx.xyz/article/read/" + article.pk);
+        urlNode.put("url.lastmod", formatTime(article.update_time));
+        pt.add_child("urlset.url", urlNode.get_child("url"));
     }
     std::ostringstream oss;
     boost::property_tree::write_xml(oss, pt);

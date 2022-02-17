@@ -18,7 +18,7 @@ std::vector<ArticleModel> selectArticles() {
         if (conn.is_open()) {
             std::cout << "Opened database successfully: " << conn.dbname() << std::endl;
             const char *sqlText = "select pk, title, body, create_time, update_time, creator, "
-                                  "keywords, description from articles;";
+                                  "keywords, description from articles order by update_time desc limit 100;";
             pqxx::nontransaction N(conn);
             pqxx::result R(N.exec(sqlText));
 

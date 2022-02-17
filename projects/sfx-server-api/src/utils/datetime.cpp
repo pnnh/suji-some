@@ -23,6 +23,6 @@ std::string formatTime(const std::chrono::system_clock::time_point &time_point) 
     std::time_t now = std::chrono::system_clock::to_time_t(time_point);
 
     char mbstr[100];
-    std::strftime(mbstr, sizeof(mbstr), "%Y-%m-%d %H:%M:%S", std::localtime(&now));
+    std::strftime(mbstr, sizeof(mbstr), "%FT%TZ", std::localtime(&now));
     return mbstr;
 }
