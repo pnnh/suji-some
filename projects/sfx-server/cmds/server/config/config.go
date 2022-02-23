@@ -2,7 +2,6 @@ package config
 
 import (
 	"fmt"
-	"os"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -37,27 +36,32 @@ var (
 )
 
 func init() {
-	resPath := os.Getenv(envResPath)
+	configMap, err := GetConfigurationMap()
+	if err != nil {
+		logrus.Fatalln("获取appconfig配置出错: %w", err)
+	}
+
+	resPath := configMap[envResPath]
 	if len(resPath) > 0 {
 		ResourceUrl = resPath
 	}
-	DBDSN = os.Getenv("DSN")
+	DBDSN = configMap["DSN"]
 	if len(DBDSN) < 1 {
 		logrus.Fatalln("数据库未配置")
 	}
 
-	REDIS = os.Getenv("REDIS")
+	REDIS = configMap["REDIS"]
 	if len(REDIS) < 1 {
 		logrus.Fatalln("Redis未配置")
 	}
 
-	mode := os.Getenv("MODE")
+	mode := configMap["MODE"]
 	if len(mode) > 0 {
 		GINMODE = mode
 	}
 
-	MailHost = os.Getenv("MAIL_HOST")
-	mailPortStr := os.Getenv("MAIL_PORT")
+	MailHost = configMap["MAIL_HOST"]
+	mailPortStr := configMap["MAIL_PORT"]
 	if len(mailPortStr) > 0 {
 		if mailPort, err := strconv.Atoi(mailPortStr); err != nil {
 			logrus.Fatalln("转换邮件端口出错: %w", err)
@@ -65,14 +69,14 @@ func init() {
 			MailPort = mailPort
 		}
 	}
-	MailUser = os.Getenv("MAIL_USER")
-	MailPassword = os.Getenv("MAIL_PASSWORD")
+	MailUser = configMap["MAIL_USER"]
+	MailPassword = configMap["MAIL_PASSWORD"]
 	if len(MailHost) < 1 || len(MailUser) < 1 || len(MailPassword) < 1 {
 		logrus.Fatalln("邮件配置有误")
 	}
 
-	JWTKey = os.Getenv("JWT_KEY")
-	CSRFToken = os.Getenv("CSRF_TOKEN")
+	JWTKey = configMap["JWT_KEY"]
+	CSRFToken = configMap["CSRF_TOKEN"]
 	if len(JWTKey) < 1 {
 		JWTKey = uuid.New().String()[:32]
 	}
@@ -83,7 +87,7 @@ func init() {
 		ServerUrl = "http://127.0.0.1:5000"
 		ResourceUrl = "http://127.0.0.1:3000"
 	}
-	QuestKey = os.Getenv("QUEST_KEY")
+	QuestKey = configMap["QUEST_KEY"]
 	if len(QuestKey) < 1 {
 		logrus.Fatalln("未配置QUEST_KEY")
 	}
