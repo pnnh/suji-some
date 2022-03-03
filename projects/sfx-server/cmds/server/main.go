@@ -6,7 +6,6 @@ import (
 )
 
 func main() {
-	//some.CPrintln()
 	app := application.NewApplication()
 
 	if err := app.Init(); err != nil {

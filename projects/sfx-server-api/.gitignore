@@ -1,0 +1,11 @@
+.idea/
+cmake-build-*
+build/
+gen/
+dist/
+node_modules/
+.vscode/
+GPATH
+GTAGS
+GRTAGS
+ID
