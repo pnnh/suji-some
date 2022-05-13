@@ -18,6 +18,7 @@ import './index.scss'
 import {TodoPage} from '@/pages/todo/todo'
 import {CalendarPage} from '@/pages/calendar/calendar'
 import {PostPage} from '@/pages/post/post'
+import {randomPassword, randomString} from './utils/rand'
 
 export * from '@/components/hello.svelte'
 export * from '@/components/Clock.svelte'
@@ -58,4 +59,15 @@ if (rootElement) {
 const goTopElement = document.getElementById('go-top')
 if (goTopElement) {
   ReactDOM.render(<GoTop/>, goTopElement)
+}
+
+window.randomString = (length = 16, number = true, letter = true,
+  uppercaseLetter = true, symbol = true) => {
+  const password = randomPassword(16, {
+    number: number,
+    letter: letter,
+    uppercaseLetter: uppercaseLetter,
+    symbol: symbol,
+  })
+  return password
 }
